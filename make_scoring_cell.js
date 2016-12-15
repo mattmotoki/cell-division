@@ -154,7 +154,7 @@ var makeScoringCell = (function() {
 
   /* Draw and fill outline of cell */
   function drawScoringCell(context) {
-    var row, next_row, next_cpx, next_cpy
+    var row, next_row, next_cpx, next_cpy;
     var n_points = corner_points.length;
 
     context.beginPath();
@@ -169,7 +169,7 @@ var makeScoringCell = (function() {
       next_cpy = -next_row.radius*Math.sin(next_row.theta) + next_row.y;
 
       // plot start and end points and connecting Bezier curve
-      if (i==0) {context.moveTo(row.x, row.y);}
+      if (i===0) {context.moveTo(row.x, row.y);}
       context.bezierCurveTo(cpx, cpy, next_cpx, next_cpy, next_row.x, next_row.y);
     }
     context.fill();
@@ -191,7 +191,7 @@ var makeScoringCell = (function() {
     // update the cell parameters
     for (var i = 0; i <corner_points.length; i++) {
       row = corner_points[i];
-      row.radius = scale*Math.sqrt( (row.y - center_y)**2 + (row.x - center_x)**2 );
+      row.radius = scale*Math.sqrt( Math.pow(row.y - center_y,2) + Math.pow(row.x - center_x,2) );
       row.theta = Math.atan2(row.y - center_y, row.x - center_x)-Math.PI/2;
     }
 
@@ -200,10 +200,10 @@ var makeScoringCell = (function() {
     center_y = -0.015*size*z0 + 0.85*size;
 
     // if magnitude is small then normalization creates a jittery trajectory
-    var mag =  Math.sqrt( (temp_y - center_y)**2 + (temp_x - center_x)**2 )/size;
-    if (mag > 0.01) {
-      center_x = temp_x + 0.01*(center_x - temp_x)/mag;
-      center_y = temp_y + 0.01*(center_y - temp_y)/mag;
+    var vel =  Math.sqrt( Math.pow(temp_y - center_y,2) + Math.pow(temp_x - center_x,2) )/size;
+    if (vel > 0.01) {
+      center_x = temp_x + 0.01*(center_x - temp_x)/vel;
+      center_y = temp_y + 0.01*(center_y - temp_y)/vel;
     }
     temp_x = center_x;
     temp_y = center_y;

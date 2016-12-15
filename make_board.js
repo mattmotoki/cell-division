@@ -56,7 +56,7 @@ var makeBoard = function(w, h) {
   // initialize tables with defaults
   var connection_table = new Array(w*h);
   var scoring_table = [new Array(w*h), new Array(w*h)];
-  for (var i = 0; i < w*h; i++) {
+  for (var i=0; i < w*h; i++) {
     connection_table[i] = { player:2, openness:8, connections:[0, 0, 0, 0] };
     scoring_table[0][i] = { overlap:0, interlap:0, unconnected:0, extensions:0 };
     scoring_table[1][i] = { overlap:0, interlap:0, unconnected:0, extensions:0 };
@@ -78,7 +78,7 @@ var makeBoard = function(w, h) {
     // get cell container
     var cell_container = document.createElement("div");
     cell_container.className = "cell-container";
-    cell_container.setAttribute("style",'width:' + 100/(w-4) + '%');
+    cell_container.setAttribute("style","width:" + 100/(w-4) + "%");
 
     // initialize scoring overlay text
     var cell_text = document.createElement("div");
