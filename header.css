@@ -1,0 +1,125 @@
+/* -------------------------------------------------------------------------- */
+/*  Mobile Header (Title: cell-animation, text; Game Settings: icon, menu)    */
+/* -------------------------------------------------------------------------- */
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+.header-container {
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+  padding: 5px;
+  width: 100%;
+}
+
+/* ----------------------------------- */
+/*  Title: cell-animation, title-text  */
+/* ----------------------------------- */
+
+/* cell-animation */
+#scoring-cell {
+  display: inline-block;
+  vertical-align: text-top;
+  height: 40px;
+}
+
+/* title-text */
+#title-text {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+
+/* ----------------------------------- */
+/*  Settings: icon, menu  */
+/* ----------------------------------- */
+
+/* menu */
+#menu-link:hover { cursor: pointer;}
+
+.dropdown { position: relative; }
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 50px;
+  background-color: rgb(25, 25, 25);
+  font-size: 24px;
+  padding: 15px;
+}
+
+.show {
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/*  Tablet Header (Title: cell-animation, text; Game Settings: icon, menu)    */
+/* -------------------------------------------------------------------------- */
+@media only screen and (min-width: 500px) {
+  header {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    width: inherit;
+  }
+
+
+  /* ----------------------------------- */
+  /*  Title: cell-animation, title-text  */
+  /* ----------------------------------- */
+  #scoring-cell {
+    height: 130px;
+    order: 2;
+    align-self: center;
+  }
+  #title-text {
+    display: block;
+    margin-left: 0px;     /* remove spacing */
+  }
+  /* ----------------------------------- */
+  /*  Settings: icon, menu  */
+  /* ----------------------------------- */
+  /* icon */
+  #options-icon {display: none;}
+
+  /* menu */
+  #options-menu {
+    display: flex;
+    flex-direction: column;
+    position: static;
+  }
+
+  /* remove link like behaviour */
+  #menu-link:hover {
+  	color: white;
+    cursor:default;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Desktop Header (Title: cell-animation, text; Game Settings: icon, menu)   */
+/* -------------------------------------------------------------------------- */
+@media only screen and (orientation: landscape)  {
+  header {
+    float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+  }
+  #scoring-cell {
+    height: 25%;
+  }
+}

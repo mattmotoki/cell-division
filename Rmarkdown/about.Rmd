@@ -1,0 +1,345 @@
+---
+title: "About Cell Division"
+author: Created by Matt Motoki
+output: 
+  html_document:
+    highlight: pygments
+    toc: TRUE
+    toc_depth: 2
+    toc_float: true
+    collapsed: false
+    theme: flatly
+---
+<!--
+simplex
+cosmo
+united
+readable
+-->
+
+
+
+
+# Introduction 
+Cell Addition is a turn-based board game.  This game is intended for those who like strategy/puzzles and dislike luck/probability^[One of the motivations for creating this game was out of frustration with Candy Crush which after awhile becomes a game of luck rather than skill.].  All A.I. opponents implement a deterministic strategy that is greedy with respect to an approximate value function.  Games against a fixed difficulty A.I. opponent are completely reproducible and can be thought of as a type of puzzle; i.e., you can design a strategy that specifically exploits the A.I. opponent's weaknesses.  
+
+# Implementation
+
+## R 
+Cell Division was originally written using R Shiny which converts R code into HTML, CSS and Javascript. 
+The code for the original game is available [here](https://github.com/mattmotoki/Games.ai/tree/master/Cell%20Division) and can be played at [addlink].  Unfortunately, R Shiny geared more towards interactive data analytics and is less not well-suited for this type of game.  
+
+
+## HTML, CSS and Javascript
+The current implementation of the game is writen directly in plain HTML, CSS and Javascript and can be played at [addlink].  This implementation lacks a few features of the R implementation, but overall it is faster and cleaner. 
+
+
+# Creating The Cells
+The visuals in this R implementation are quite limited; e.g.,
+<center>![](petri4.png)</center>
+
+Rather than drawing squares and lines, it is more visually appealing to use cartoon-like cells;e.g, 
+<center>![](medium_size_logo.png)</center>
+
+This section describes the process of creating cell images from scratch using base R graphics.  The images can then be loaded and displayed as buttons in the game. 
+
+
+## Defining the Outline
+Cells are drawn as layered polygons in base R.  Before calling the `polygon` function we must create a new plot.  The `blank_plot` function creates a new empty plot and draws lines to highlight the edges of the cell which we will take to be 0 and 1 in both directions. 
+```{r}
+blank_plot <- function() {
+  par(mar=c(0,0,0,0), bg=NA)
+  plot(1, type="n", asp=1, axes=FALSE, 
+       yaxs="i", xaxs="i", xlab = "", ylab = "",
+       xlim = c(-0.1, 1.1), ylim = c(-0.1, 1.1)
+  )
+}
+```
+The natural way to define the outline of a cell is in terms of its $x$ and $y$ coordinates.  Alternatively, we can specify the outline parametrically with an angle $\theta\in[0,\, 2\pi]$ and a radius $r$, then map back to the $xy$-plane using the formulas
+$$
+x = r\cdot \cos(\theta)
+\qquad
+\qquad
+y = r\cdot \sin(\theta).
+$$
+A simplifying trick is to specify only the curved sections of the outline and let R automatically create the straight sections by connecting the curves.  Another simplification comes by specifying one pivot point per curved section rather than pivoting about a single origin. 
+
+The following two functions use this method to create the outline of triangular cells
+```{r}
+triangular_cell <- function(r, r2, n_pnts) {
+  R <- rep(r, n_pnts)
+  R2 <- rep(r2, n_pnts)
+  
+  theta <- c(seq(0, pi/2, length.out = n_pnts), 
+             seq(pi/2, 5*pi/4, length.out = n_pnts),
+             seq(5*pi/4, 2*pi, length.out = n_pnts))
+  
+  x_pivots <- c(1-R, R2*(1+sqrt(2)),  1-R2) - 0.5
+  y_pivots <- c(1-R, 1-R2,  R2*(1+sqrt(2))) - 0.5
+  
+  cbind(
+    c(R, R2, R2)*cos(theta) + x_pivots,
+    c(R, R2, R2)*sin(theta) + y_pivots
+  )
+}
+
+# variant
+side_triangular_cell <- function(r, r2, n_pnts) {
+  R <- rep(r, n_pnts)
+  R2 <- rep(r2, n_pnts)
+  
+  theta <- c(seq(0, 3*pi/4, length.out = n_pnts),
+             seq(3*pi/4, 5*pi/4, length.out = n_pnts),
+             seq(5*pi/4, 2*pi, length.out = n_pnts))
+  
+  x_pivots <- c(1-R, 0.5+sqrt(2)*R2, 1-R) - 0.5
+  y_pivots <- c(1-(1+sqrt(2))*R, rep(0.5, n_pnts), (1+sqrt(2))*R) - 0.5
+  
+  cbind(
+    c(R, R2, R)*cos(theta) + x_pivots,
+    c(R, R2, R)*sin(theta) + y_pivots
+  )
+}
+```
+
+To draw multiple cells we apply translations, rotations and reflections to the outlines. For example,
+```{r, fig.width=4, fig.height=4, fig.align='center' }
+# create outlines
+side_tri_outline <- side_triangular_cell(0.1, 0.3, 10)
+side_tri_x <- side_tri_outline[, 1]+0.5
+side_tri_y <- side_tri_outline[, 2]+0.5
+
+sm_tri_outline <- triangular_cell(0.3, 0.2, 10)
+sm_tri_x <- 0.5*(sm_tri_outline[, 1]+0.5)
+sm_tri_y <- 0.5*(sm_tri_outline[, 2]+0.5)
+
+# plot cells and show points
+blank_plot()
+abline(h=c(0,1), v=c(0,1))
+cellgreen <- c(34/255,250/255,34/255)
+poly_and_points <- function(x, y) {
+  polygon(x, y, col=rgb(cellgreen[1], cellgreen[2], cellgreen[3]))
+  points(x, y)
+}
+
+poly_and_points(sm_tri_x+0.5, 1-sm_tri_y) # top right
+poly_and_points(sm_tri_x+0.5, sm_tri_y)   # bot right
+poly_and_points(0.5-sm_tri_x, 1-sm_tri_y) # top left
+poly_and_points(0.5-sm_tri_x, sm_tri_y)   # bot left
+poly_and_points(side_tri_y, 1-side_tri_x) # bottom 
+poly_and_points(side_tri_y, side_tri_x)   # top
+```
+
+
+## Shading About the Center of Mass
+There are two types of shading used to create the cells.  Both types of shading are implemented by plotting a sequence of polygons centered about the center of mass with either decreasing/increasing size and decreasing/increasing transparency. 
+
+The center of mass (COM) can be calculated using the following hack.  First, save the polygon image of the cell as a temporary png, then read it back into R as a 3-dimensional matrix (two dimensions for x and y and the third dimension for the RGBA value).  The center of mass can then be obtained by taking inner products between the rows/cols of the transparency matrix and the corresponding y/x values. The `com_calc` takes in the `x` and `y` values of the cell outline and applies the aforementioned hack.
+```{r}
+com_calc <- function(x, y) {
+  # plot and save shape
+  png('temp_com.png', width = 800, height = 800)
+  par(mar=c(0,0,0,0), bg="NA")
+  plot(1, type="n", asp=1, axes = FALSE,
+       yaxs="i", xaxs="i", xlab = "", ylab = "",
+       xlim = c(0, 1), ylim = c(0, 1)
+  )
+  polygon(x, y, col=rgb(0,0,0), border=NA)
+  dev.off()
+  
+  # load in shape
+  img <- 1*(readPNG("temp_com.png")[, , 4]>0.5)
+  img <- img/sum(img)
+  
+  # calculate center of mass
+  com_x <- sum(img %*% seq(0, 1, length=dim(img)[1]))
+  com_y <- 1-sum(t(img) %*% seq(0, 1, length=dim(img)[1]))
+  
+  c(com_x, com_y)
+}
+```
+
+We can now create the shadow for the ouline of the cell using a decreasing sequence of polygon size and transparency.  The next style of shading creates a dimple in the middle of the cell and created using an increasing sequence of polygon size and transparency.
+
+```{r, fig.width=4, fig.height=4, fig.align='center' }
+library(png)
+# plot a single cell with shadow and dimple
+plot_cell <- function(x, y, color) {
+  com <- com_calc(x, y)
+  
+  # add shadow
+  n_layers <- 100
+  shrink <- seq(1, 0,length=n_layers)
+  alpha <- seq(0.1, 1, length=n_layers)
+  polygon(x, y, col="black", border=NA)
+  for (k in 1:n_layers) {
+    polygon(shrink[k]*(x-com[1])+com[1], shrink[k]*(y-com[2])+com[2],
+            col=rgb(color[1], color[2], color[3], alpha[k]), border=NA) 
+  }
+  
+  # add dimple
+  n_layers <- 25
+  shrink <- seq(0.25, 0.85, length=n_layers)^2
+  alpha <- seq(0.01, 0.05, length=n_layers)
+  color <- 0.5*color
+  for (k in 1:n_layers) {
+    polygon(shrink[k]*(x-com[1])+com[1], shrink[k]*(y-com[2])+com[2],
+            col=rgb(color[1], color[2], color[3], alpha[k]), border=NA)
+  }
+}
+
+# plot cells
+blank_plot()
+abline(h=c(0,1), v=c(0,1))
+
+plot_cell(sm_tri_x+0.5, 1-sm_tri_y, color=cellgreen) # top right
+plot_cell(sm_tri_x+0.5, sm_tri_y, color=cellgreen)   # bot right
+plot_cell(0.5-sm_tri_x, 1-sm_tri_y, color=cellgreen) # top left
+plot_cell(0.5-sm_tri_x, sm_tri_y, color=cellgreen)   # bot left
+plot_cell(side_tri_y, 1-side_tri_x, color=cellgreen) # bottom
+plot_cell(side_tri_y, side_tri_x, color=cellgreen)   # top
+```
+
+
+ 
+
+# A.I. Opponent
+All oppponent's follow a greedy with respect to some approximation of the value of a move.  The quality of the approximation determines the difficulty of the opponent.  Since the objective is to maximize your score, it makes sense to approximate the long term benefit of a move with its immediate increase in score.  It turn's out that the increase in score can be decomposed in the a function of the following four variables: 
+
+* $\text{overlap}(\text{move})$ is the number of cells adjacent to a move,
+* $\text{interlap}(\text{move})$ is the number of times the move is sandwitched by it's cell and it's opposite
+* $\text{extensions}(\text{move})$ is the number of existing connections that a move extends
+* $\text{unconnected}(\text{move})$ is the number of unconnected cells that a move connects,
+
+and the formula is 
+
+$$\begin{split}
+\Delta \text{score}_p(\text{move}) 
+&= \mathbb{I} \{\text{overlap}(\text{move})>1\} - \text{unconnected}(\text{move}) \\
+&\quad + 2\cdot \big[\text{overlap}(\text{move}) - \text{interlap}(\text{move})\big] \\
+&\quad + 2\cdot\big[  \text{overlap}(\text{move})  - \text{extensions}(\text{move}) \big],
+\end{split}$$
+where $p$ denotes the player playing the move.  By convention, we define the first player ($p=1$) to be you and the second player ($p=2$) to be the A.I.  
+
+
+One benefit of this decomposition is that each of the variables can themselves be updated in an online fashion.  Thus, we can keep track of the increase in score for every move efficiently. 
+
+Additional variables that have intuitive value are:
+
+* $\text{openness}(\text{move})$ is move number of open positions adjacent to a move,
+* $\text{centrality}(\text{move})$ measures how close a move is to the center of the board.
+
+Every opponent uses some a weighted sum of the above variables.  The weights that are used in the combinations are completely ad hoc and can most likely be improved. 
+
+## Easy, Medium and Hard Opponents
+The easy opponent's feature combination is
+$$
+\begin{split}
+\text{easy}(\text{move}) 
+= 10 \cdot \Delta \text{score}_2(\text{move}) 
+  + 5\cdot \Delta \text{score}_1(\text{move}) 
+\end{split}
+$$
+Thus, the easy opponent cares almost entirely about maximizing it's immediate score.  On the other hand, the hard opponent takes a more balanced approach 
+$$
+\begin{split}
+\text{hard}(\text{move}) 
+&= 2\cdot \Delta \text{score}_2(\text{move}) 
+\quad + 2\cdot \Delta \text{score}_1(\text{move}) \\
+&\quad + 1\cdot \text{openness}(\text{move}) 
+\quad + 1 \cdot \text{centrality}(\text{move}).
+\end{split}
+$$
+The medium opponent's weights are just the average of the easy and hard opponent's weights.  
+
+
+
+<!-- The easy opponent obtains a move by maximizing -->
+<!-- $$ -->
+<!-- \text{easy}(\text{move}) = \text{overlap}(\text{move}) + 0.01 \cdot \text{centrality}(\text{move}). -->
+<!-- $$ -->
+<!-- The overlap is a relatively good approximation for the increase in score of a move; it is only when we extend existing connections or place a move in between two cells do we over count.  The centrality term is intended to be negligible unless a tie occurs, in which case the opponent will prefer moves towards the center of the board.   -->
+
+<!-- ### Medium -->
+<!-- The medium opponent obtains a move by maximizing -->
+<!-- $$ -->
+<!-- \text{medium}(\text{move}) = \Delta \text{score}_2(\text{move}) + 0.5\cdot \text{openness}(\text{move}) + 0.01 \cdot \text{centrality}(\text{move}). -->
+<!-- $$ -->
+<!-- Here the opponent tries to maximize its increase in score directly.  Again, with the centrality term used to break ties. -->
+
+
+<!-- ### Hard -->
+<!-- The hard opponent obtains a move by maximizing -->
+<!-- $$\begin{split} -->
+<!-- \text{hard}(\text{move})  -->
+<!-- &= \Delta \text{score}_2(\text{move})  -->
+<!-- \quad + 0.75\cdot \Delta \text{score}_1(\text{move}) \\ -->
+<!-- &\quad + 0.1\cdot \text{openness}(\text{move})  -->
+<!-- \quad + 0.01 \cdot \text{centrality}(\text{move}). -->
+<!-- \end{split}$$ -->
+<!-- The previous two opponents looked only at their own values.  The hard opponent takes into account how much a move will hurt your chances of increasing your own score.  In this way, it is a bit more adversarial than the previous two opponents.  The openness of a move is also given some weight and if all else is equal, the hard opponent will choose a move closest to the center of the board. -->
+
+
+## Adaptive (R implementation only)
+The adaptive opponent has a skill level which determines the overall strategy in a game.  
+
+The adaptive opponent adapts to your play in two ways: 
+
+1. It adapts to your play within a game.
+2. It adapts its entire strategy after a game.
+
+
+Formally, the adaptive player uses a blend (convex combination) of the normalized easy player's score approximation and the normalized hard player's score approximation.  
+$$
+\text{adaptive}(\text{move}) 
+= \text{skill}' \cdot \frac{\text{hard}(\text{move})}{\max\limits_{m}\{ \text{hard}(m) \} } 
++ (1 - \text{skill}') \cdot  \frac{\text{easy} \text{move})}{\max\limits_{m}\{ \text{easy}(m) \} },
+$$
+
+where $\text{skill}'$ is the modified skill parameter
+
+$$
+\text{skill}' = \text{skill} + ( \text{your score} - \text{A.I.'s score} ).
+$$
+
+Notice that if you are winning, then the effective skill of your opponent goes up.  Moreover, if you are winning by a lot then the effective skill will go up by a lot.  
+
+At the end of the game, your opponent's skill level is updated according to the following formula:
+$$
+\text{skill} \leftarrow \text{skill} + \frac{ \text{your score} - \text{A.I.'s score}  }{1 + \mathbb{I} \{ \text{your score} < \text{A.I.'s score} \}  }.
+$$
+Hence, if you beat your opponent, then its skill goes up by the score difference; if you lose to your opponent, then its skill goes down by one half the absolute score difference.  If the game is a draw, then the skill level stays the same.
+
+Ignoring within-game adaptivity, when $\text{skill}=0$ you are essentially playing against the easy opponent, when $\text{skill}=100$ you are playing against the hard, and similarly, \text{skill} $skill=50$ you are playing against the medium opponent.
+
+
+
+
+
+# Future Add-Ons
+There are many variations on this game that can be played.  What follows is an unordered list of possible improvements/variants of the game.
+
+* **Attack Moves**: Give players access to the strong acid HCl and the strong base NaOH.  Each acid/base will destroy the other player's cells while leaving their cells intact.  Similarly, isopropyl alcohol can be played to destroy any cell.  
++ **Sythesis Process**: Let NaOH/HCl and isopropyl alcohol regenerate over time. 
++ **cell Walls**: Let players enforce their cells with cell walls (or membranes) to guard against HCl/NaOH/Alcochol attacks. 
+
+
+* **Alternative Objectives**: Instead of placing cells on the board, we can start with a given number of each player's cells in a predefined configuration.  You are allowed to move a cell one step in any direction or swap your cell with an opponent's adjacent cell.  Cells continue to divide based on thier connections.  The end of a game occurs after a fixed number of moves. The winner is the player with the most cells at the end of the game.  
++ **Cell Swap**: Let player's swap their cell's with their oppoent's (enforce [no backsies](http://www.urbandictionary.com/define.php?term=no%20backsies)); 
++ **Cell Jumps**: Let players jump their opponent's cells to convert them to one of their own (as in checkers).
+
+* **Triangular and Hexagonal Grids**: Storing a board defined over these grids can be done by modifying what it means to be adjacent to another cell.  Thus, boards can be stored and analyzed in a similar way to the rectangular grid.  The approximations that the A.I. opponents use will probably also generalize well to these types of grids. 
+
+
+* **Modified Scoring**: One of the problems with this game is that the scoring system --- although well-defined --- is not very intuitive.  A more natural scoring system may be to count the number of connections rather than the number of divisions.
+
+
+* **Cell Capture**: This is a <a href="https://en.wikipedia.org/wiki/Go_(game)" target="_blank">Go</a>-like feature which allows you to convert your opponent's cells into your own.  This is achieved by completely surrounding your opponent's cells or sandwiching them between the edge of a board and your cells.  
+
+
+* **Partial Cells**: Allow and score partial cells. Triangular cell's might not be too hard to add in. 
+
+
+* **Custom Board Builder**: Create a GUI that allows the user to click on a grid to define the feasible positions of thier custom board.  Boards can naturally be stored as a binary matrix, thus it would be easy to let the user save and upload thier board.  
+
+

@@ -1,0 +1,45 @@
+
+/* Introduction */
+#introduction {
+  display: none;
+  /*display: flex;*/
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  background: rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  font-size: 50px;
+}
+
+#intro-buttons {
+  display: flex;
+  width: 100%;
+  max-width: 800px;
+  justify-content: space-around;
+  padding-top: 10px;
+  font-size: initial;
+}
+#intro-buttons > * {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 125px;
+  width: 125px;
+  border-radius: 20px;
+  color: black;
+}
+#intro-buttons>*:hover * {
+  animation: shake 0.75s;
+}
+#tutorial-button { background-color: rgb(34, 142, 250); }
+#about-button { background-color: rgb(230, 54, 230); }
+#me-button { background-color: rgb(255, 255, 0); }
+#play-button { background-color: rgb(34, 250, 34); }
+#github-button { background-color: rgb(230, 60, 0); }
+#play-button:hover { cursor: pointer; }

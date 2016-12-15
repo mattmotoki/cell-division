@@ -1,0 +1,116 @@
+/* -------------------------------------------------------------------------- */
+/*  Main                                                                      */
+/* -------------------------------------------------------------------------- */
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 15px;
+  height: calc(100% - 65px - 100px);
+  border-top: 1px solid rgb(100,100,100);
+  border-bottom: 1px solid rgb(100,100,100);
+}
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid rgb(100,100,100);
+  position: relative;
+}
+
+
+/* ----------------- */
+/*  Scoring Section  */
+/* ----------------- */
+#scoring-container {
+  font-size: 24px;
+  padding: 5px;
+}
+
+/* --------------- */
+/*  Board Section */
+/* --------------- */
+#board-container {
+  display: flex;
+  justify-content: space-around;
+}
+.cell-container {
+  display: inline-block;
+  position: relative;
+  border: 1px solid rgb(25, 25, 25);
+  margin: -0.5px;
+}
+.cell-text{
+  display: none;
+  color:black;
+}
+.single-cell {
+  display: inline-block;
+  width: 100%;
+  background-color: black;
+}
+
+
+@keyframes shake {
+  25% { transform: translateY(2px) }
+  50% { transform: translateY(-1px) }
+  75% { transform: translateY(1px) }
+}
+
+.cell-container:hover * {
+  animation: shake 0.75s;
+}
+.cell-container:hover .cell-text.on {
+  display: inline-block;
+  position: absolute;
+  background-color: none;
+  left: calc(50% - 7px);
+  top: calc(50% - 12px);
+  cursor: pointer;
+  z-index: 0;
+}
+.cell-container:hover .single-cell.on {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor:pointer;
+}
+.single-cell.on:active,  .single-cell.off{
+  background-color: none;
+  cursor:default;
+}
+
+/* ---------------- */
+/*  Button Section  */
+/* ---------------- */
+.button {
+  display: inline-block;
+  padding: 3px 15px 3px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  color: black;
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  transition-duration: 0.1s;
+}
+.button:hover {
+  background-color: rgb(200,200,200);
+}
+.button:active {
+  transform: translateY(2px);
+}
+.button:focus {
+  border: none;
+  outline:none;
+}
+
+
+
+
+@media only screen and (orientation: landscape)  {
+  main {
+    border: none;
+    border-left: 1px solid rgb(100,100,100);
+  }
+}

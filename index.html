@@ -1,7 +1,149 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Cell Addition</title>
+  <link rel="stylesheet" type="text/css" href="generic.css"/>
+  <link rel="stylesheet" type="text/css" href="intro.css"/>
+  <link rel="stylesheet" type="text/css" href="header.css"/>
+  <link rel="stylesheet" type="text/css" href="main.css"/>
+  <link rel="stylesheet" type="text/css" href="footer.css"/>
+  <link rel="stylesheet" type="text/css" href="overlay.css"/>
+  <link rel="shortcut icon" href="images/small_icon.ico" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+  <!-- ============================ -->
+  <!--  Header (Title and Options)  -->
+  <!-- ============================ -->
+  <header id="header">
+    <!-- Title -->
+    <a href="https://codepen.io/mmotoki/" target="_blank" title="Animation Code">
+      <div class="header-container" >
+        <div id="scoring-cell"> <canvas id="scoring-canvas"></canvas> </div>
+        <div id="title-text">Cell Addition</div>
+      </div>
+    </a>
+
+    <div class="dropdown header-container">
+      <a onclick="toggleMenu()" id="menu-link">
+        <i id="options-icon" class="fa fa-bars" aria-hidden="true"></i> Game Settings
+      </a>
+
+      <div id="options-menu" class="dropdown-content">
+        <label >
+          Difficulty:
+          <select id="difficulty">
+            <option value="easy"> Easy </option>
+            <option value="medium" > Medium </option>
+            <option value="hard" selected="selected"> Hard </option>
+          </select>
+        </label>
+
+        <label >
+          Board Size:
+          <select id="board_size">
+            <option value="small" selected="selected"> Small (4x4)</option>
+            <option value="medium" > Medium (5x5)</option>
+            <option value="large"> Large (6x6)</option>
+          </select>
+        </label>
+
+        <label>
+		  First Move:
+          <label><input type="radio" name="first_move" value="you" id="you" checked/> You</label>
+          <label><input type="radio" name="first_move" value="ai" id="ai" /> AI</label>
+        </label>
+
+      </div>
+    </div>
+  </header>
+  <!-- ======================= -->
+  <!--  Main (Overlay, Board)  -->
+  <!-- ======================= -->
+  <main id="main">
+    <!-- Introduction -->
+    <div id="introduction">
+      Welcome to Cell Addition
+      <div id="intro-buttons">
+        <a id="me-button" href="https://www.youtube.com/watch?v=qb_hqexKkw8" target="_blank" title="Click here!">
+          <i class="fa fa-user-o fa-3x" aria-hidden="true"></i> Created by <br>Matt Motoki
+        </a>
+        <a id="about-button" href="about.html" target="_blank" title="Game Details">
+          <i class="fa fa-book fa-3x" aria-hidden="true"></i> About
+        </a>
+        <a id="play-button" href="#">
+          <i class="fa fa-gamepad fa-3x" aria-hidden="true"></i> Play Game
+        </a>
+        <a id="tutorial-button" href="tutorial.html" target="_blank" title="How to Play">
+          <i class="fa fa-play fa-3x" aria-hidden="true"></i> Tutorial
+        </a>
+        <a id="github-button" href="https://github.com/mattmotoki/Games.ai" target="_blank" title="Github">
+          <i class="fa fa-github fa-3x" aria-hidden="true"></i> Code
+        </a>
+      </div>
+    </div>
+    <!-- Overlay -->
+    <div id="overlay">
+      <p id="game-over-message"> Congratulations you won!<p>
+      <div class="graphics-container">
+        <div class="graphic">
+          <p class="plot-title"> Score Difference</p>
+          <canvas id="difference-plot"></canvas>
+        </div>
+        <div class="graphic">
+          <p class="plot-title"> Individual Scores </p>
+          <canvas id="individual-plot"></canvas>
+        </div>
+      </div>
+      <a href="https://codepen.io/mmotoki/" target="_blank" id="codepen-link">
+        Code available at codepen <i class="fa fa-codepen" aria-hidden="true"></i>
+      </a>
+    </div>
+
+    <!-- Scoring -->
+    <div class="main-container" id="scoring-container">
+      <div id="score0" class="score"> You: 0 </div>
+      <div id="score1" class="score"> AI: 0 </div>
+    </div>
+    <!-- main board -->
+    <div class="main-container" id="board-container">
+      <!-- board goes here -->
+     </div>
+    <!-- game buttons -->
+    <div class="main-container">
+      <button class="button" id="undo-button">
+        <i class="fa fa-undo" aria-hidden="true"></i> undo
+      </button>
+      <button class="button" id="reset-button">
+        <i class="fa fa-refresh" aria-hidden="true"></i> reset
+      </button>
+    </div>
+  </main>
+  <!-- ================ -->
+  <!--  Footer (links)  -->
+  <!-- ================ -->
+  <footer>
+    <div id="info-links">
+      <a href="about.html" target="_blank" title="Game Details">
+        <i class="fa fa-book" aria-hidden="true"></i> About
+      </a>
+      <a href="https://github.com/mattmotoki/Games.ai" target="_blank" title="Github">
+        <i class="fa fa-github" aria-hidden="true"></i> Code
+      </a>
+      <a href="tutorial.html" target="_blank" title="How to Play">
+        <i class="fa fa-play" aria-hidden="true"></i> Tutorial
+      </a>
+    </div>
+    <a href="https://www.linkedin.com/in/matthew-motoki-9b7884a2" target="_blank" title="LinkedIn">
+      Created by Matt Motoki
+    </a>
+  </footer>
 </body>
+<script type="text/javascript" src="init.js"></script>
+<script type="text/javascript" src="make_board.js"></script>
+<script type="text/javascript" src="make_scoring_cell.js"></script>
+<script type="text/javascript" src="difference_graphic.js"></script>
+<script type="text/javascript" src="individual_graphic.js"></script>
 </html>
