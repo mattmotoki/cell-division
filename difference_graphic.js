@@ -6,7 +6,7 @@ function makeDifferenceGraph(scores, first_move, player_color) {
   var h = 300;
   var w = 500;
   var canvas = document.querySelector("#difference-plot");
-  var ctx = canvas.getContext('2d');
+  var ctx = canvas.getContext("2d");
   canvas.width = w;    canvas.height = h;
   ctx.lineJoin="round";
   ctx.font = "12pt Calibri";

@@ -25,7 +25,7 @@ var makeScoringCell = (function() {
   /* Canvas variables */
   var size = document.querySelector("#scoring-cell").offsetHeight;
   var canvas = document.querySelector("#scoring-canvas");
-  var ctx = canvas.getContext('2d');
+  var ctx = canvas.getContext("2d");
   var center_x, center_y;
 
   var scale, corner_points, temp_x, temp_y;
@@ -43,7 +43,8 @@ var makeScoringCell = (function() {
     ];
 
     // state of the Lorenz system converted to pixels (in the xy-plane)
-    temp_x=size/2, temp_y=size/2;
+    temp_x=size/2;
+    temp_y=size/2;
   }
   setSizeDependentParameters();
 

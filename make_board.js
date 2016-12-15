@@ -61,6 +61,7 @@ var makeBoard = function(w, h) {
     scoring_table[0][i] = { overlap:0, interlap:0, unconnected:0, extensions:0 };
     scoring_table[1][i] = { overlap:0, interlap:0, unconnected:0, extensions:0 };
   }
+
   // check for infeasible and correct defaults
   for (var i = 0; i < w*h; i++) {
     // if feasible then check neighbors
@@ -295,7 +296,6 @@ var makeBoard = function(w, h) {
         scoring_table[plyr][ind0-adj[i]].extensions --;
         scoring_table[plyr][ind2].extensions --;
 
-        /* ******* Need to check ******* */
         // check if ind1 is now unconnected, if so then update its neighbors
         if (connection_table[ind1].connections.reduce((a, b) => a + b, 0)==0) {
           scoring_table[plyr][ind1].unconnected = -1;
@@ -306,7 +306,7 @@ var makeBoard = function(w, h) {
 
         // update the cell display of the neighbor (if necessary)
         if (connection_table[ind1].connections[Math.floor(i/2)]==0) {
-        updateCellDisplay(ind1);
+          updateCellDisplay(ind1);
         }
       }
 
@@ -396,13 +396,13 @@ var makeBoard = function(w, h) {
   /* Fade cells into the board */
   function unfade(element) {
     var op = 0.1;  // initial opacity
-    element.style.display = 'block';
+    element.style.display = "block";
     element.style.opacity = op;
-    element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+    element.style.filter = "alpha(opacity=" + op * 100 + ")";
     var timer = setInterval(function () {
       if (op >= 1){ clearInterval(timer); }
       element.style.opacity = op;
-      element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+      element.style.filter = "alpha(opacity=" + op * 100 + ")";
       op += op * 0.1;
     }, 30);
   }

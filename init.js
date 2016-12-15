@@ -6,7 +6,7 @@
 /*           Shared Variables            */
 /* ------------------------------------- */
 var first_move = true;     // if true then user goes first
-var board_size             // board size
+var board_size;            // board size
 var difficulty = "hard";   // AI difficulty
 var score = [0, 0];        // your score and AI's score
 var diff = 0;              // your score minus AI's score
@@ -35,7 +35,7 @@ var game_log = {
 window.onresize = function() {
   makeScoringCell.resizeCanvas();
   resizeBoard();
-}
+};
 
 /* Get user input */
 document.querySelector("body").onload = function() {
@@ -54,8 +54,8 @@ document.querySelector("body").onload = function() {
 };
 
 /* Update difficulty */
-document.querySelector("#difficulty").oninput = function() {
-  var new_difficulty = this.options[this.selectedIndex].value;
+document.querySelector("#difficulty").oninput = function(el) {
+  var new_difficulty = el.target.options[el.target.selectedIndex].value;
   if (new_difficulty == difficulty) {return;}
   difficulty = new_difficulty;
   makeScoringCell.setAIColor();
@@ -65,17 +65,19 @@ document.querySelector("#difficulty").oninput = function() {
 /* Update first move */
 (function() {
   var radios = document.getElementsByName("first_move");
-  for (var i=0; i<radios.length; i++) {
-    radios[i].addEventListener("click", function() {
-      first_move = !first_move;
-      resetBoard();
-    });
-  }
+  radios.forEach(
+    function(el) {
+      el.addEventListener("click", function() {
+        first_move = !first_move;
+        resetBoard();
+      }
+    );
+  });
 })();
 
 /* Update board dimensions */
-document.querySelector("#board_size").oninput = function() {
-  var new_size = this.options[this.selectedIndex].value;
+document.querySelector("#board_size").oninput = function(el) {
+  var new_size = el.target.options[el.target.selectedIndex].value;
   if (new_size == board_size) {return;}
   board_size = new_size;
   resetBoard();
@@ -83,6 +85,10 @@ document.querySelector("#board_size").oninput = function() {
 
 /* Update board size */
 function resizeBoard() {
+  var header_width;
+  var header_height;
+  var main_width;
+  var main_height;
 
   // get window and header size
   var window_height = window.innerHeight;
@@ -91,25 +97,23 @@ function resizeBoard() {
   // check orientation
   if (window_height>window_width) {
     // if portrait then 3-row format (subtract header and footer)
-    var header_height = document.querySelector("#header").clientHeight;
-    var main_width = window_width;
-    var main_height = window_height - header_height - 65;
+    header_height = document.querySelector("#header").clientHeight;
+    main_width = window_width;
+    main_height = window_height - header_height - 65;
   } else {
     // if landscape then 2-col format (no header and footer)
-    var header_width = document.querySelector("#header").clientWidth;
-    var main_width = window_width - header_width;
-    var main_height = window_height;
+    header_width = document.querySelector("#header").clientWidth;
+    main_width = window_width - header_width;
+    main_height = window_height;
   }
   // resize main display
   document.querySelector("#main").style.height = main_height + "px";
-  
+
   // resize board
   var board = document.querySelector("#board");
-  var board_size = Math.min(main_width-75, main_height-140)
+  board_size = Math.min(main_width-75, main_height-140);
   board.style.maxWidth =  board_size + "px";
   board.style.maxHeight = board_size + "px";
-
-
 }
 
 
@@ -124,7 +128,7 @@ document.querySelector("#reset-button").onclick = resetBoard;
 // play button
 document.querySelector("#play-button").onclick = function() {
   document.querySelector("#introduction").style.display = "none";
-}
+};
 
 
 /* Game Over Overlay */
@@ -134,8 +138,8 @@ function showGameOverMessage() {
 
   // update message
   var game_message = "The game is a draw.";
-  if (score[0] > score[1]) { game_message = "Congratulation you won!" }
-  else if (score[0] < score[1]) { game_message = "Sorry, you lost." }
+  if (score[0] > score[1]) { game_message = "Congratulations you won!"; }
+  else if (score[0] < score[1]) { game_message = "Sorry, you lost."; }
   document.querySelector("#game-over-message").innerHTML = game_message;
 
   // create graphics
@@ -158,7 +162,7 @@ function resetBoard() {
 
   // delete board
   var parent = document.querySelector("#board-container");
-  var child =  document.querySelector("#board")
+  var child =  document.querySelector("#board");
   parent.removeChild(child);
 
   // ser board dimensions
@@ -209,13 +213,14 @@ function toggleMenu() {
 
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(event) {
-  if (!event.target.matches('#menu-link')) {
+  if (!event.target.matches("#menu-link")) {
     var dropdowns = document.getElementsByClassName("dropdown-content");
-    for (var i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (!event.target.matches('.dropdown *') && openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
+    dropdowns.forEach(
+      function(el) {
+        if (!event.target.matches(".dropdown *") && el.classList.contains("show")) {
+          el.classList.remove("show");
+        }
       }
-    }
+    );
   }
 }
