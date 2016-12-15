@@ -52,7 +52,7 @@ function makeIndividualGraph(scores, first_move, player_color) {
     ctx.lineTo(w, score2y(0));             // horizontal axis end
 
     // horizontal axis ticks
-    for (var i=0; i<n; i++) {
+    for (i=0; i<n; i++) {
       ctx.moveTo(timestep2x(i+1), score2y(0) + 0.0125*h);
       ctx.lineTo(timestep2x(i+1), score2y(0) - 0.0125*h);
     }

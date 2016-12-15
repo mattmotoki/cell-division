@@ -21,8 +21,8 @@ function makeDifferenceGraph(scores, first_move, player_color) {
   var n_lower = 8 - n_upper;
   var delta = Math.ceil(
     Math.max(
-      n_upper==0 ? 0 : max_diff/n_upper,
-      n_lower==0 ? 0 : Math.abs(min_diff)/n_lower
+      n_upper===0 ? 0 : max_diff/n_upper,
+      n_lower===0 ? 0 : Math.abs(min_diff)/n_lower
     )
   );
 
@@ -78,7 +78,7 @@ function makeDifferenceGraph(scores, first_move, player_color) {
     ctx.moveTo(timestep2x(0), diff2y(0)); // horizontal axis start
     ctx.lineTo(w, diff2y(0));             // horizontal axis end
     // horizontal axis ticks
-    for (var i=0; i<n; i++) {
+    for (i=0; i<n; i++) {
       ctx.moveTo(timestep2x(i+1), diff2y(0) + 0.0125*h);
       ctx.lineTo(timestep2x(i+1), diff2y(0) - 0.0125*h);
     }
@@ -111,7 +111,7 @@ function makeDifferenceGraph(scores, first_move, player_color) {
       ctx.fillText(
         score_diffs[i],
         timestep2x(i+1),
-        diff2y(score_diffs[i]) + 0.04*h*(-1)**((i+1)%2+!first_move)
+        diff2y(score_diffs[i]) + 0.04*h*Math.pow(-1, (i+1)%2+!first_move)
       );
     }
     ctx.restore();
@@ -146,7 +146,7 @@ function makeDifferenceGraph(scores, first_move, player_color) {
   /* Player0 Score Difference */
   function diffCalc(A) {
     A.unshift(0);
-    return A.slice(1).map(function(n, i) { return (-1)**(i%2+!first_move)*(n - A[i]); });
+    return A.slice(1).map(function(n, i) { return Math.pow(-1, i%2+!first_move)*(n - A[i]); });
   }
   /* Element-wise Convex Combination of Two Vectors */
   function cvx_comb(v1, v2, alpha) {

@@ -9,11 +9,11 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: calc(100% - 285px);
+  width: 100%;
   background-color: rgba(0, 0, 0, 0.9);
   position: absolute;
   top: 0;
-  left: 285px;
+  /*left: 285px;*/
   z-index: 1;
 }
 

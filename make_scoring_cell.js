@@ -128,8 +128,8 @@ var makeScoringCell = (function() {
     // define colors
     var base_color = diff>0 ? base_color1 : base_color2;
     var dark_color = cvx_comb(color_black, base_color, darkness);
-    var outer_color = cvx_comb(color_white, dark_color, 1-adjusted_diff**0.25);
-    var inner_color = cvx_comb(color_white, base_color, 1-adjusted_diff**0.25);
+    var outer_color = cvx_comb(color_white, dark_color, 1-Math.pow(adjusted_diff,0.25));
+    var inner_color = cvx_comb(color_white, base_color, 1-Math.pow(adjusted_diff,0.25));
 
     // update the fill style
     color_gradient=ctx.createRadialGradient(center_x, center_y,0,center_x, center_y, size);
@@ -143,7 +143,7 @@ var makeScoringCell = (function() {
 
     // add transparency
     inner_shade.push(0);
-    outer_shade.push(0.5 + 0.25*(1- adjusted_diff)**0.25);
+    outer_shade.push(0.5 + 0.25*Math.pow(1- adjusted_diff,0.25));
 
     // update the fill style
     shading_gradient=ctx.createRadialGradient(center_x, center_y,0,center_x, center_y, 0.9*size);
