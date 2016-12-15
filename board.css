@@ -5,9 +5,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   padding: 15px;
-  height: calc(100% - 65px - 100px);
   border-top: 1px solid rgb(100,100,100);
   border-bottom: 1px solid rgb(100,100,100);
 }
@@ -26,6 +24,7 @@ main {
 #scoring-container {
   font-size: 24px;
   padding: 5px;
+  /*background-color: rgb(20,20,0);*/
 }
 
 /* --------------- */
@@ -38,10 +37,10 @@ main {
 .cell-container {
   display: inline-block;
   position: relative;
-  border: 1px solid rgb(25, 25, 25);
-  margin: -0.5px;
+  outline: 0.0625em solid  rgb(75, 75, 75);
+  font-size: 1.5em;
 }
-.cell-text{
+.cell-text, .cell-text.off{
   display: none;
   color:black;
 }
@@ -65,8 +64,8 @@ main {
   display: inline-block;
   position: absolute;
   background-color: none;
-  left: calc(50% - 7px);
-  top: calc(50% - 12px);
+  left: calc(50% - 0.35em);
+  top: calc(50% - 0.75em);
   cursor: pointer;
   z-index: 0;
 }

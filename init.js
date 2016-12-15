@@ -102,12 +102,14 @@ function resizeBoard() {
   }
   // resize main display
   document.querySelector("#main").style.height = main_height + "px";
-
+  
   // resize board
   var board = document.querySelector("#board");
   var board_size = Math.min(main_width-75, main_height-140)
   board.style.maxWidth =  board_size + "px";
   board.style.maxHeight = board_size + "px";
+
+
 }
 
 
