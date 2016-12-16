@@ -236,7 +236,7 @@ var makeBoard = function(w, h) {
     updateCellDisplay(ind0);
 
     // check if game is over
-    game_log.addToLog(ind0, plyr, score[plyr]);
+    game_log.push({"move":ind0, "player":plyr, "score":score[plyr]});
     if (game_over) { showGameOverMessage(); }
   }
 

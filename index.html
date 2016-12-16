@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="game.css"/>
   <link rel="stylesheet" type="text/css" href="footer.css"/>
   <link rel="stylesheet" type="text/css" href="overlay.css"/>
-  <link rel="shortcut icon" href="images/small_icon.ico" />
+  <link rel="shortcut icon" href="images/favicon.ico" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -87,7 +87,7 @@
             <option value="large"> Large (6x6)</option>
           </select>
         </label>
-        
+
         <label>
           First Move:
           <label><input type="radio" name="first_move" value="you" id="you" checked/> You</label>
@@ -103,13 +103,13 @@
   <main id="main">
     <!-- Game Over Overlay -->
     <div id="game-over-container">
-      <p> Congratulations you won!<p>
+      <p id="game-over-message"> Congratulations you won!<p>
         <div id="game-over-buttons">
-          <a id="switch-button" href="#">
-            <i class="fa fa-exchange fa-3x" aria-hidden="true"></i>Switch Turns
-          </a>
           <a id="stats-button" href="#">
             <i class="fa fa-bar-chart fa-3x" aria-hidden="true"></i>Statistics
+          </a>
+          <a id="switch-button" href="#">
+            <i class="fa fa-exchange fa-3x" aria-hidden="true"></i>Switch Turns
           </a>
           <a id="repeat-button" href="#">
             <i class="fa fa-gamepad fa-3x" aria-hidden="true"></i>Play Again

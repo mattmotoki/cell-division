@@ -13,18 +13,7 @@ var diff = 0;              // your score minus AI's score
 var n_rounds = 0;          // number of rounds per game
 
 /* Create a game log (for easier undos and for score visualization)*/
-var game_log = {
-  log: [],
-  addToLog: function(ind0, plyr, score) {
-    game_log.log.push(
-      {
-        move: ind0,
-        player: plyr,
-        score: score
-      }
-    );
-  }
-};
+var game_log = [];
 
 
 /* ------------------------------------- */
@@ -46,7 +35,7 @@ document.querySelector("body").onload = function() {
     case "small":  makeBoard(4,4); n_rounds=16; break;
     case "medium": makeBoard(5,5); n_rounds=25; break;
     case "large":  makeBoard(6,6); n_rounds=36; break;
-    default:       makeBoard(5,5); n_rounds=25;
+    default: throw  "board size not defined";
   }
 
   // initialize scoring cell
@@ -111,14 +100,14 @@ function resizeBoard() {
 
   // resize board
   var board = document.querySelector("#board");
-  board_size = Math.min(main_width-75, main_height-140);
-  board.style.maxWidth =  board_size + "px";
-  board.style.maxHeight = board_size + "px";
+  var board_width = Math.min(main_width-75, main_height-140);
+  board.style.maxWidth =  board_width + "px";
+  board.style.maxHeight = board_width + "px";
 
   // resize game
   var game = document.querySelector("#game");
-  game.style.maxWidth =  (board_size) + "px";
-  game.style.maxHeight = (board_size+140) + "px";
+  game.style.maxWidth =  (board_width) + "px";
+  game.style.maxHeight = (board_width+140) + "px";
 }
 
 
@@ -131,6 +120,7 @@ function resizeBoard() {
 // play button
 document.querySelector("#play-button").onclick = function() {
   document.querySelector("#introduction").style.display = "none";
+  document.querySelector("#overlay").style.zIndex  = 0;
 };
 // tutorial button
 
@@ -148,6 +138,7 @@ document.querySelector("#switch-button").onclick = function() {
   first_move = !first_move;
   resetBoard();
   document.querySelector("#game-over-container").style.display = "none";
+  document.querySelector("#overlay").style.zIndex  = 0;
 };
 // statistics button
 document.querySelector("#stats-button").onclick = function() {
@@ -158,6 +149,7 @@ document.querySelector("#stats-button").onclick = function() {
 document.querySelector("#repeat-button").onclick = function() {
   resetBoard();
   document.querySelector("#game-over-container").style.display = "none";
+  document.querySelector("#overlay").style.zIndex  = 0;
 };
 
 
@@ -166,7 +158,8 @@ document.querySelector("#repeat-button").onclick = function() {
 /* ------------------------------------- */
 function showGameOverMessage() {
   // update display
-  document.querySelector("#game-over-overlay").style.display = "flex";
+  document.querySelector("#game-over-container").style.display = "flex";
+  document.querySelector("#overlay").style.zIndex  = 1;
 
   // update message
   var game_message = "The game is a draw.";
@@ -175,15 +168,16 @@ function showGameOverMessage() {
   document.querySelector("#game-over-message").innerHTML = game_message;
 
   // create graphics
-  var scores = game_log.log.map(function(x) {return x.score;} );
-  console.log(scores);
+  var scores = game_log.map(function(x) {return x.score;} );
   makeDifferenceGraph(scores, first_move, makeScoringCell.player_colors);
   makeIndividualGraph(scores, first_move, makeScoringCell.player_colors);
 }
+// statistics overlay
 document.querySelector("#statistics-overlay").onclick = function(el){
   document.querySelector("#game-over-container").style.display = "flex";
   document.querySelector("#statistics-overlay").style.display = "none";
 };
+
 
 // // graphics display
 // document.querySelector("#statistics-overlay").onclick = function(el){
@@ -196,7 +190,7 @@ document.querySelector("#statistics-overlay").onclick = function(el){
 /* ------------------------------------- */
 function resetBoard() {
   // reset scores
-  score = [0, 0];   diff = 0;
+  score = [0, 0];   diff = 0;   game_log = [];
   document.querySelector("#score0").innerHTML = "You: 0";
   document.querySelector("#score1").innerHTML = "AI: 0";
 

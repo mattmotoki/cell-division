@@ -18,6 +18,7 @@ main {
 /* ------------------- */
 #game-over-container {
   display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   width: 100%;
