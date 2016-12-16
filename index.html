@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="generic.css"/>
   <link rel="stylesheet" type="text/css" href="intro.css"/>
   <link rel="stylesheet" type="text/css" href="header.css"/>
-  <link rel="stylesheet" type="text/css" href="board.css"/>
+  <link rel="stylesheet" type="text/css" href="game.css"/>
   <link rel="stylesheet" type="text/css" href="footer.css"/>
   <link rel="stylesheet" type="text/css" href="overlay.css"/>
   <link rel="shortcut icon" href="images/small_icon.ico" />
@@ -14,34 +14,10 @@
 </head>
 
 <body>
-  <!-- ==================================== -->
-  <!--  Introduction (Welcom and Tutorial)  -->
-  <!-- ==================================== -->
+  <!-- ===================================== -->
+  <!--  Introduction (Welcome and Tutorial)  -->
+  <!-- ===================================== -->
   <!-- Introduction -->
-  <div id="introduction">
-    Welcome to Cell Addition
-    <div id="intro-buttons">
-      <a id="me-button" href="https://www.youtube.com/watch?v=qb_hqexKkw8" target="_blank" title="Click here!">
-        <i class="fa fa-user-o fa-3x" aria-hidden="true"></i> Created by <br>Matt Motoki
-      </a>
-      <a id="about-button" href="about.html" target="_blank" title="Game Details">
-        <i class="fa fa-book fa-3x" aria-hidden="true"></i> About
-      </a>
-      <a id="play-button" href="#">
-        <i class="fa fa-gamepad fa-3x" aria-hidden="true"></i> Play Game
-      </a>
-      <a id="tutorial-button" href="tutorial.html" target="_blank" title="How to Play">
-        <i class="fa fa-play fa-3x" aria-hidden="true"></i> Tutorial
-      </a>
-      <a id="github-button" href="https://github.com/mattmotoki/Games.ai" target="_blank" title="Github">
-        <i class="fa fa-github fa-3x" aria-hidden="true"></i> Code
-      </a>
-    </div>
-  </div>
-
-  <!-- ============================ -->
-  <!--         Introduction         -->
-  <!-- ============================ -->
   <div id="introduction">
     Welcome to Cell Addition
     <div id="intro-buttons">
@@ -108,12 +84,15 @@
     </div>
   </header>
   <!-- ======================= -->
-  <!--  Main (Overlay, Board)  -->
+  <!--  Main (Overlays, Game)  -->
   <!-- ======================= -->
   <main id="main">
-    <!-- Overlay -->
-    <div id="overlay">
+    <!-- Game Over Overlay -->
+    <div id="game-over-overlay">
       <p id="game-over-message"> Congratulations you won!<p>
+    </div>
+    <!-- Statistics Overlay -->
+    <div id="statistics-overlay">
       <div class="graphics-container">
         <div class="graphic">
           <p class="plot-title"> Score Difference</p>
@@ -129,23 +108,26 @@
       </a>
     </div>
 
-    <!-- Scoring -->
-    <div class="main-container" id="scoring-container">
-      <div id="score0" class="score"> You: 0 </div>
-      <div id="score1" class="score"> AI: 0 </div>
-    </div>
-    <!-- main board -->
-    <div class="main-container" id="board-container">
-      <!-- board goes here -->
-     </div>
-    <!-- game buttons -->
-    <div class="main-container">
-      <button class="button" id="undo-button">
-        <i class="fa fa-undo" aria-hidden="true"></i> undo
-      </button>
-      <button class="button" id="reset-button">
-        <i class="fa fa-refresh" aria-hidden="true"></i> reset
-      </button>
+    <!-- Game (score, board and buttons) -->
+    <div id="game">
+      <!-- Scoring -->
+      <div class="game-container" id="scoring-container">
+        <div id="score0" class="score"> You: 0 </div>
+        <div id="score1" class="score"> AI: 0 </div>
+      </div>
+      <!-- main board -->
+      <div class="game-container" id="board-container">
+        <!-- board goes here -->
+      </div>
+      <!-- game buttons -->
+      <div class="game-container">
+        <button class="button" id="undo-button">
+          <i class="fa fa-undo" aria-hidden="true"></i> undo
+        </button>
+        <button class="button" id="reset-button">
+          <i class="fa fa-refresh" aria-hidden="true"></i> reset
+        </button>
+      </div>
     </div>
   </main>
   <!-- ================ -->

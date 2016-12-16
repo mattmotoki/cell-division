@@ -114,6 +114,11 @@ function resizeBoard() {
   board_size = Math.min(main_width-75, main_height-140);
   board.style.maxWidth =  board_size + "px";
   board.style.maxHeight = board_size + "px";
+
+  // resize game
+  var game = document.querySelector("#game");
+  game.style.maxWidth =  (board_size) + "px";
+  game.style.maxHeight = (board_size+140) + "px";
 }
 
 
@@ -132,11 +137,11 @@ document.querySelector("#play-button").onclick = function() {
 
 
 /* ------------------------------------- */
-/*           Game Over Overlay           */
+/*                Overlays               */
 /* ------------------------------------- */
 function showGameOverMessage() {
   // update display
-  document.querySelector("#overlay").style.display = "flex";
+  document.querySelector("#game-over-overlay").style.display = "flex";
 
   // update message
   var game_message = "The game is a draw.";
@@ -151,6 +156,10 @@ function showGameOverMessage() {
   makeIndividualGraph(scores, first_move, makeScoringCell.player_colors);
 }
 
+// graphics display
+document.querySelector("#statistics-overlay").onclick = function(el){
+  el.style.display = none;
+};
 
 
 /* ------------------------------------- */

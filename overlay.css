@@ -2,7 +2,7 @@
 /* ----------------- */
 /*  Overlay-Section  */
 /* ----------------- */
-#overlay {
+#game-over-overlay, #statistics-overlay {
   display: none;
   /*display: flex;*/
   flex-direction: column;
