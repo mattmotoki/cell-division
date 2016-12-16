@@ -125,29 +125,35 @@ function resizeBoard() {
 /* ------------------------------------- */
 /*           Button Listeners            */
 /* ------------------------------------- */
-// reset button
-document.querySelector("#reset-button").onclick = resetBoard;
-
-// tutorial button
-
+/* --------------- */
+/*  Intro Buttons  */
+/* --------------- */
 // play button
 document.querySelector("#play-button").onclick = function() {
   document.querySelector("#introduction").style.display = "none";
 };
+// tutorial button
 
+/* -------------- */
+/*  Game Buttons  */
+/* -------------- */
+// reset button
+document.querySelector("#reset-button").onclick = resetBoard;
+
+/* ------------------- */
+/*  Game Over Buttons  */
+/* ------------------- */
 // switch button
 document.querySelector("#switch-button").onclick = function() {
   first_move = !first_move;
   resetBoard();
   document.querySelector("#game-over-container").style.display = "none";
 };
-
 // statistics button
 document.querySelector("#stats-button").onclick = function() {
   document.querySelector("#game-over-container").style.display = "none";
   document.querySelector("#statistics-overlay").style.display = "flex";
 };
-
 // repeat (play again) button
 document.querySelector("#repeat-button").onclick = function() {
   resetBoard();
@@ -247,14 +253,26 @@ function toggleMenu() {
 
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(event) {
-  if (!event.target.matches("#menu-link")) {
+  if (!event.target.matches('#menu-link')) {
     var dropdowns = document.getElementsByClassName("dropdown-content");
-    dropdowns.forEach(
-      function(el) {
-        if (!event.target.matches(".dropdown *") && el.classList.contains("show")) {
-          el.classList.remove("show");
-        }
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (!event.target.matches('.dropdown *') && openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
       }
-    );
+    }
   }
 }
+// // Close the dropdown if the user clicks outside of it
+// window.onclick = function(event) {
+//   if (!event.target.matches("#menu-link")) {
+//     var dropdowns = document.getElementsByClassName("dropdown-content");
+//     dropdowns.forEach(
+//       function(el) {
+//         if (!event.target.matches(".dropdown *") && el.classList.contains("show")) {
+//           el.classList.remove("show");
+//         }
+//       }
+//     );
+//   }
+// }

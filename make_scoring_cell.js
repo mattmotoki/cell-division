@@ -9,9 +9,9 @@ var makeScoringCell = (function() {
 
   var cell_module = {};
 
-  /* ------------------------------------- */
-  /*         Private Variables             */
-  /* ------------------------------------- */
+  /* ------------------------------ */
+  /*          Variables             */
+  /* ------------------------------ */
   /* Lorenz parameters (in units w.r.t. to the Lorenz system) */
   var sigma = 10;         // Lorenz system parameter
   var r = 28;             // Lorenz system parameter
@@ -57,17 +57,21 @@ var makeScoringCell = (function() {
   var shading_gradient = "white";    // black and white gradient fill
   var max_score = 10;                // value used to truncate score difference
   var adjusted_diff = 0;             // positive scaled truncated score difference
-  var base_color1 = [34, 255, 34];   // player's cell color (green)
+  var base_color0 = [34, 255, 34];   // player's cell color (green)
   // AI's cell color
   function setAIColor() {
     switch (difficulty) {
-      case "easy":   base_color2 = [34, 142, 250]; break; // (blue)
-      case "medium": base_color2 = [230, 54, 230]; break; // (fuscia)
-      case "hard":   base_color2 = [255, 0, 0];    break; // (red)
-      default:       base_color2 = [255, 255, 0];         // (yellow)
+      case "easy":   base_color1 = [34, 142, 250]; break; // (blue)
+      case "medium": base_color1 = [230, 54, 230]; break; // (fuscia)
+      case "hard":   base_color1 = [255, 0, 0];    break; // (red)
+      default:       base_color1 = [255, 255, 0];         // (yellow)
     }
     // make cell colors public
-    cell_module.player_colors = [base_color1, base_color2];
+    cell_module.player_colors = [base_color0, base_color1];
+
+    // update AI score color
+    document.querySelector("#score1").style.color = vec2rgb(base_color1);
+
   }
   setAIColor();
   cell_module.setAIColor = setAIColor;
@@ -127,7 +131,7 @@ var makeScoringCell = (function() {
   function updateGradient() {
     /* Cell color*/
     // define colors
-    var base_color = diff>0 ? base_color1 : base_color2;
+    var base_color = diff>0 ? base_color0 : base_color1;
     var dark_color = cvx_comb(color_black, base_color, darkness);
     var outer_color = cvx_comb(color_white, dark_color, 1-Math.pow(adjusted_diff,0.25));
     var inner_color = cvx_comb(color_white, base_color, 1-Math.pow(adjusted_diff,0.25));

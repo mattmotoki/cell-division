@@ -87,9 +87,9 @@
             <option value="large"> Large (6x6)</option>
           </select>
         </label>
-
+        
         <label>
-		  First Move:
+          First Move:
           <label><input type="radio" name="first_move" value="you" id="you" checked/> You</label>
           <label><input type="radio" name="first_move" value="ai" id="ai" /> AI</label>
         </label>
@@ -115,52 +115,52 @@
             <i class="fa fa-gamepad fa-3x" aria-hidden="true"></i>Play Again
           </a>
         </div>
-    </div>
-    <!-- Game (score, board and buttons) -->
-    <div id="game">
-      <!-- Scoring -->
-      <div class="game-container" id="scoring-container">
-        <div id="score0" class="score"> You: 0 </div>
-        <div id="score1" class="score"> AI: 0 </div>
       </div>
-      <!-- main board -->
-      <div class="game-container" id="board-container">
-        <!-- board goes here -->
+      <!-- Game (score, board and buttons) -->
+      <div id="game">
+        <!-- Scoring -->
+        <div class="game-container" id="scoring-container">
+          <div id="score0" class="score"> You: 0 </div>
+          <div id="score1" class="score"> AI: 0 </div>
+        </div>
+        <!-- main board -->
+        <div class="game-container" id="board-container">
+          <!-- board goes here -->
+        </div>
+        <!-- game buttons -->
+        <div class="game-container">
+          <button class="button" id="undo-button">
+            <i class="fa fa-undo" aria-hidden="true"></i> undo
+          </button>
+          <button class="button" id="reset-button">
+            <i class="fa fa-refresh" aria-hidden="true"></i> reset
+          </button>
+        </div>
       </div>
-      <!-- game buttons -->
-      <div class="game-container">
-        <button class="button" id="undo-button">
-          <i class="fa fa-undo" aria-hidden="true"></i> undo
-        </button>
-        <button class="button" id="reset-button">
-          <i class="fa fa-refresh" aria-hidden="true"></i> reset
-        </button>
+    </main>
+    <!-- ================ -->
+    <!--  Footer (links)  -->
+    <!-- ================ -->
+    <footer>
+      <div id="info-links">
+        <a href="about.html" target="_blank" title="Game Details">
+          <i class="fa fa-book" aria-hidden="true"></i> About
+        </a>
+        <a href="https://github.com/mattmotoki/Games.ai" target="_blank" title="Github">
+          <i class="fa fa-github" aria-hidden="true"></i> Code
+        </a>
+        <a href="tutorial.html" target="_blank" title="How to Play">
+          <i class="fa fa-play" aria-hidden="true"></i> Tutorial
+        </a>
       </div>
-    </div>
-  </main>
-  <!-- ================ -->
-  <!--  Footer (links)  -->
-  <!-- ================ -->
-  <footer>
-    <div id="info-links">
-      <a href="about.html" target="_blank" title="Game Details">
-        <i class="fa fa-book" aria-hidden="true"></i> About
+      <a href="https://www.youtube.com/watch?v=qb_hqexKkw8" target="_blank" title="Click here!">
+        Created by Matt Motoki
       </a>
-      <a href="https://github.com/mattmotoki/Games.ai" target="_blank" title="Github">
-        <i class="fa fa-github" aria-hidden="true"></i> Code
-      </a>
-      <a href="tutorial.html" target="_blank" title="How to Play">
-        <i class="fa fa-play" aria-hidden="true"></i> Tutorial
-      </a>
-    </div>
-    <a href="https://www.youtube.com/watch?v=qb_hqexKkw8" target="_blank" title="Click here!">
-      Created by Matt Motoki
-    </a>
-  </footer>
-</body>
-<script type="text/javascript" src="init.js"></script>
-<script type="text/javascript" src="make_board.js"></script>
-<script type="text/javascript" src="make_scoring_cell.js"></script>
-<script type="text/javascript" src="difference_graphic.js"></script>
-<script type="text/javascript" src="individual_graphic.js"></script>
-</html>
+    </footer>
+  </body>
+  <script type="text/javascript" src="init.js"></script>
+  <script type="text/javascript" src="make_board.js"></script>
+  <script type="text/javascript" src="make_scoring_cell.js"></script>
+  <script type="text/javascript" src="difference_graphic.js"></script>
+  <script type="text/javascript" src="individual_graphic.js"></script>
+  </html>

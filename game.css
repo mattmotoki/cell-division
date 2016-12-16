@@ -72,6 +72,9 @@ main {
   font-size: 24px;
   padding: 5px;
 }
+#score0 {
+  color: rgb(34, 255, 34);
+}
 
 /* --------------- */
 /*  Board Section */

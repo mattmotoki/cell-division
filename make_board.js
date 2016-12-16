@@ -9,9 +9,9 @@ var makeBoard = function(w, h) {
   /*  -first_move: determines who get's the first move                        */
   /* ------------------------------------------------------------------------ */
 
-  /* ------------------------------------- */
-  /*         Internal Variables            */
-  /* ------------------------------------- */
+  /* ----------------------------- */
+  /*          Variables            */
+  /* ----------------------------- */
   var game_over = false; // number of rounds per game
   var open_moves = [];   // open board positions
   var is_busy = false;   // is busy with annimation
@@ -23,7 +23,6 @@ var makeBoard = function(w, h) {
   container.id = "board";
   document.querySelector("#board-container").appendChild(container);
   resizeBoard();
-
 
   /* Calculate adjacent indices */
   var adj = [
