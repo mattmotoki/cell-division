@@ -63,7 +63,7 @@ var makeScoringCell = (function() {
     switch (difficulty) {
       case "easy":   base_color1 = [34, 142, 250]; break; // (blue)
       case "medium": base_color1 = [230, 54, 230]; break; // (fuscia)
-      case "hard":   base_color1 = [255, 0, 0];    break; // (red)
+      case "hard":   base_color1 = [255, 60, 0];    break; // (red)
       default:       base_color1 = [255, 255, 0];         // (yellow)
     }
     // make cell colors public

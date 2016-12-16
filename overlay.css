@@ -1,5 +1,6 @@
 #overlay {
   display: flex;
+  display: none;
   justify-content: center;
   height: 100%;
   width: 100%;

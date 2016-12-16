@@ -32,11 +32,10 @@ body *{
 	padding: 0px;
 	border: 1px solid rgba(221,221,221,0.);
 }
-
 a {
 	text-decoration: none;
 	color: white;
 }
 a:hover {
-	color: rgb(200,200,200);
+	color: rgb(34, 255, 34);
 }

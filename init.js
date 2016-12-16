@@ -6,8 +6,8 @@
 /*           Shared Variables            */
 /* ------------------------------------- */
 var first_move = true;     // if true then user goes first
-var board_size;            // board size
-var difficulty = "hard";   // AI difficulty
+var board_size = "small";  // board size
+var difficulty = "medium";   // AI difficulty
 var score = [0, 0];        // your score and AI's score
 var diff = 0;              // your score minus AI's score
 var n_rounds = 0;          // number of rounds per game
@@ -28,33 +28,68 @@ window.onresize = function() {
 
 /* Get user input */
 document.querySelector("body").onload = function() {
-  // initialze board
-  var el = document.querySelector("#board_size");
-  board_size = el.options[el.selectedIndex].value;
+  // initialize difficulty
+  var el = document.querySelector("#difficulty-" + difficulty).childNodes[3];
+  el.className = "fa fa-check check-on";
+
+  // initialize board size
   switch (board_size) {
     case "small":  makeBoard(4,4); n_rounds=16; break;
     case "medium": makeBoard(5,5); n_rounds=25; break;
     case "large":  makeBoard(6,6); n_rounds=36; break;
     default: throw  "board size not defined";
   }
+  el = document.querySelector("#size-" + board_size).childNodes[3];
+  el.className = "fa fa-check check-on";
 
   // initialize scoring cell
   requestId = makeScoringCell.animateCell();
 };
 
 /* Update difficulty */
-document.querySelector("#difficulty").oninput = function(el) {
-  var new_difficulty = el.target.options[el.target.selectedIndex].value;
-  if (new_difficulty == difficulty) {return;}
-  difficulty = new_difficulty;
-  makeScoringCell.setAIColor();
-  resetBoard();
-};
+document.querySelector("#difficulty-easy").onclick = setDifficulty;
+document.querySelector("#difficulty-medium").onclick = setDifficulty;
+document.querySelector("#difficulty-hard").onclick = setDifficulty;
+function setDifficulty() {
+  var new_difficulty = this.id.match(/-(.*)/)[1];
+  if (new_difficulty != difficulty) {
+    // turn off old difficulty
+    document.querySelector("#difficulty-" + difficulty)
+    .childNodes[3].className = "fa fa-check check-off";
+    // turn off on new difficulty
+    document.querySelector("#difficulty-" + new_difficulty)
+    .childNodes[3].className = "fa fa-check check-on";
+    // switch and reset the game
+    difficulty = new_difficulty;
+    makeScoringCell.setAIColor();
+    resetBoard();
+  }
+}
+
+
+/* Update board size */
+document.querySelector("#size-small").onclick = setSize;
+document.querySelector("#size-medium").onclick = setSize;
+document.querySelector("#size-large").onclick = setSize;
+function setSize() {
+  var new_size = this.id.match(/-(.*)/)[1];
+  if (new_size != board_size) {
+    // turn off old difficulty
+    document.querySelector("#size-" + board_size)
+    .childNodes[3].className = "fa fa-check check-off";
+    // turn off on new difficulty
+    document.querySelector("#size-" + new_size)
+    .childNodes[3].className = "fa fa-check check-on";
+    // switch and reset the game
+    board_size = new_size;
+    resetBoard();
+  }
+}
+
 
 /* Update first move */
 (function() {
-  var radios = document.getElementsByName("first_move");
-  radios.forEach(
+  document.getElementsByName("first-move").forEach(
     function(el) {
       el.addEventListener("click", function() {
         first_move = !first_move;
@@ -63,14 +98,6 @@ document.querySelector("#difficulty").oninput = function(el) {
     );
   });
 })();
-
-/* Update board dimensions */
-document.querySelector("#board_size").oninput = function(el) {
-  var new_size = el.target.options[el.target.selectedIndex].value;
-  if (new_size == board_size) {return;}
-  board_size = new_size;
-  resetBoard();
-};
 
 /* Update board size */
 function resizeBoard() {

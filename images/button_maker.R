@@ -1,8 +1,8 @@
 source("cell_plot_utils.R")
 line_width <- 3
 
-w = 120
-h = 120
+w = 50
+h = 50
 
 #------------------
 # cell definitions
@@ -49,20 +49,20 @@ graphics.off()
 # difficulty
 png("cell_icon.png")
 blank_plot()
-plot_cell(2*sm_sq_x, 2*sm_sq_y, cellyellow)
+plot_cell(2*sm_sq_x, 2*sm_sq_y, cellgreen)
 dev.off()
 
-png("difficulty_easy.png")
+png("difficulty_easy.png", width=w, height=h)
 blank_plot()
 plot_cell(2*sm_sq_x, 2*sm_sq_y, cellblue)
 dev.off()
 
-png("difficulty_medium.png")
+png("difficulty_medium.png", width=w, height=h)
 blank_plot()
 plot_cell(2*sm_sq_x, 2*sm_sq_y, cellfuscia)
 dev.off()
 
-png("difficulty_hard.png")
+png("difficulty_hard.png", width=w, height=h)
 blank_plot()
 plot_cell(2*sm_sq_x, 2*sm_sq_y, cellred)
 dev.off()
@@ -71,18 +71,18 @@ dev.off()
 #------------------
 # board size
 
-png("size_small.png")
+png("size_small.png", width=w, height=h)
 blank_plot()
 plot_cell(sm_sq_x+0.25, sm_sq_y+0.25, cellyellow)
 dev.off()
 
-png("size_medium.png")
+png("size_medium.png", width=w, height=h)
 blank_plot()
 plot_cell(sm_sq_x, sm_sq_y+0.25, cellyellow)
 plot_cell(sm_sq_x+0.5, sm_sq_y+0.25, cellyellow)
 dev.off()
 
-png("size_larger.png")
+png("size_large.png", width=w, height=h)
 blank_plot()
 plot_cell(sm_sq_x, sm_sq_y, cellyellow)
 plot_cell(sm_sq_x+0.5, sm_sq_y, cellyellow)

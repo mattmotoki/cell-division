@@ -6,6 +6,7 @@ header {
   flex-direction: column;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.1);
+  min-width: 285px;
 }
 
 
@@ -40,7 +41,9 @@ header {
 /* ----------------------------------- */
 
 /* menu */
-#menu-link:hover { cursor: pointer;}
+
+
+#menu-link:hover { cursor: pointer; }
 
 .dropdown { position: relative; }
 
@@ -59,7 +62,39 @@ header {
   z-index: 2;
 }
 
+.check-off {
+  visibility: hidden;
+}
 
+.check-on {
+  visibility: inherit;
+}
+
+
+.setting >* {
+  display: block;
+}
+.setting img {
+  height: 25px;
+  vertical-align: bottom;
+  margin-left: 0.65em;
+}
+.setting label {
+  margin-left: 0.65em;
+}
+
+#board-size >*:hover {
+  color: yellow;
+}
+#difficulty-easy:hover {
+  color: rgb(34, 142, 250);
+}
+#difficulty-medium:hover {
+  color: rgb(230, 54, 230);
+}
+#difficulty-hard:hover {
+  color: rgb(255, 60, 0);
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Tablet Header (Title: cell-animation, text; Game Settings: icon, menu)    */
@@ -103,8 +138,8 @@ header {
 
   /* remove link like behaviour */
   #menu-link:hover {
-  	color: white;
-    cursor:default;
+  	color: inherit;
+    cursor: default;
   }
 }
 
