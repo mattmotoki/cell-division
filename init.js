@@ -117,9 +117,9 @@ function resizeBoard() {
 }
 
 
-
-/* Button Listeners */
-
+/* ------------------------------------- */
+/*           Button Listeners            */
+/* ------------------------------------- */
 // reset button
 document.querySelector("#reset-button").onclick = resetBoard;
 
@@ -131,7 +131,9 @@ document.querySelector("#play-button").onclick = function() {
 };
 
 
-/* Game Over Overlay */
+/* ------------------------------------- */
+/*           Game Over Overlay           */
+/* ------------------------------------- */
 function showGameOverMessage() {
   // update display
   document.querySelector("#overlay").style.display = "flex";
