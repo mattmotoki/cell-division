@@ -7,6 +7,44 @@ main {
   padding: 15px;
   border-top: 1px solid rgb(100,100,100);
   border-bottom: 1px solid rgb(100,100,100);
+  position: relative;
+}
+
+
+
+
+/* ------------------- */
+/*  Game Over Message  */
+/* ------------------- */
+#game-over-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  font-size: 50px;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+
+#game-over-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  font-size: 30px;
+}
+
+#game-over-buttons * {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
 }
 
 

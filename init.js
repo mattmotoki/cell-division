@@ -135,6 +135,25 @@ document.querySelector("#play-button").onclick = function() {
   document.querySelector("#introduction").style.display = "none";
 };
 
+// switch button
+document.querySelector("#switch-button").onclick = function() {
+  first_move = !first_move;
+  resetBoard();
+  document.querySelector("#game-over-container").style.display = "none";
+};
+
+// statistics button
+document.querySelector("#stats-button").onclick = function() {
+  document.querySelector("#game-over-container").style.display = "none";
+  document.querySelector("#statistics-overlay").style.display = "flex";
+};
+
+// repeat (play again) button
+document.querySelector("#repeat-button").onclick = function() {
+  resetBoard();
+  document.querySelector("#game-over-container").style.display = "none";
+};
+
 
 /* ------------------------------------- */
 /*                Overlays               */
@@ -155,11 +174,15 @@ function showGameOverMessage() {
   makeDifferenceGraph(scores, first_move, makeScoringCell.player_colors);
   makeIndividualGraph(scores, first_move, makeScoringCell.player_colors);
 }
-
-// graphics display
 document.querySelector("#statistics-overlay").onclick = function(el){
-  el.style.display = none;
+  document.querySelector("#game-over-container").style.display = "flex";
+  document.querySelector("#statistics-overlay").style.display = "none";
 };
+
+// // graphics display
+// document.querySelector("#statistics-overlay").onclick = function(el){
+//   el.style.display = none;
+// };
 
 
 /* ------------------------------------- */
