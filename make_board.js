@@ -87,13 +87,20 @@ var makeBoard = function(w, h) {
     cell_text.className = "cell-text on";
 
     // initialize cell image
-    var cell = document.createElement("img");
-    cell.id  = "cell-img-" + ind0;
-    cell.className  = "single-cell on";
-    cell.src = "images/o0000.png";
+    var old_cell = document.createElement("img");
+    old_cell.id  = "old-cell-img-" + ind0;
+    old_cell.className  = "single-cell on old";
+    old_cell.src = "images/o0000.png";
+
+    var new_cell = document.createElement("img");
+    new_cell.id  = "new-cell-img-" + ind0;
+    new_cell.className  = "single-cell on new";
+    new_cell.src = "images/o0000.png";
+
 
     // add elements to board
-    cell_container.appendChild(cell);
+    cell_container.appendChild(new_cell);
+    cell_container.appendChild(old_cell);
     cell_container.appendChild(cell_text);
     container.appendChild(cell_container);
   }
@@ -154,9 +161,10 @@ var makeBoard = function(w, h) {
     connection_table[ind0].player = plyr;
     if (timestep==n_rounds) { game_over = true; }
 
-    // remove hover property from cell image and cell text
-    document.querySelector("#cell-img-" + ind0).className  = "single-cell off";
-    document.querySelector("#cell-text-" + ind0).className  = "cell-text off";
+    // remove hover property from cell image and cell text ("on" class)
+    document.querySelector("#new-cell-img-" + ind0).className  = "single-cell new";
+    document.querySelector("#old-cell-img-" + ind0).className  = "single-cell old";
+    document.querySelector("#cell-text-" + ind0).className  = "cell-text";
 
     // update score parameters
     score[plyr] += extractScore(plyr, ind0);
@@ -254,7 +262,8 @@ var makeBoard = function(w, h) {
     connection_table[ind0].player = 2;
 
     // add hover property from cell image and cell text
-    document.querySelector("#cell-img-" + ind0).className  = "single-cell on";
+    document.querySelector("#new-cell-img-" + ind0).className  = "single-cell on new";
+    document.querySelector("#old-cell-img-" + ind0).className  = "single-cell on old";
     document.querySelector("#cell-text-" + ind0).className  = "cell-text on";
 
     // update score parameters
@@ -379,25 +388,16 @@ var makeBoard = function(w, h) {
 
   /* Update cell image */
   function updateCellDisplay(ind) {
-    var cell = document.querySelector("#cell-img-" + ind);
-    // map number of connections to {0, 1} then update image
-    cell.src = "images/" + player_color[connection_table[ind].player] +
-    connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
-    easeIn(cell);
-  }
+    var old_cell = document.querySelector("#old-cell-img-" + ind);
+    var new_cell = document.querySelector("#new-cell-img-" + ind);
 
-  /* Fade cells into the board */
-  function unfade(element) {
-    var op = 0.1;  // initial opacity
-    element.style.display = "block";
-    element.style.opacity = op;
-    element.style.filter = "alpha(opacity=" + op * 100 + ")";
-    var timer = setInterval(function () {
-      if (op >= 1){ clearInterval(timer); }
-      element.style.opacity = op;
-      element.style.filter = "alpha(opacity=" + op * 100 + ")";
-      op += op * 0.1;
-    }, 30);
+    // update old cell
+    old_cell.src = new_cell.src;
+    easeOut(old_cell, 1);
+    // update new cell (map number of connections to {0, 1})
+    new_cell.src = "images/" + player_color[connection_table[ind].player] +
+    connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
+    easeIn(new_cell, 2);
   }
 
 

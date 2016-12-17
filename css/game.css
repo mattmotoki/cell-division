@@ -101,6 +101,13 @@ main {
   display: inline-block;
   width: 100%;
 }
+.old {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
 .cell-container:hover * {
   animation: shake 0.75s;
 }

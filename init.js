@@ -240,7 +240,6 @@ function easeIn(el, duration=1) {
   function increaseOpacity() {
     t += dt;
     op = t*(2-t);
-    console.log(op);
     if (t >= 1){
       el.style.opacity = 1;
       el.style.filter = "alpha(opacity=100)";
@@ -264,7 +263,7 @@ function easeOut(el, duration=1) {
   // update opacity using op = 1 - t^2
   function decreaseOpacity() {
     t += dt;
-    op = 1-t*t;
+    op = 1-t; // 1-t*t
     if (t >= 1){
       el.style.opacity = 0;
       el.style.filter = "alpha(opacity=0)";
