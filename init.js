@@ -7,11 +7,10 @@
 /* ------------------------------------- */
 var first_move = true;     // if true then user goes first
 var board_size = "small";  // board size
-var difficulty = "medium";   // AI difficulty
+var difficulty = "medium"; // AI difficulty
 var score = [0, 0];        // your score and AI's score
 var diff = 0;              // your score minus AI's score
 var n_rounds = 0;          // number of rounds per game
-
 /* Create a game log (for easier undos and for score visualization)*/
 var game_log = [];
 
@@ -157,6 +156,9 @@ document.querySelector("#play-button").onclick = function() {
 // reset button
 document.querySelector("#reset-button").onclick = resetBoard;
 
+// undo button (see make_board.js)
+
+
 /* ------------------- */
 /*  Game Over Buttons  */
 /* ------------------- */
@@ -203,13 +205,9 @@ function showGameOverMessage() {
 document.querySelector("#statistics-overlay").onclick = function(el){
   document.querySelector("#game-over-container").style.display = "flex";
   document.querySelector("#statistics-overlay").style.display = "none";
+  document.querySelector("#overlay").style.zIndex  = 0;
 };
 
-
-// // graphics display
-// document.querySelector("#statistics-overlay").onclick = function(el){
-//   el.style.display = none;
-// };
 
 
 /* ------------------------------------- */
@@ -284,16 +282,3 @@ window.onclick = function(event) {
     }
   }
 }
-// // Close the dropdown if the user clicks outside of it
-// window.onclick = function(event) {
-//   if (!event.target.matches("#menu-link")) {
-//     var dropdowns = document.getElementsByClassName("dropdown-content");
-//     dropdowns.forEach(
-//       function(el) {
-//         if (!event.target.matches(".dropdown *") && el.classList.contains("show")) {
-//           el.classList.remove("show");
-//         }
-//       }
-//     );
-//   }
-// }

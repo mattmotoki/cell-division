@@ -1,5 +1,5 @@
 #overlay {
-  display: flex;
+  /*display: flex;*/
   display: none;
   justify-content: center;
   height: 100%;
@@ -15,8 +15,8 @@
 /* Introduction */
 /* ------------ */
 #introduction {
-  display: flex;
-  /*display: none;*/
+  /*display: flex;*/
+  display: none;
   width: 100%;
   /*max-width: 800px;*/
   background: rgba(0, 0, 0, 1);
@@ -55,7 +55,8 @@
 /*  Statistics  */
 /* ----------------- */
 #statistics-overlay {
-  display: none;
+  display: flex;
+    /*display: none;*/
   flex-direction: column;
   align-items: center;
   justify-content: center;

@@ -90,15 +90,34 @@ main {
   outline: 0.0625em solid  rgb(75, 75, 75);
   font-size: 1.5em;
 }
-.cell-text, .cell-text.off{
+.cell-container * {
+  margin: 1px 0 0 1px; /* this is fudging */
+}
+.cell-text {
   display: none;
-  color:black;
+  color: black;
 }
 .single-cell {
   display: inline-block;
   width: 100%;
-  background-color: black;
 }
+.cell-container:hover * {
+  animation: shake 0.75s;
+}
+.cell-container:hover .cell-text.on {
+  display: inline-block;
+  position: absolute;
+  left: calc(50% - 0.35em);
+  top: calc(50% - 0.75em);
+  background-color: none;
+  cursor: pointer;
+  z-index: 0;
+}
+.cell-container:hover .single-cell.on {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor:pointer;
+}
+
 
 
 @keyframes shake {
@@ -107,26 +126,6 @@ main {
   75% { transform: translateY(1px) }
 }
 
-.cell-container:hover * {
-  animation: shake 0.75s;
-}
-.cell-container:hover .cell-text.on {
-  display: inline-block;
-  position: absolute;
-  background-color: none;
-  left: calc(50% - 0.35em);
-  top: calc(50% - 0.75em);
-  cursor: pointer;
-  z-index: 0;
-}
-.cell-container:hover .single-cell.on {
-  background-color: rgba(255, 255, 255, 0.2);
-  cursor:pointer;
-}
-.single-cell.on:active,  .single-cell.off{
-  background-color: none;
-  cursor:default;
-}
 
 /* ---------------- */
 /*  Button Section  */

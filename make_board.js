@@ -12,12 +12,11 @@ var makeBoard = function(w, h) {
   /* ----------------------------- */
   /*          Variables            */
   /* ----------------------------- */
-  var game_over = false; // number of rounds per game
+  var game_over = false; // game over flag
   var open_moves = [];   // open board positions
   var is_busy = false;   // is busy with annimation
-  var timestep = 0;      // number of moves played (unused)
   w += 4;   h += 4;      // add margin to width and height
-
+  var timestep = 0;      // number of moves played
   // Create board
   var container = document.createElement("div");
   container.id = "board";
@@ -43,59 +42,52 @@ var makeBoard = function(w, h) {
   player_color.push("o"); // default for outline
 
   /* Create scoring and connections table */
-
   // check feasibility of index (with margin)
-  var infeasible_rows = [0, 1, h-2, h-1];
-  var infeasible_cols = [0, 1, w-2, w-1];
   function checkFeasibility(ind) {
     var col = Math.floor(ind/h);
     var row = ind % h;
-    return (infeasible_rows.indexOf(row)==-1 && infeasible_cols.indexOf(col)==-1);
+    return (row>1) && (row<h-1) && (col>1) && (col<w-1);
   }
   // initialize tables with defaults
   var connection_table = new Array(w*h);
   var scoring_table = [new Array(w*h), new Array(w*h)];
   for (var i=0; i < w*h; i++) {
-    connection_table[i] = { player:2, openness:8, connections:[0, 0, 0, 0] };
+    // initialize scoring tables
     scoring_table[0][i] = { overlap:0, interlap:0, unconnected:0, extensions:0 };
     scoring_table[1][i] = { overlap:0, interlap:0, unconnected:0, extensions:0 };
-  }
-
-  // check for infeasible and correct defaults
-  for (var i = 0; i < w*h; i++) {
-    // if feasible then check neighbors
+    // initialize  connection table (default player=2)
+    connection_table[i] = { player:2, openness:8, connections:[0, 0, 0, 0] };
+    // update openness (if neighbor is not feasible then decrement openness)
     if (checkFeasibility(i)) {
       for (var j = 0; j < 8; j++) {
-        // if neighbors is not feasible then decrement openness
         if (!checkFeasibility(i + adj[j])) { connection_table[i].openness --; }
       }
     }
   }
 
-
   /* Fill in the board */
   for (var i=0; i < (w-4)*(h-4);  i++) {
+    var ind0 = convertIndex(i);
+    open_moves.push(ind0);
+
     // get cell container
     var cell_container = document.createElement("div");
     cell_container.className = "cell-container";
-    cell_container.setAttribute("style","width:" + 100/(w-4) + "%");
+    cell_container.style.width = 100/(w-4) + "%";
+    cell_container.ind0 =  ind0;
+    cell_container.onclick = playRound;
 
     // initialize scoring overlay text
     var cell_text = document.createElement("div");
     cell_text.innerHTML = "1";
-    cell_text.id  = "cell-text-" + convertIndex(i);
-    cell_text.ind0 =  convertIndex(i);
+    cell_text.id  = "cell-text-" + ind0;
     cell_text.className = "cell-text on";
-    cell_text.onclick = playRound;
 
     // initialize cell image
     var cell = document.createElement("img");
-    cell.id  = "cell-img-" + convertIndex(i);
+    cell.id  = "cell-img-" + ind0;
     cell.className  = "single-cell on";
     cell.src = "images/o0000.png";
-    cell.ind0 =  convertIndex(i);
-    open_moves.push(cell.ind0);
-    cell.onclick = playRound;
 
     // add elements to board
     cell_container.appendChild(cell);
@@ -107,26 +99,10 @@ var makeBoard = function(w, h) {
   open_moves.sort();
 
 
-  /* Listen for undo button */
-  document.querySelector("#undo-button").onclick = function() {
-    // check to see if there are enough moves to remove
-    if (timestep<2) {
-      console.log("Not enough moves to undo.");
-      return;
-    }
-
-    removeMove();
-    // if game over and medium board then only need to remove one piece
-    if (!game_over || board_size!="medium") { removeMove(); }
-    diff = score[0] - score[1];
-    game_over = false;
-  };
-
-
   /* Set AI move if needed */
   if (!first_move) {
-    ind0 = findBestMove();
-    move_ind = open_moves.indexOf(ind0);
+    var ind0 = findBestMove();
+    var move_ind = open_moves.indexOf(ind0);
     open_moves.splice(move_ind, 1);
     playMove(ind0, 1);
   }
@@ -167,11 +143,13 @@ var makeBoard = function(w, h) {
   function playMove(ind0, plyr) {
     if (game_over) { return; }
 
+    // update game log
+    game_log.push({move:ind0, player:plyr, score:score[plyr]});
+
     // update connection_table
     timestep ++;
     connection_table[ind0].player = plyr;
     if (timestep==n_rounds) { game_over = true; }
-
 
     // remove hover property from cell image and cell text
     document.querySelector("#cell-img-" + ind0).className  = "single-cell off";
@@ -236,20 +214,34 @@ var makeBoard = function(w, h) {
     updateCellDisplay(ind0);
 
     // check if game is over
-    game_log.push({"move":ind0, "player":plyr, "score":score[plyr]});
     if (game_over) { showGameOverMessage(); }
   }
 
 
+
+  /* Listen for undo button */
+  document.querySelector("#undo-button").onclick = function() {
+    // check to see if there are enough moves to remove
+    if (timestep<2) {
+      console.log("Not enough moves to undo.");
+      return;
+    }
+
+    removeMove();
+    // if game over and medium board then only need to remove one piece
+    if (!(game_over && board_size=="medium")) { removeMove(); }
+    diff = score[0] - score[1];
+    game_over = false;
+  };
+
   /* Remove a single player's move */
   function removeMove() {
-
     // get entry
-    var last_entry = game_log.log.pop();
+    var last_entry = game_log.pop();
     var ind0 = last_entry.move;
     var plyr = last_entry.player;
     var plyr_score = last_entry.score;
-
+    console.log(last_entry);
     // add move back to open_moves
     open_moves.push(ind0);
     open_moves.sort();
