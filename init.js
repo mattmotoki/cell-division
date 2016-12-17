@@ -227,58 +227,32 @@ function resetBoard() {
 /* ------------------------------------- */
 /*               Animation               */
 /* ------------------------------------- */
-/* quadratic fade in function */
-function easeIn(el, duration=1) {
-  el.style.opacity = 0;
-  el.style.filter = "alpha(opacity=0)";
-  var op = 0;             // initial opacity
-  var t = 0;              // initial time
-  var dt = 1/60/duration; // timestep (duration in seconds)
-  var anim_id = requestAnimationFrame(increaseOpacity);
+/* fading function */
+function easeElement(el, in_or_out="out", duration=1, power=3) {
+  var t = 0;                             // initial time
+  var dt = 1/60/duration;                // timestep (duration in seconds)
+  var initial_op = 1*(in_or_out=="out"); // initial opacity
 
-  // update opacity using op = 1-(1-t)^2 = t*(2-t)
-  function increaseOpacity() {
+  // initialize
+  var op = initial_op;
+  el.style.opacity = initial_op;
+  el.style.filter = "alpha(opacity=" + initial_op*100 + ")";
+  var anim_id = requestAnimationFrame(updateOpacity);
+  // update opacity: 1-t^power (out) or t^power (in)
+  function updateOpacity() {
     t += dt;
-    op = t*(2-t);
+    op = in_or_out=="out" ? 1-Math.pow(t, power) : Math.pow(t, power);
     if (t >= 1){
-      el.style.opacity = 1;
-      el.style.filter = "alpha(opacity=100)";
+      el.style.opacity = 1-initial_op;
+      el.style.filter = "alpha(opacity=" + (1-initial_op)*100 + ")";
       cancelAnimationFrame(anim_id);
     } else {
       el.style.opacity = op;
-      el.style.filter = "alpha(opacity=" + op * 100 + ")";
-      anim_id = requestAnimationFrame(increaseOpacity);
+      el.style.filter = "alpha(opacity=" + op*100 + ")";
+      anim_id = requestAnimationFrame(updateOpacity);
     }
   }
 }
-
-/* linear fade out function */
-function easeOut(el, duration=1) {
-  el.style.opacity = 1;
-  el.style.filter = "alpha(opacity=100)";
-  var op = 0;             // initial opacity
-  var t = 0;              // initial time
-  var dt = 1/60/duration; // timestep (duration in seconds)
-  var anim_id = requestAnimationFrame(decreaseOpacity);
-
-  // update opacity using op = (t-1)^2 (quadratic)
-  function decreaseOpacity() {
-    t += dt;
-    op = t*(t-2)+1; // 1-t
-    if (t >= 1){
-      el.style.opacity = 0;
-      el.style.filter = "alpha(opacity=0)";
-      cancelAnimationFrame(anim_id);
-    }
-    else {
-      el.style.opacity = op;
-      el.style.filter = "alpha(opacity=" + op * 100 + ")";
-      anim_id = requestAnimationFrame(decreaseOpacity);
-    }
-  }
-}
-
-
 
 function toggleMenu() {
   document.getElementById("options-menu").classList.toggle("show");

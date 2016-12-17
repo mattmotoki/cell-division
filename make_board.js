@@ -392,11 +392,11 @@ var makeBoard = function(w, h) {
 
     // update old cell
     old_cell.src = new_cell.src;
-    easeOut(old_cell, 0.5);
+    easeElement(old_cell, "out", 1, 2);
     // update new cell (map number of connections to {0, 1})
     new_cell.src = "images/" + player_color[connection_table[ind].player] +
     connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
-    easeIn(new_cell, 1);
+    easeElement(new_cell, "in", 1, 2);
   }
 
   // /* Gradually update score difference (for scoring cell color) */
@@ -409,12 +409,12 @@ var makeBoard = function(w, h) {
     function updateDiff() {
       t += 1/30;
       score[plyr] +=  ds;
-      if (t >= 1) {
+      if (t >= 0.95) {
         score[plyr] =  Math.round(score[plyr]);
         cancelAnimationFrame(requestIncDiffId);
       } else { requestAnimationFrame(updateDiff); }
       diff = score[0] - score[1];
-      player_score.innerHTML = (plyr==0 ? "You" : "AI") + ": " + Math.round(score[plyr]);
+      player_score.innerHTML = (plyr==0 ? "You" : "AI") + ": " + Math.ceil(score[plyr]);
     }
   }
 

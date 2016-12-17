@@ -21,17 +21,17 @@ sm_sq_x <- 0.5*(sm_sq_outline[, 1] + 0.5)
 sm_sq_y <- 0.5*(sm_sq_outline[, 2] + 0.5)
 
 # trianglular cell
-tri_outline <- triangular_cell(0.3, 0.1, n_pnts)
+tri_outline <- triangular_cell(0.2, 0.1, n_pnts)
 tri_x <- tri_outline[, 1]+0.5
 tri_y <- tri_outline[, 2]+0.5
 
 # side trianglular cell
-side_tri_outline <- side_triangular_cell(0.1, 0.3, n_pnts)
+side_tri_outline <- side_triangular_cell(0.1, 0.275, n_pnts)
 side_tri_x <- side_tri_outline[, 1]+0.5
 side_tri_y <- side_tri_outline[, 2]+0.5
 
 # small trianglular cell
-sm_tri_outline <- triangular_cell(0.3, 0.2, n_pnts)
+sm_tri_outline <- triangular_cell(0.4, 0.2, n_pnts)
 sm_tri_x <- 0.5*(sm_tri_outline[, 1]+0.5)
 sm_tri_y <- 0.5*(sm_tri_outline[, 2]+0.5)
 
@@ -49,7 +49,7 @@ graphics.off()
 # cell outline
 png("o0000.png")
 blank_plot()
-abline(h=c(0,1), v=c(0,1), lwd=line_width/2)
+# abline(h=c(0,1), v=c(0,1), lwd=line_width/2)
 # polygon(sq_x, sq_y, col = rgb(1, 1, 1, 0))  
 dev.off()
 
