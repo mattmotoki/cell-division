@@ -12,10 +12,10 @@ var makeBoard = function(w, h) {
   /* ----------------------------- */
   /*          Variables            */
   /* ----------------------------- */
-  var is_busy = false;       // is busy with annimation
+  w += 4;   h += 4;      // add margin to width and height
+  var is_busy = false;   // is busy with annimation
   var game_over = false; // game over flag
   var open_moves = [];   // open board positions
-  w += 4;   h += 4;      // add margin to width and height
   var timestep = 0;      // number of moves played
 
 
@@ -42,7 +42,7 @@ var makeBoard = function(w, h) {
   function checkFeasibility(ind) {
     var col = Math.floor(ind/h);
     var row = ind % h;
-    return (row>1) && (row<h-1) && (col>1) && (col<w-1);
+    return (row>1) && (row<h-2) && (col>1) && (col<w-2);
   }
   // initialize tables with defaults
   var connection_table = new Array(w*h);
@@ -130,7 +130,7 @@ var makeBoard = function(w, h) {
 
       // cut off user input for 2 seconds (time for two moves)
       is_busy = true;
-      setTimeout( function() {is_busy = false;}, 1500 )
+      setTimeout( function() {is_busy = false;}, 1000 )
 
       // remove from feasible array
       open_moves.splice(move_ind, 1);
@@ -167,8 +167,7 @@ var makeBoard = function(w, h) {
     document.querySelector("#cell-text-" + ind0).className  = "cell-text";
 
     // update score parameters
-    score[plyr] += extractScore(plyr, ind0);
-    updateDiff(plyr);
+    updateScore(plyr, extractScore(plyr, ind0));
 
 
     // update state values of other cells
@@ -252,7 +251,7 @@ var makeBoard = function(w, h) {
     var ind0 = last_entry.move;
     var plyr = last_entry.player;
     var plyr_score = last_entry.score;
-    console.log(last_entry);
+
     // add move back to open_moves
     open_moves.push(ind0);
     open_moves.sort();
@@ -393,13 +392,31 @@ var makeBoard = function(w, h) {
 
     // update old cell
     old_cell.src = new_cell.src;
-    easeOut(old_cell, 1);
+    easeOut(old_cell, 0.5);
     // update new cell (map number of connections to {0, 1})
     new_cell.src = "images/" + player_color[connection_table[ind].player] +
     connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
-    easeIn(new_cell, 2);
+    easeIn(new_cell, 1);
   }
 
+  // /* Gradually update score difference (for scoring cell color) */
+  function updateScore(plyr, added_score) {
+    var t = 0;
+    var ds = added_score/30;
+    var player_score = document.querySelector("#score" + plyr);
+    var requestIncDiffId = requestAnimationFrame(updateDiff);
+
+    function updateDiff() {
+      t += 1/30;
+      score[plyr] +=  ds;
+      if (t >= 1) {
+        score[plyr] =  Math.round(score[plyr]);
+        cancelAnimationFrame(requestIncDiffId);
+      } else { requestAnimationFrame(updateDiff); }
+      diff = score[0] - score[1];
+      player_score.innerHTML = (plyr==0 ? "You" : "AI") + ": " + Math.round(score[plyr]);
+    }
+  }
 
   /* ------------------------------------- */
   /*           Utility Functions           */

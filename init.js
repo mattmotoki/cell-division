@@ -227,7 +227,7 @@ function resetBoard() {
 /* ------------------------------------- */
 /*               Animation               */
 /* ------------------------------------- */
-
+/* quadratic fade in function */
 function easeIn(el, duration=1) {
   el.style.opacity = 0;
   el.style.filter = "alpha(opacity=0)";
@@ -252,6 +252,7 @@ function easeIn(el, duration=1) {
   }
 }
 
+/* linear fade out function */
 function easeOut(el, duration=1) {
   el.style.opacity = 1;
   el.style.filter = "alpha(opacity=100)";
@@ -260,10 +261,10 @@ function easeOut(el, duration=1) {
   var dt = 1/60/duration; // timestep (duration in seconds)
   var anim_id = requestAnimationFrame(decreaseOpacity);
 
-  // update opacity using op = 1 - t^2
+  // update opacity using op = (t-1)^2 (quadratic)
   function decreaseOpacity() {
     t += dt;
-    op = 1-t; // 1-t*t
+    op = t*(t-2)+1; // 1-t
     if (t >= 1){
       el.style.opacity = 0;
       el.style.filter = "alpha(opacity=0)";
@@ -278,33 +279,6 @@ function easeOut(el, duration=1) {
 }
 
 
-/* Gradually update score difference (for scoring cell color) */
-function updateDiff(plyr) {
-  var new_diff = score[0] - score[1];
-  var total_change = (new_diff - diff);
-  var dx = total_change/30;
-  var player_score = document.querySelector("#score" + plyr);
-  var requestIncDiffId = requestAnimationFrame(incrementDiff);
-
-  // increment diff by dx and repeat 60 times a second
-  function incrementDiff() {
-    diff += dx;
-    // check to see if calculation is over
-    if (Math.abs(diff - new_diff)> Math.abs(dx)) {
-      requestIncDiffId = requestAnimationFrame(incrementDiff);
-    } else {
-      diff = new_diff; // make sure everything no round off error
-      cancelAnimationFrame(requestIncDiffId);
-      // is_busy = false;
-    }
-
-    // update score display
-    player_score.innerHTML = ( plyr==0 ?
-      "You: " + Math.round(score[plyr] + diff-new_diff) :
-      "AI: " + Math.round(score[plyr] + new_diff-diff)
-    ) ;
-  }
-}
 
 function toggleMenu() {
   document.getElementById("options-menu").classList.toggle("show");
