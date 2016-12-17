@@ -12,9 +12,9 @@ var makeBoard = function(w, h) {
   /* ----------------------------- */
   /*          Variables            */
   /* ----------------------------- */
+  var is_busy = false;       // is busy with annimation
   var game_over = false; // game over flag
   var open_moves = [];   // open board positions
-  var is_busy = false;   // is busy with annimation
   w += 4;   h += 4;      // add margin to width and height
   var timestep = 0;      // number of moves played
   // Create board

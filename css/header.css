@@ -99,7 +99,7 @@ header {
 /* -------------------------------------------------------------------------- */
 /*  Tablet Header (Title: cell-animation, text; Game Settings: icon, menu)    */
 /* -------------------------------------------------------------------------- */
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 5000000px) {
   header {
     flex-direction: row;
     justify-content: space-around;
@@ -154,7 +154,26 @@ header {
     justify-content: flex-start;
     height: 100%;
   }
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    width: inherit;
+  }
   #scoring-cell {
     height: 25%;
   }
+  #options-icon {display: none;}
+
+  /* menu */
+  #options-menu {
+    display: flex;
+    flex-direction: column;
+    position: static;
+  }
+  /* remove link like behaviour */
+  #menu-link:hover {
+    color: inherit;
+    cursor: default;
+  }
+
 }

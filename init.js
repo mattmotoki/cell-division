@@ -5,6 +5,7 @@
 /* ------------------------------------- */
 /*           Shared Variables            */
 /* ------------------------------------- */
+var move_queue = [];       // array of moves to implement
 var first_move = true;     // if true then user goes first
 var board_size = "small";  // board size
 var difficulty = "medium"; // AI difficulty
@@ -45,45 +46,34 @@ document.querySelector("body").onload = function() {
   requestId = makeScoringCell.animateCell();
 };
 
-/* Update difficulty */
-document.querySelector("#difficulty-easy").onclick = setDifficulty;
-document.querySelector("#difficulty-medium").onclick = setDifficulty;
-document.querySelector("#difficulty-hard").onclick = setDifficulty;
-function setDifficulty() {
-  var new_difficulty = this.id.match(/-(.*)/)[1];
-  if (new_difficulty != difficulty) {
-    // turn off old difficulty
-    document.querySelector("#difficulty-" + difficulty)
+/* Update menu values */
+function setMenuValue(el, var_name, value_name, value) {
+  var new_value = el.id.match(/-(.*)/)[1];
+  window[var_name] = new_value;
+  if (new_value != value) {
+    // turn off old value
+    document.querySelector("#" + value_name + "-" + value)
     .childNodes[3].className = "fa fa-check check-off";
-    // turn off on new difficulty
-    document.querySelector("#difficulty-" + new_difficulty)
+    // turn off on new value
+    document.querySelector("#" + value_name + "-" + new_value)
     .childNodes[3].className = "fa fa-check check-on";
-    // switch and reset the game
-    difficulty = new_difficulty;
-    makeScoringCell.setAIColor();
+    // reset the game
     resetBoard();
   }
 }
 
+/* Update difficulty */
+document.querySelector("#ai-difficulty")
+.childNodes.forEach(function(el) {el.onclick = setDifficulty;});
+function setDifficulty() {
+  setMenuValue(this, "difficulty", "difficulty", difficulty);
+  makeScoringCell.setAIColor();
+}
 
 /* Update board size */
-document.querySelector("#size-small").onclick = setSize;
-document.querySelector("#size-medium").onclick = setSize;
-document.querySelector("#size-large").onclick = setSize;
-function setSize() {
-  var new_size = this.id.match(/-(.*)/)[1];
-  if (new_size != board_size) {
-    // turn off old difficulty
-    document.querySelector("#size-" + board_size)
-    .childNodes[3].className = "fa fa-check check-off";
-    // turn off on new difficulty
-    document.querySelector("#size-" + new_size)
-    .childNodes[3].className = "fa fa-check check-on";
-    // switch and reset the game
-    board_size = new_size;
-    resetBoard();
-  }
-}
+document.querySelector("#board-size")
+.childNodes.forEach(function(el) {el.onclick = setSize;});
+function setSize() { setMenuValue(this, "board_size", "size", board_size); }
 
 
 /* Update first move */
@@ -224,12 +214,12 @@ function resetBoard() {
   var child =  document.querySelector("#board");
   parent.removeChild(child);
 
-  // ser board dimensions
+  // set board dimensions
   switch (board_size) {
     case "small":  makeBoard(4,4); n_rounds=16; break;
     case "medium": makeBoard(5,5); n_rounds=25; break;
     case "large":  makeBoard(6,6); n_rounds=36; break;
-    default:       makeBoard(5,5); n_rounds=25;
+    default: throw  "board size not defined";
   }
 }
 
@@ -254,8 +244,9 @@ function updateDiff(plyr) {
     if (Math.abs(diff - new_diff)> Math.abs(dx)) {
       requestIncDiffId = requestAnimationFrame(incrementDiff);
     } else {
-      diff = new_diff; // make sure everything is correct (no round off error)
+      diff = new_diff; // make sure everything no round off error
       cancelAnimationFrame(requestIncDiffId);
+      // is_busy = false;
     }
 
     // update score display
