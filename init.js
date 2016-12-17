@@ -228,6 +228,56 @@ function resetBoard() {
 /*               Animation               */
 /* ------------------------------------- */
 
+function easeIn(el, duration=1) {
+  el.style.opacity = 0;
+  el.style.filter = "alpha(opacity=0)";
+  var op = 0;             // initial opacity
+  var t = 0;              // initial time
+  var dt = 1/60/duration; // timestep (duration in seconds)
+  var anim_id = requestAnimationFrame(increaseOpacity);
+
+  // update opacity using op = 1-(1-t)^2 = t*(2-t)
+  function increaseOpacity() {
+    t += dt;
+    op = t*(2-t);
+    console.log(op);
+    if (t >= 1){
+      el.style.opacity = 1;
+      el.style.filter = "alpha(opacity=100)";
+      cancelAnimationFrame(anim_id);
+    } else {
+      el.style.opacity = op;
+      el.style.filter = "alpha(opacity=" + op * 100 + ")";
+      anim_id = requestAnimationFrame(increaseOpacity);
+    }
+  }
+}
+
+function easeOut(el, duration=1) {
+  el.style.opacity = 1;
+  el.style.filter = "alpha(opacity=100)";
+  var op = 0;             // initial opacity
+  var t = 0;              // initial time
+  var dt = 1/60/duration; // timestep (duration in seconds)
+  var anim_id = requestAnimationFrame(decreaseOpacity);
+
+  // update opacity using op = 1 - t^2
+  function decreaseOpacity() {
+    t += dt;
+    op = 1-t*t;
+    if (t >= 1){
+      el.style.opacity = 0;
+      el.style.filter = "alpha(opacity=0)";
+      cancelAnimationFrame(anim_id);
+    }
+    else {
+      el.style.opacity = op;
+      el.style.filter = "alpha(opacity=" + op * 100 + ")";
+      anim_id = requestAnimationFrame(decreaseOpacity);
+    }
+  }
+}
+
 
 /* Gradually update score difference (for scoring cell color) */
 function updateDiff(plyr) {

@@ -17,11 +17,7 @@ var makeBoard = function(w, h) {
   var open_moves = [];   // open board positions
   w += 4;   h += 4;      // add margin to width and height
   var timestep = 0;      // number of moves played
-  // Create board
-  var container = document.createElement("div");
-  container.id = "board";
-  document.querySelector("#board-container").appendChild(container);
-  resizeBoard();
+
 
   /* Calculate adjacent indices */
   var adj = [
@@ -37,7 +33,7 @@ var makeBoard = function(w, h) {
     case "easy":   player_color.push("b"); break;
     case "medium": player_color.push("f"); break;
     case "hard":   player_color.push("r"); break;
-    default:       player_color.push("y");
+    default: throw "player difficulty not defined";
   }
   player_color.push("o"); // default for outline
 
@@ -64,6 +60,13 @@ var makeBoard = function(w, h) {
       }
     }
   }
+
+
+  /* Create the board */
+  var container = document.createElement("div");
+  container.id = "board";
+  document.querySelector("#board-container").appendChild(container);
+  resizeBoard();
 
   /* Fill in the board */
   for (var i=0; i < (w-4)*(h-4);  i++) {
@@ -377,11 +380,10 @@ var makeBoard = function(w, h) {
   /* Update cell image */
   function updateCellDisplay(ind) {
     var cell = document.querySelector("#cell-img-" + ind);
-    unfade(cell);
-
     // map number of connections to {0, 1} then update image
     cell.src = "images/" + player_color[connection_table[ind].player] +
     connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
+    easeIn(cell);
   }
 
   /* Fade cells into the board */
