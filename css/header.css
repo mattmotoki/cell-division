@@ -16,6 +16,7 @@ header {
   font-size: 30px;
   padding: 5px;
   width: 100%;
+  color: white;
 }
 
 /* ----------------------------------- */
@@ -41,8 +42,9 @@ header {
 /* ----------------------------------- */
 
 /* menu */
-
-
+#options-menu {
+  padding: 0px;
+}
 #menu-link:hover { cursor: pointer; }
 
 .dropdown { position: relative; }
@@ -62,30 +64,29 @@ header {
   z-index: 2;
 }
 
-.check-off {
-  visibility: hidden;
+.setting img, .setting i {
+  opacity: 0;
 }
 
-.check-on {
-  visibility: inherit;
+.option {
+  display: flex;
+  flex-direction: column;
 }
-
+.option:hover {
+  color: rgb(200, 200, 200;
+  background-color: rgba(250, 250, 250, 0.1);
+}
 
 .setting >* {
   display: block;
 }
 .setting img {
-  height: 25px;
-  vertical-align: bottom;
-  margin-left: 0.65em;
+  height: 0.75em;
+  vertical-align: baseline;
 }
-.setting label {
-  margin-left: 0.65em;
-}
+.setting i { font-size: 0.9em; }
 
-#board-size >*:hover {
-  color: yellow;
-}
+
 #difficulty-easy:hover {
   color: rgb(34, 142, 250);
 }
@@ -95,6 +96,14 @@ header {
 #difficulty-hard:hover {
   color: rgb(255, 60, 0);
 }
+
+#move-you i {
+  color: rgb(34, 255, 34);
+}
+#move-ai i {
+  color: rgb(230, 54, 230);
+}
+
 
 /* -------------------------------------------------------------------------- */
 /*  Tablet Header (Title: cell-animation, text; Game Settings: icon, menu)    */
@@ -138,7 +147,7 @@ header {
 
   /* remove link like behaviour */
   #menu-link:hover {
-  	color: inherit;
+    color: inherit;
     cursor: default;
   }
 }
@@ -172,7 +181,6 @@ header {
   }
   /* remove link like behaviour */
   #menu-link:hover {
-    color: inherit;
     cursor: default;
   }
 

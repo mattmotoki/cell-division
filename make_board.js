@@ -110,7 +110,7 @@ var makeBoard = function(w, h) {
 
 
   /* Set AI move if needed */
-  if (!first_move) {
+  if (first_move=="ai") {
     var ind0 = findBestMove();
     var move_ind = open_moves.indexOf(ind0);
     open_moves.splice(move_ind, 1);

@@ -67,46 +67,49 @@
       </div>
     </a>
     <div class="dropdown header-container">
-      <a onclick="toggleMenu()" id="menu-link">
+      <div onclick="toggleMenu()" id="menu-link">
         <i id="options-icon" class="fa fa-bars" aria-hidden="true"></i> Game Settings
-      </a>
+      </div>
       <div id="options-menu" class="dropdown-content">
-        Difficulty:
-        <div class="setting" id="ai-difficulty">
-          <a id="difficulty-easy" href="#">
-            <img src="images/difficulty_easy.png" alt=""> Easy
-            <i class="fa fa-check check-off" aria-hidden="true"></i>
-          </a>
-          <a id="difficulty-medium" href="#">
-            <img src="images/difficulty_medium.png" alt=""> Medium
-            <i class="fa fa-check check-off" aria-hidden="true"></i>
-          </a>
-          <a id="difficulty-hard" href="#">
-            <img src="images/difficulty_hard.png" alt=""> Hard
-            <i class="fa fa-check check-off" aria-hidden="true"></i>
-          </a>
+        <div class="option">
+          <div class="option-name">Difficulty:</div>
+          <div class="setting" id="ai-difficulty">
+            <a id="difficulty-easy" href="#">
+              <img src="images/b0000.png" alt=""> Easy
+            </a>
+            <a id="difficulty-medium" href="#">
+              <img src="images/f0000.png" alt=""> Medium
+            </a>
+            <a id="difficulty-hard" href="#">
+              <img src="images/r0000.png" alt=""> Hard
+            </a>
+          </div>
         </div>
-        Board Size:
-        <div class="setting" id="board-size">
-          <a id="size-small" href="#">
-            <img src="images/size_small.png" alt=""> Small
-            <i class="fa fa-check check-off" aria-hidden="true"></i>
-          </a>
-          <a id="size-medium" href="#">
-            <img src="images/size_medium.png" alt=""> Medium
-            <i class="fa fa-check check-off" aria-hidden="true"></i>
-          </a>
-          <a id="size-large" href="#">
-            <img src="images/size_large.png" alt=""> Large
-            <i class="fa fa-check check-off" aria-hidden="true"></i>
-          </a>
+        <div class="option">
+          <div class="option-name">Board Size:</div>
+          <div class="setting" id="board-size">
+            <a id="size-small" href="#">
+              <img src="images/size_small.png" alt=""> Small
+            </a>
+            <a id="size-medium" href="#">
+              <img src="images/size_medium.png" alt=""> Medium
+            </a>
+            <a id="size-large" href="#">
+              <img src="images/size_large.png" alt=""> Large
+            </a>
+          </div>
         </div>
-        First Move:
-        <div class="setting">
-          <label><input type="radio" name="first-move" value="you" id="you" checked/> You</label>
-          <label><input type="radio" name="first-move" value="ai" id="ai" /> AI</label>
+        <div class="option">
+          <div class="option-name">First Move:</div>
+          <div class="setting" id="first-move">
+            <a id="move-you" href="#">
+               <i class="fa fa-user-o" aria-hidden="true"></i> You
+            </a>
+            <a id="move-ai" href="#">
+               <i class="fa fa-user-o" aria-hidden="true"></i> AI
+            </a>
+          </div>
         </div>
-
       </div>
     </div>
   </header>

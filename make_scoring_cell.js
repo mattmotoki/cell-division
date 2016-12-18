@@ -205,7 +205,7 @@ var makeScoringCell = (function() {
     center_y = -0.015*size*z0 + 0.85*size;
 
     // if magnitude is small then normalization creates a jittery trajectory
-    var vel =  Math.sqrt( Math.pow(temp_y - center_y,2) + Math.pow(temp_x - center_x,2) )/size;
+    var vel = Math.sqrt( Math.pow(temp_y - center_y,2) + Math.pow(temp_x - center_x,2) )/size;
     if (vel > 0.01) {
       center_x = temp_x + 0.01*(center_x - temp_x)/vel;
       center_y = temp_y + 0.01*(center_y - temp_y)/vel;
@@ -213,28 +213,6 @@ var makeScoringCell = (function() {
     temp_x = center_x;
     temp_y = center_y;
   }
-
-  /* ------------------------------------- */
-  /*           Utility Functions           */
-  /* ------------------------------------- */
-  /* Element-wise convex combination of two vectors */
-  function cvx_comb(v1, v2, alpha) {
-    var vec = [];
-    for (var i = 0; i <v1.length; i++) {
-      vec.push( Math.round(alpha*v1[i] + (1-alpha)*v2[i]) );
-    }
-    return vec;
-  }
-
-  /* Convert entries in a vector into an rgb string */
-  function vec2rgb(vec) {
-    return "rgb(" + vec[0] + "," + vec[1] + "," + vec[2] + ")";
-  }
-
-  /* Convert entries in a vector into an rgba string */
-  function vec2rgba(vec) {
-    return "rgba(" + vec[0] + "," + vec[1] + "," + vec[2] + "," + vec[3] + ")";
-  }
-
+  
   return cell_module;
 }());

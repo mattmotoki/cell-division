@@ -6,7 +6,7 @@
 /*           Shared Variables            */
 /* ------------------------------------- */
 var move_queue = [];       // array of moves to implement
-var first_move = true;     // if true then user goes first
+var first_move = "you";     // if true then user goes first
 var board_size = "small";  // board size
 var difficulty = "medium"; // AI difficulty
 var score = [0, 0];        // your score and AI's score
@@ -29,9 +29,10 @@ window.onresize = function() {
 /* Get user input */
 document.querySelector("body").onload = function() {
   // initialize difficulty
-  var el = document.querySelector("#difficulty-" + difficulty).childNodes[3];
-  el.className = "fa fa-check check-on";
-
+  easeElement(
+    document.querySelector("#difficulty-" + difficulty)
+    .childNodes[1], "in", 0.5
+  );
   // initialize board size
   switch (board_size) {
     case "small":  makeBoard(4,4); n_rounds=16; break;
@@ -39,8 +40,22 @@ document.querySelector("body").onload = function() {
     case "large":  makeBoard(6,6); n_rounds=36; break;
     default: throw  "board size not defined";
   }
-  el = document.querySelector("#size-" + board_size).childNodes[3];
-  el.className = "fa fa-check check-on";
+  easeElement(
+    document.querySelector("#size-" + board_size)
+    .childNodes[1], "in", 0.5
+  );
+  // initialize first move
+  easeElement(
+    document.querySelector("#move-" + first_move)
+    .childNodes[1], "in", 0.5
+  );
+  // simulate hover effects
+  document.querySelector("#move-ai").onmouseover = function(el) {
+    el.target.style.color = vec2rgb(makeScoringCell.player_colors[1]);
+  };
+  document.querySelector("#move-ai").onmouseleave = function(el) {
+    el.target.style.color = "white";
+  };
 
   // initialize scoring cell
   requestId = makeScoringCell.animateCell();
@@ -52,11 +67,15 @@ function setMenuValue(el, var_name, value_name, value) {
   window[var_name] = new_value;
   if (new_value != value) {
     // turn off old value
-    document.querySelector("#" + value_name + "-" + value)
-    .childNodes[3].className = "fa fa-check check-off";
-    // turn off on new value
-    document.querySelector("#" + value_name + "-" + new_value)
-    .childNodes[3].className = "fa fa-check check-on";
+    easeElement(
+      document.querySelector("#" + value_name + "-" + value)
+      .childNodes[1], "out", 0.5
+    );
+    // turn on new value
+    easeElement(
+      document.querySelector("#" + value_name + "-" + new_value)
+      .childNodes[1], "in", 0.5
+    );
     // reset the game
     resetBoard();
   }
@@ -68,6 +87,7 @@ document.querySelector("#ai-difficulty")
 function setDifficulty() {
   setMenuValue(this, "difficulty", "difficulty", difficulty);
   makeScoringCell.setAIColor();
+  document.querySelector("#move-ai").childNodes[1].style.color = vec2rgb(makeScoringCell.player_colors[1]);
 }
 
 /* Update board size */
@@ -75,18 +95,12 @@ document.querySelector("#board-size")
 .childNodes.forEach(function(el) {el.onclick = setSize;});
 function setSize() { setMenuValue(this, "board_size", "size", board_size); }
 
-
 /* Update first move */
-(function() {
-  document.getElementsByName("first-move").forEach(
-    function(el) {
-      el.addEventListener("click", function() {
-        first_move = !first_move;
-        resetBoard();
-      }
-    );
-  });
-})();
+document.querySelector("#first-move")
+.childNodes.forEach(function(el) {el.onclick = setFirstMove;});
+function setFirstMove() { setMenuValue(this, "first_move", "move", first_move); }
+
+
 
 /* Update board size */
 function resizeBoard() {
@@ -143,10 +157,9 @@ document.querySelector("#play-button").onclick = function() {
 /* -------------- */
 /*  Game Buttons  */
 /* -------------- */
+// undo button (see make_board.js)
 // reset button
 document.querySelector("#reset-button").onclick = resetBoard;
-
-// undo button (see make_board.js)
 
 
 /* ------------------- */
@@ -154,7 +167,7 @@ document.querySelector("#reset-button").onclick = resetBoard;
 /* ------------------- */
 // switch button
 document.querySelector("#switch-button").onclick = function() {
-  first_move = !first_move;
+  first_move = first_move=="you" ? "ai" : "you";
   resetBoard();
   document.querySelector("#game-over-container").style.display = "none";
   document.querySelector("#overlay").style.zIndex  = 0;
@@ -188,8 +201,8 @@ function showGameOverMessage() {
 
   // create graphics
   var scores = game_log.map(function(x) {return x.score;} );
-  makeDifferenceGraph(scores, first_move, makeScoringCell.player_colors);
-  makeIndividualGraph(scores, first_move, makeScoringCell.player_colors);
+  makeDifferenceGraph(scores, first_move=="you", makeScoringCell.player_colors);
+  makeIndividualGraph(scores, first_move=="you", makeScoringCell.player_colors);
 }
 // statistics overlay
 document.querySelector("#statistics-overlay").onclick = function(el){
@@ -269,4 +282,25 @@ window.onclick = function(event) {
       }
     }
   }
+}
+/* ------------------------------------- */
+/*           Utility Functions           */
+/* ------------------------------------- */
+/* Element-wise convex combination of two vectors */
+function cvx_comb(v1, v2, alpha) {
+  var vec = [];
+  for (var i = 0; i <v1.length; i++) {
+    vec.push( Math.round(alpha*v1[i] + (1-alpha)*v2[i]) );
+  }
+  return vec;
+}
+
+/* Convert entries in a vector into an rgb string */
+function vec2rgb(vec) {
+  return "rgb(" + vec[0] + "," + vec[1] + "," + vec[2] + ")";
+}
+
+/* Convert entries in a vector into an rgba string */
+function vec2rgba(vec) {
+  return "rgba(" + vec[0] + "," + vec[1] + "," + vec[2] + "," + vec[3] + ")";
 }

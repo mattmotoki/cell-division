@@ -54,7 +54,7 @@ points(sm_tri_x, sm_tri_y+0.5, pch=16, cex=0.1, col="green")
 points(sm_sq_x, sm_sq_y, pch=16, cex=0.1, col="red")
 points(sm_tri_x, sm_tri_y, pch=16, cex=0.1, col="green")
 
-points(side_tri_x, side_tri_y, pch=16, cex=0.1, col="red")
+points(side_tri_x, side_tri_y, pch=16, cex=0.1, col="black")
 points(sm_tri_x+0.5, sm_tri_y, pch=16, cex=0.1, col="green")
 
 
