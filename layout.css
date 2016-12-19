@@ -153,10 +153,10 @@ main {
 .cell-container * {
 	margin: 1px 0 0 1px; /* this is fudging */
 }
-.cell-text {
+/*.cell-text {
 	display: none;
 	color: black;
-}
+}*/
 .single-cell {
 	display: inline-block;
 	width: 100%;
@@ -169,7 +169,7 @@ main {
 	left: 0;
 	width: 100%;
 }
-.cell-container:hover * {
+/*.cell-container:hover * {
 	animation: shake 0.75s;
 }
 .cell-container:hover .cell-text.on {
@@ -190,7 +190,7 @@ main {
 	25% { transform: translateY(2px) }
 	50% { transform: translateY(-1px) }
 	75% { transform: translateY(1px) }
-}
+}*/
 
 /* graphics overlay */
 #statistics-overlay {

@@ -78,10 +78,10 @@ var makeBoard = function(w, h) {
     cell_container.onclick = playRound;
 
     // initialize scoring overlay text
-    var cell_text = document.createElement("div");
-    cell_text.innerHTML = "1";
-    cell_text.id  = "cell-text-" + ind0;
-    cell_text.className = "cell-text on";
+    // var cell_text = document.createElement("div");
+    // cell_text.innerHTML = "1";
+    // cell_text.id  = "cell-text-" + ind0;
+    // cell_text.className = "cell-text on";
 
     // initialize cell image
     var old_cell = document.createElement("img");
@@ -98,7 +98,7 @@ var makeBoard = function(w, h) {
     // add elements to board
     cell_container.appendChild(new_cell);
     cell_container.appendChild(old_cell);
-    cell_container.appendChild(cell_text);
+    // cell_container.appendChild(cell_text);
     container.appendChild(cell_container);
     document.querySelector("#board-container").appendChild(container);
   }
@@ -162,7 +162,7 @@ var makeBoard = function(w, h) {
     // remove hover property from cell image and cell text ("on" class)
     document.querySelector("#new-cell-img-" + ind0).className  = "single-cell new";
     document.querySelector("#old-cell-img-" + ind0).className  = "single-cell old";
-    document.querySelector("#cell-text-" + ind0).className  = "cell-text";
+    // document.querySelector("#cell-text-" + ind0).className  = "cell-text";
 
     // update score parameters
     updateScore(plyr, extractScore(plyr, ind0));
@@ -379,8 +379,8 @@ var makeBoard = function(w, h) {
         best_value = value;
         best_ind = ind;
       }
-      // update the text displayed in the cell (this could be better placed)
-      document.querySelector("#cell-text-" + ind).innerHTML = extractScore(0, ind);
+      // // update the text displayed in the cell (this could be better placed)
+      // document.querySelector("#cell-text-" + ind).innerHTML = extractScore(0, ind);
     }
     return best_ind;
   }
