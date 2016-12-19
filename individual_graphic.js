@@ -1,10 +1,8 @@
-function makeIndividualGraph(scores, first_move, player_color) {
+function makeIndividualGraph(scores, first_move, player_color, h, w) {
   /* ------------------------------------- */
   /*        Variables and Parameters       */
   /* ------------------------------------- */
   /* Canvas and Context */
-  var h = 300;
-  var w = 500;
   var canvas = document.querySelector("#individual-plot");
   var ctx = canvas.getContext("2d");
   canvas.width = w;    canvas.height = h;
@@ -85,39 +83,39 @@ function makeIndividualGraph(scores, first_move, player_color) {
   /* Colored Region Labels */
   function addLegend() {
     ctx.save();
-    ctx.font = "italic 12pt Calibri";
+    ctx.font = "12pt Calibri";
     // played move
     ctx.fillStyle = "gray";
-    ctx.fillText( "played", 1.75*w/16, 0.12*h );
+    ctx.fillText( "played", 0.125*w, 0.15*h );
     ctx.beginPath();
-    ctx.arc( 1.5*w/16, 0.12*h, 0.01*h, 0, 2*Math.PI );
+    ctx.arc( 0.1*w, 0.15*h, 0.015*h, 0, 2*Math.PI );
     ctx.fill();
     // waited
     ctx.lineWidth = 1.5;
     ctx.strokeStyle = "gray";
-    ctx.fillText( "waited", 1.75*w/16, 0.18*h );
+    ctx.fillText( "waited", 0.125*w, 0.225*h );
     ctx.beginPath();
-    ctx.arc( 1.5*w/16, 0.18*h, 0.01*h, 0, 2*Math.PI );
+    ctx.arc( 0.1*w, 0.225*h, 0.015*h, 0, 2*Math.PI );
     ctx.stroke();
     // title
-    ctx.font = "italic 14pt Calibri";
-    ctx.fillText( "Legend", 1.4*w/16, 0.05*h );
+    ctx.font = "14pt Calibri";
+    ctx.fillText( "Legend", 1.4*w/16, 0.075*h );
     ctx.restore();
   }
 
   /* Draw Open Dots */
   function addOpenDots() {
     ctx.save();
-    ctx.fillStyle = "rgb(23, 23, 23)";
+    ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.lineWidth = 4;
     for (var i=1; i<n; i++) {
       // outline
       ctx.beginPath();
       ctx.strokeStyle = vec2rgb(player_color[(i+!first_move)%2]);
-      ctx.arc( timestep2x(i), score2y(scores[i-1]), 0.01*h, 0, 2*Math.PI );
+      ctx.arc( timestep2x(i), score2y(scores[i-1]), 0.015*h, 0, 2*Math.PI );
       ctx.stroke();
       // inside
-      ctx.arc( timestep2x(i), score2y(scores[i]), 0.005*h, 0, 2*Math.PI );
+      ctx.arc( timestep2x(i), score2y(scores[i]), 0.01*h, 0, 2*Math.PI );
       ctx.fill();
     }
     ctx.restore();
@@ -129,7 +127,7 @@ function makeIndividualGraph(scores, first_move, player_color) {
     for (var i=1; i<n; i++) {
       ctx.beginPath();
       ctx.fillStyle = vec2rgb(player_color[(i+first_move)%2]);
-      ctx.arc( timestep2x(i), score2y(scores[i]), 0.01*h, 0, 2*Math.PI );
+      ctx.arc( timestep2x(i), score2y(scores[i]), 0.015*h, 0, 2*Math.PI );
       ctx.fill();
     }
     ctx.restore();
@@ -142,14 +140,16 @@ function makeIndividualGraph(scores, first_move, player_color) {
   function timestep2x(t) { return w/16*(14.5*t/(n-1) + 1); }
 
   /* Score  to Pixels */
-  function score2y(s) { return h/10*(-1.05*s/delta + n_labels+1); }
+  function score2y(s) { return h/10*(-s/delta + n_labels+1); }
 
   function extractScore(player) {
     var s = [];
-    for (var i=1*(player!=first_move); i<n; i+=2) {
+    for (var i=1*(player!=first_move); i<=n; i+=2) {
       s.push(scores[i]);
       s.push(scores[i]);
     }
+    if (player!=first_move) { s.pop();}
+
     // check if shift is needed
     if (player!=first_move) { s.unshift(0); } // append to front
     else { s.pop(); }                         // remove last

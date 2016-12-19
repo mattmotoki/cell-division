@@ -1,10 +1,8 @@
-function makeDifferenceGraph(scores, first_move, player_color) {
+function makeDifferenceGraph(scores, first_move, player_color, h, w) {
   /* ------------------------------------- */
   /*        Variables and Parameters       */
   /* ------------------------------------- */
   /* Canvas and Context */
-  var h = 300;
-  var w = 500;
   var canvas = document.querySelector("#difference-plot");
   var ctx = canvas.getContext("2d");
   canvas.width = w;    canvas.height = h;
@@ -120,17 +118,17 @@ function makeDifferenceGraph(scores, first_move, player_color) {
   /* Colored Region Labels */
   function addRegionLabels() {
     ctx.save();
-    ctx.font = "bold 16pt Calibri";
+    ctx.font = "bold 14pt Calibri";
     //label background
-    ctx.fillStyle = "rgb(23, 23, 23)";
+    ctx.fillStyle = "black";
     ctx.fillRect( 1.5*w/16, 0.025*h, 0.155*w, 0.07*h );
-    ctx.fillRect( 1.5*w/16, 0.925*h, 0.115*w, 0.07*h );
+    ctx.fillRect( 1.5*w/16, 0.925*h, 0.115*w, 0.07*h );    
     // winning label
     ctx.fillStyle = vec2rgb(player_color[0]);
-    ctx.fillText( "Winning", 1.5*w/16, 0.05*h );
+    ctx.fillText( "Winning", 1.5*w/16, 0.075*h );
     // losing label
     ctx.fillStyle = vec2rgb(player_color[1]);
-    ctx.fillText( "Losing", 1.5*w/16, 0.95*h );
+    ctx.fillText( "Losing", 1.5*w/16, 0.925*h );
     ctx.restore();
   }
 

@@ -5,12 +5,11 @@
 /* ------------------------------------- */
 /*           Shared Variables            */
 /* ------------------------------------- */
-var move_queue = [];       // array of moves to implement
-var first_move = "you";     // if true then user goes first
+var game_over = false;     // game over flag
+var first_move = "you";    // if true then user goes first
 var board_size = "small";  // board size
 var difficulty = "medium"; // AI difficulty
 var score = [0, 0];        // your score and AI's score
-var diff = 0;              // your score minus AI's score
 var n_rounds = 0;          // number of rounds per game
 /* Create a game log (for easier undos and for score visualization)*/
 var game_log = [];
@@ -23,6 +22,7 @@ var game_log = [];
 /* resize listener   */
 window.onresize = function() {
   makeScoringCell.resizeCanvas();
+  if (game_over) {makeGraphics();}
 };
 
 /* Get user input */
@@ -93,51 +93,85 @@ document.querySelector("#first-move")
 function setFirstMove() { setMenuValue(this, "first_move", "move", first_move); }
 
 
-/* ------------------------------------- */
-/*           Button Listeners            */
-/* ------------------------------------- */
-// undo button (see make_board.js)
-// statistics button
-document.querySelector("#stats-button").onclick = function() {
-  document.querySelector("#game-over-container").style.display = "none";
-  document.querySelector("#statistics-overlay").style.display = "flex";
-};
-// reset button
-document.querySelector("#reset-button").onclick = resetBoard;
-
 
 /* ------------------------------------- */
 /*                Overlays               */
 /* ------------------------------------- */
 function showGameOverMessage() {
   // update display
-  document.querySelector("#game-over-container").style.display = "flex";
-  document.querySelector("#overlay").style.zIndex  = 1;
-
+  var overlay = document.querySelector("#game-over-message");
   // update message
-  var game_message = "The game is a draw.";
-  if (score[0] > score[1]) { game_message = "Congratulations you won!"; }
-  else if (score[0] < score[1]) { game_message = "Sorry, you lost."; }
-  document.querySelector("#game-over-message").innerHTML = game_message;
-
-  // create graphics
-  var scores = game_log.map(function(x) {return x.score;} );
-  makeDifferenceGraph(scores, first_move=="you", makeScoringCell.player_colors);
-  makeIndividualGraph(scores, first_move=="you", makeScoringCell.player_colors);
+  var game_message = "Draw.";
+  overlay.style.color = "white";
+  if (score[0] > score[1]) {
+    game_message = "You won!";
+    overlay.style.color = vec2rgb(makeScoringCell.player_colors[0]);
+  }
+  else if (score[0] < score[1]) {
+    game_message = "You lost.";
+    overlay.style.color = vec2rgb(makeScoringCell.player_colors[1]);
+  }
+  overlay.innerHTML = game_message;
 }
 // statistics overlay
 document.querySelector("#statistics-overlay").onclick = function(el){
-  document.querySelector("#game-over-container").style.display = "flex";
   document.querySelector("#statistics-overlay").style.display = "none";
-  document.querySelector("#overlay").style.zIndex  = 0;
 };
+
+/* ------------------------------------- */
+/*           Button Listeners            */
+/* ------------------------------------- */
+// undo button (see make_board.js)
+// reset button
+document.querySelector("#reset-button").onclick = resetBoard;
+// statistics button
+document.querySelector("#stats-button").onclick = function() {
+  if (game_over) {
+    // toggle graphics (turn off or create)
+    var stats_overlay = document.querySelector("#statistics-overlay");
+    if (stats_overlay.style.display == "flex") { stats_overlay.style.display = "none"; }
+    else {
+      stats_overlay.style.display = "flex";
+      makeGraphics();
+    }
+  }
+};
+function makeGraphics() {
+  var h = 0.4*document.querySelector("#board").offsetHeight;
+  var w = document.querySelector("#board").offsetWidth;
+  var scores = game_log.map(function(x) {return x.score;} );
+  // remove first two elements (zeros) and add current scores
+  scores.splice(0,2)
+  if (board_size=="medium") {
+    scores.push(score[1*(first_move=="you")])
+    scores.push(score[1*(first_move!="you")])
+  } else {
+    scores.push(score[1*(first_move!="you")])
+    scores.push(score[1*(first_move=="you")])
+  }
+  makeDifferenceGraph(scores, first_move=="you", makeScoringCell.player_colors, h, w);
+  makeIndividualGraph(scores, first_move=="you", makeScoringCell.player_colors, h, w);
+}
+
+
 
 /* ------------------------------------- */
 /*            Helper Functions           */
 /* ------------------------------------- */
 function resetBoard() {
+  // switch first moves at the end of a game
+  if (game_over) {
+    // turn off underline of old first move
+    document.querySelector("#move-" + first_move)
+    .style.textDecoration = "none";
+    // switch and turn on underline
+    first_move = first_move=="you" ? "ai" : "you";
+    document.querySelector("#move-" + first_move)
+    .style.textDecoration = "underline";
+  }
+
   // reset scores
-  score = [0, 0];   diff = 0;   game_log = [];
+  score = [0, 0];   game_log = [];   game_over = false;
   document.querySelector("#score0").innerHTML = "You: 0";
   document.querySelector("#score1").innerHTML = "AI: 0";
 
@@ -153,6 +187,11 @@ function resetBoard() {
     case "large":  makeBoard(6,6); n_rounds=36; break;
     default: throw  "board size not defined";
   }
+
+  // update displays
+  document.querySelector("#game-over-message").innerHTML = "";;
+  document.querySelector("#stats-button").className = "off";
+  document.querySelector("#statistics-overlay").style.display = "none";
 }
 
 /* ------------------------------------- */

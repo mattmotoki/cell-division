@@ -64,35 +64,34 @@
     <!-- Game (score, board and buttons) -->
     <div id="score-bar">
       <div id="score0" class="score"> You: 0 </div>
-      <div id="game-over-message"> All Pau </div>
+      <div id="game-over-message">  </div>
       <div id="score1" class="score"> AI: 0 </div>
     </div>
-    <div id="board-container"> </div>
+    <div id="board-container">
+      <!-- Statistics Overlay -->
+      <div id="statistics-overlay">
+        <div class="graphic">
+          Individual Scores
+          <canvas id="individual-plot"></canvas>
+        </div>
+        <div class="graphic">
+          Score Difference
+          <canvas id="difference-plot"></canvas>
+        </div>
+        <a href="https://codepen.io/mmotoki/" target="_blank" id="codepen-link">
+          Code available at codepen <i class="fa fa-codepen" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
     <div id="game-buttons">
       <a id="undo-button">
         <i class="fa fa-undo fa-2x" aria-hidden="true"></i> Undo
       </a>
-      <a id="stats-button">
+      <a id="stats-button" class="off">
         <i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i> Statistics
       </a>
       <a id="reset-button">
         <i class="fa fa-refresh fa-2x" aria-hidden="true"></i> Reset
-      </a>
-    </div>
-    <!-- Statistics Overlay -->
-    <div id="statistics-overlay">
-      <div class="graphics-container">
-        <div class="graphic">
-          <p class="plot-title"> Score Difference</p>
-          <canvas id="difference-plot"></canvas>
-        </div>
-        <div class="graphic">
-          <p class="plot-title"> Individual Scores </p>
-          <canvas id="individual-plot"></canvas>
-        </div>
-      </div>
-      <a href="https://codepen.io/mmotoki/" target="_blank" id="codepen-link">
-        Code available at codepen <i class="fa fa-codepen" aria-hidden="true"></i>
       </a>
     </div>
   </main>

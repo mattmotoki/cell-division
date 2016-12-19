@@ -52,18 +52,16 @@ var makeScoringCell = (function() {
   var darkness = 0.5;                // how dark the shading is
   var color_white = [255, 255, 255]; // rgb value for white
   var color_black = [0, 0, 0];       // rgb value for black
-  var canvas_diff = 0.01;            // diff used to color cell
   var color_gradient = "white";      // colored gradient fill
   var shading_gradient = "white";    // black and white gradient fill
   var max_score = 10;                // value used to truncate score difference
-  var adjusted_diff = 0;             // positive scaled truncated score difference
   var base_color0 = [34, 255, 34];   // player's cell color (green)
   // AI's cell color
   function setAIColor() {
     switch (difficulty) {
       case "easy":   base_color1 = [34, 142, 250]; break; // (blue)
       case "medium": base_color1 = [230, 54, 230]; break; // (fuscia)
-      case "hard":   base_color1 = [255, 60, 0];    break; // (red)
+      case "hard":   base_color1 = [255, 60, 0];   break; // (red)
       default:       base_color1 = [255, 255, 0];         // (yellow)
     }
     // make cell colors public
@@ -75,7 +73,6 @@ var makeScoringCell = (function() {
   }
   setAIColor();
   cell_module.setAIColor = setAIColor;
-
 
   /* ------------------------------------- */
   /*           Event Listeners             */
@@ -98,28 +95,18 @@ var makeScoringCell = (function() {
     // update parameters
     updateParameters();
     updateGradient();
-
     // rotate cell
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.translate(size/2, size/2);
-    ctx.rotate(Math.PI/3600);
+    ctx.rotate(2*Math.PI/3600);
     ctx.translate(-size/2, -size/2);
-
     // redraw cell
     ctx.fillStyle = color_gradient;
     drawScoringCell(ctx);
-
     // overlay shading
     ctx.fillStyle =  shading_gradient;
     drawScoringCell(ctx);
 
-    // update difference parameters if necessary
-    if (canvas_diff != diff) {
-      canvas_diff = diff;
-      adjusted_diff = Math.min(Math.abs(diff) / max_score, 1);
-    }
-
-    // repeat
     requestId = requestAnimationFrame(animateCell);
   }
 
@@ -129,9 +116,11 @@ var makeScoringCell = (function() {
   /* Update cell color and shading gradients */
   cell_module.updateGradient = updateGradient;
   function updateGradient() {
+    var adjusted_diff = Math.min(Math.abs(score[0] - score[1]) / max_score, 1);
+
     /* Cell color*/
     // define colors
-    var base_color = diff>0 ? base_color0 : base_color1;
+    var base_color = score[0]>score[1] ? base_color0 : base_color1;
     var dark_color = cvx_comb(color_black, base_color, darkness);
     var outer_color = cvx_comb(color_white, dark_color, 1-Math.pow(adjusted_diff,0.25));
     var inner_color = cvx_comb(color_white, base_color, 1-Math.pow(adjusted_diff,0.25));
@@ -213,6 +202,6 @@ var makeScoringCell = (function() {
     temp_x = center_x;
     temp_y = center_y;
   }
-  
+
   return cell_module;
 }());

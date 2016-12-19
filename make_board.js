@@ -14,7 +14,6 @@ var makeBoard = function(w, h) {
   /* ----------------------------- */
   w += 4;   h += 4;      // add margin to width and height
   var is_busy = false;   // is busy with annimation
-  var game_over = false; // game over flag
   var open_moves = [];   // open board positions
   var timestep = 0;      // number of moves played
 
@@ -223,7 +222,10 @@ var makeBoard = function(w, h) {
     updateCellDisplay(ind0);
 
     // check if game is over
-    if (game_over) { showGameOverMessage(); }
+    if (game_over) {
+      setTimeout(showGameOverMessage, 1000);
+      document.querySelector("#stats-button").className = "";
+     }
   }
 
 
@@ -239,8 +241,11 @@ var makeBoard = function(w, h) {
     removeMove();
     // if game over and medium board then only need to remove one piece
     if (!(game_over && board_size=="medium")) { removeMove(); }
-    diff = score[0] - score[1];
-    game_over = false;
+    if (game_over) {
+      document.querySelector("#statistics-overlay").style.display = "none";
+      document.querySelector("#stats-button").className = "off";
+      game_over = false;
+    }
   };
 
   /* Remove a single player's move */
@@ -391,11 +396,11 @@ var makeBoard = function(w, h) {
 
     // update old cell
     old_cell.src = new_cell.src;
-    easeElement(old_cell, "out", 1, 2);
+    old_cell.onload = function() {easeElement(old_cell, "out", 1, 2)};
     // update new cell (map number of connections to {0, 1})
     new_cell.src = "images/" + player_color[connection_table[ind].player] +
     connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
-    easeElement(new_cell, "in", 1, 2);
+    new_cell.onload = function() {easeElement(new_cell, "in", 1, 2)};
   }
 
   // /* Gradually update score difference (for scoring cell color) */
@@ -412,7 +417,6 @@ var makeBoard = function(w, h) {
         score[plyr] =  Math.round(score[plyr]);
         cancelAnimationFrame(requestIncDiffId);
       } else { requestAnimationFrame(updateDiff); }
-      diff = score[0] - score[1];
       player_score.innerHTML = (plyr==0 ? "You" : "AI") + ": " + Math.ceil(score[plyr]);
     }
   }

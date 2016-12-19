@@ -54,8 +54,6 @@ header {
 	display: flex;
 	justify-content: space-around;
 }
-
-
 .setting >* {
 	display: block;
 	color: white;
@@ -132,8 +130,9 @@ main {
 	cursor: pointer;
 }
 
-#stats-button {
-	opacity: 0.1;
+#stats-button.off {
+	opacity: 0.25;
+	cursor: default;
 }
 
 #board-container {
@@ -141,11 +140,14 @@ main {
 	align-self: center;
 	position: relative;
 }
+#board {
+	border: 2px solid gray;
+}
 
 .cell-container {
 	display: inline-block;
 	position: relative;
-	outline: 0.1px solid;
+	outline: 0.1px solid gray;
 	font-size: 1.5em;
 }
 .cell-container * {
@@ -191,21 +193,28 @@ main {
 
 /* graphics overlay */
 #statistics-overlay {
+	position: absolute;
+	max-height: 75vh;
+	max-width: 75vh;
+	height: 100%;
+	width: 100%;
 	display: none;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
+	justify-content: space-between;
 	color: gray;
 	background: rgba(0, 0, 0, 1);
+	z-index: 1;
 }
 
 .graphic {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
-	margin: 10px
 }
+#statistics-overlay a {
+	font-size: 0.75em;
+	align-self: center;
+ }
+
 
 /* -------- */
 /*  Footer  */
@@ -259,6 +268,13 @@ footer > *{
 		max-height: 75vh;
 		max-width: 75vh;
 	}
+	#statistics-overlay {
+		font-size: 0.6em;
+	}
+	#statistics-overlay a {
+		font-size: 0.75em;
+	}
+
 	#game-buttons {
 		flex-grow: 0.5;
 		font-size: 0.75em;
