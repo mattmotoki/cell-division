@@ -160,6 +160,7 @@ main {
 .single-cell {
 	display: inline-block;
 	width: 100%;
+	opacity: 0;
 }
 .old {
 	display: inline-block;
