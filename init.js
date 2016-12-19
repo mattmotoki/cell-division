@@ -23,16 +23,14 @@ var game_log = [];
 /* resize listener   */
 window.onresize = function() {
   makeScoringCell.resizeCanvas();
-  resizeBoard();
 };
 
 /* Get user input */
 document.querySelector("body").onload = function() {
   // initialize difficulty
-  easeElement(
-    document.querySelector("#difficulty-" + difficulty)
-    .childNodes[1], "in", 0.5
-  );
+  document.querySelector("#difficulty-" + difficulty)
+  .style.textDecoration = "underline";
+
   // initialize board size
   switch (board_size) {
     case "small":  makeBoard(4,4); n_rounds=16; break;
@@ -40,15 +38,13 @@ document.querySelector("body").onload = function() {
     case "large":  makeBoard(6,6); n_rounds=36; break;
     default: throw  "board size not defined";
   }
-  easeElement(
-    document.querySelector("#size-" + board_size)
-    .childNodes[1], "in", 0.5
-  );
+  document.querySelector("#size-" + board_size)
+  .style.textDecoration = "underline";
+
   // initialize first move
-  easeElement(
-    document.querySelector("#move-" + first_move)
-    .childNodes[1], "in", 0.5
-  );
+  document.querySelector("#move-" + first_move)
+  .style.textDecoration = "underline";
+
   // simulate hover effects
   document.querySelector("#move-ai").onmouseover = function(el) {
     el.target.style.color = vec2rgb(makeScoringCell.player_colors[1]);
@@ -66,16 +62,12 @@ function setMenuValue(el, var_name, value_name, value) {
   var new_value = el.id.match(/-(.*)/)[1];
   window[var_name] = new_value;
   if (new_value != value) {
-    // turn off old value
-    easeElement(
-      document.querySelector("#" + value_name + "-" + value)
-      .childNodes[1], "out", 0.5
-    );
-    // turn on new value
-    easeElement(
-      document.querySelector("#" + value_name + "-" + new_value)
-      .childNodes[1], "in", 0.5
-    );
+    // turn off underline
+    document.querySelector("#" + value_name + "-" + value)
+    .style.textDecoration = "none";
+    // turn on underline
+    document.querySelector("#" + value_name + "-" + new_value)
+    .style.textDecoration = "underline";
     // reset the game
     resetBoard();
   }
@@ -101,88 +93,17 @@ document.querySelector("#first-move")
 function setFirstMove() { setMenuValue(this, "first_move", "move", first_move); }
 
 
-
-/* Update board size */
-function resizeBoard() {
-  var header_width;
-  var header_height;
-  var main_width;
-  var main_height;
-
-  // get window and header size
-  var window_height = window.innerHeight;
-  var window_width = window.innerWidth;
-
-  // check orientation
-  if (window_height>window_width) {
-    // if portrait then 3-row format (subtract header and footer)
-    header_height = document.querySelector("#header").clientHeight;
-    main_width = window_width;
-    main_height = window_height - header_height - 65;
-  } else {
-    // if landscape then 2-col format (no header and footer)
-    header_width = document.querySelector("#header").clientWidth;
-    main_width = window_width - header_width;
-    main_height = window_height;
-  }
-  // resize main display
-  document.querySelector("#main").style.height = main_height + "px";
-
-  // resize board
-  var board = document.querySelector("#board");
-  var board_width = Math.min(main_width-75, main_height-140);
-  board.style.maxWidth =  board_width + "px";
-  board.style.maxHeight = board_width + "px";
-
-  // resize game
-  var game = document.querySelector("#game");
-  game.style.maxWidth =  (board_width) + "px";
-  game.style.maxHeight = (board_width+140) + "px";
-}
-
-
 /* ------------------------------------- */
 /*           Button Listeners            */
 /* ------------------------------------- */
-/* --------------- */
-/*  Intro Buttons  */
-/* --------------- */
-// play button
-document.querySelector("#play-button").onclick = function() {
-  document.querySelector("#introduction").style.display = "none";
-  document.querySelector("#overlay").style.zIndex  = 0;
-};
-// tutorial button
-
-/* -------------- */
-/*  Game Buttons  */
-/* -------------- */
 // undo button (see make_board.js)
-// reset button
-document.querySelector("#reset-button").onclick = resetBoard;
-
-
-/* ------------------- */
-/*  Game Over Buttons  */
-/* ------------------- */
-// switch button
-document.querySelector("#switch-button").onclick = function() {
-  first_move = first_move=="you" ? "ai" : "you";
-  resetBoard();
-  document.querySelector("#game-over-container").style.display = "none";
-  document.querySelector("#overlay").style.zIndex  = 0;
-};
 // statistics button
 document.querySelector("#stats-button").onclick = function() {
   document.querySelector("#game-over-container").style.display = "none";
   document.querySelector("#statistics-overlay").style.display = "flex";
 };
-// repeat (play again) button
-document.querySelector("#repeat-button").onclick = function() {
-  resetBoard();
-  document.querySelector("#game-over-container").style.display = "none";
-  document.querySelector("#overlay").style.zIndex  = 0;
-};
+// reset button
+document.querySelector("#reset-button").onclick = resetBoard;
 
 
 /* ------------------------------------- */
@@ -211,8 +132,6 @@ document.querySelector("#statistics-overlay").onclick = function(el){
   document.querySelector("#overlay").style.zIndex  = 0;
 };
 
-
-
 /* ------------------------------------- */
 /*            Helper Functions           */
 /* ------------------------------------- */
@@ -235,7 +154,6 @@ function resetBoard() {
     default: throw  "board size not defined";
   }
 }
-
 
 /* ------------------------------------- */
 /*               Animation               */
@@ -267,22 +185,6 @@ function easeElement(el, in_or_out="out", duration=1, power=3) {
   }
 }
 
-function toggleMenu() {
-  document.getElementById("options-menu").classList.toggle("show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('#menu-link')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    for (var i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (!event.target.matches('.dropdown *') && openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
 /* ------------------------------------- */
 /*           Utility Functions           */
 /* ------------------------------------- */

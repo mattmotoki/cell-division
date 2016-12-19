@@ -1,0 +1,272 @@
+/* ---------------------- */
+/* Generic HTML Elements  */
+/* ---------------------- */
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin: 0;
+	padding: 0;
+	font-size: 2em;
+	font-family:"Segoe UI",Arial,sans-serif;
+	background-color: black;
+	color: rgb(34, 255, 34);
+}
+a {
+	text-decoration: none;
+	color: rgb(34, 255, 34);
+}
+/* Section Sizing (Portrait) */
+header, main>*, footer{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+main { flex-grow: 2;}
+header { flex-grow: 1;}
+footer {flex-grow: 0.5;}
+
+/* -------- */
+/*  Header  */
+/* -------- */
+header {
+	flex-direction: column;
+	background-color: rgba(100,100,100,0.25);
+	border-bottom: 1px solid;
+}
+
+/* Title */
+#scoring-cell {
+	display: inline-block;
+	vertical-align: middle;
+	max-height: 20%;
+}
+#title {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 5px;
+	font-size: 2em;
+}
+
+/* Settings */
+#options-menu {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+}
+
+
+.setting >* {
+	display: block;
+	color: white;
+}
+.setting img {
+	height: 0.75em;
+	vertical-align: baseline;
+	padding-right: 0.2em;
+}
+.setting i {
+	font-size: 0.9em;
+	padding-right: 0.2em;
+}
+
+#board-size >*:hover, #move-you:hover {
+	color: rgb(34, 255, 34);
+}
+
+#difficulty-easy:hover {
+	color: rgb(34, 142, 250);
+}
+#difficulty-medium:hover {
+	color: rgb(230, 54, 230);
+}
+#difficulty-hard:hover {
+	color: rgb(255, 60, 0);
+}
+
+#move-you i {
+	color: rgb(34, 255, 34);
+}
+#move-ai i {
+	color: rgb(230, 54, 230);
+}
+
+/* -------------- */
+/*  Main Section */
+/* -------------- */
+main {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+#score0 {
+	color: rgb(34, 255, 34);
+}
+
+/* score bar */
+#score-bar {
+	flex-grow: 2;
+	font-size: 1.25em;
+	justify-content: space-between;
+	margin: 0 1em 0 1em ;
+	border: none;
+}
+
+/* game buttons */
+#game-buttons {
+	flex-grow: 1.5;
+}
+#game-buttons >* {
+	display: flex;
+
+	flex-direction: column;
+
+	align-items: center;
+	font-size: 0.75em;
+	border-radius: 0.6em;
+	padding: 0.25em;
+	min-width: 15%;
+	background-color: rgb(34, 255, 34);
+	color: black;
+	cursor: pointer;
+}
+
+#stats-button {
+	opacity: 0.1;
+}
+
+#board-container {
+	max-width: 45vh;
+	align-self: center;
+	position: relative;
+}
+
+.cell-container {
+	display: inline-block;
+	position: relative;
+	outline: 0.1px solid;
+	font-size: 1.5em;
+}
+.cell-container * {
+	margin: 1px 0 0 1px; /* this is fudging */
+}
+.cell-text {
+	display: none;
+	color: black;
+}
+.single-cell {
+	display: inline-block;
+	width: 100%;
+}
+.old {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+.cell-container:hover * {
+	animation: shake 0.75s;
+}
+.cell-container:hover .cell-text.on {
+	display: inline-block;
+	position: absolute;
+	left: calc(50% - 0.35em);
+	top: calc(50% - 0.75em);
+	background-color: none;
+	cursor: pointer;
+	z-index: 0;
+}
+.cell-container:hover .single-cell.on {
+	background-color: rgba(255, 255, 255, 0.2);
+	cursor:pointer;
+}
+
+@keyframes shake {
+	25% { transform: translateY(2px) }
+	50% { transform: translateY(-1px) }
+	75% { transform: translateY(1px) }
+}
+
+/* graphics overlay */
+#statistics-overlay {
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	color: gray;
+	background: rgba(0, 0, 0, 1);
+}
+
+.graphic {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin: 10px
+}
+
+/* -------- */
+/*  Footer  */
+/* -------- */
+footer {
+	flex-direction: column;
+	background-color: rgba(100,100,100,0.25);
+	border-top: 1px solid;
+}
+footer > *{
+	width:100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+
+/* ----------------------- */
+/*  Landscape Orientation  */
+/* ----------------------- */
+@media only screen and (orientation: landscape)  {
+	body {
+		flex-direction: row;
+	}
+	header {
+		flex-grow: 2;
+		border-bottom: none;
+		justify-content: space-around;
+		padding: 0;
+	}
+	header a {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin: 0;
+	}
+	#scoring-cell {
+		height: 50%;
+		max-height: 30vh;
+	}
+
+	#options-menu {
+		padding: 0 0.5em 0 0.5em;
+	}
+	#score-bar {
+		font-size: 0.9em;
+	}
+	#board-container {
+		flex-grow: 1;
+		border-bottom: none;
+		max-height: 75vh;
+		max-width: 75vh;
+	}
+	#game-buttons {
+		flex-grow: 0.5;
+		font-size: 0.75em;
+		background-color: rgb(34, 255, 34);
+		padding: 0;
+		margin-top: 0.5em;
+	}
+
+
+	footer { display: none; }
+}

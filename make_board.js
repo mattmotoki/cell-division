@@ -65,8 +65,6 @@ var makeBoard = function(w, h) {
   /* Create the board */
   var container = document.createElement("div");
   container.id = "board";
-  document.querySelector("#board-container").appendChild(container);
-  resizeBoard();
 
   /* Fill in the board */
   for (var i=0; i < (w-4)*(h-4);  i++) {
@@ -103,6 +101,7 @@ var makeBoard = function(w, h) {
     cell_container.appendChild(old_cell);
     cell_container.appendChild(cell_text);
     container.appendChild(cell_container);
+    document.querySelector("#board-container").appendChild(container);
   }
 
   // sort open_moves for reproducible game play (after undo)
