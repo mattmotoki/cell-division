@@ -57,7 +57,8 @@ document.querySelector("body").onload = function() {
   requestId = makeScoringCell.animateCell();
 
   // cache remaining cells images into memory
-  cacheCells();
+  cacheCells("g");
+  cacheCells("b");
 };
 
 /* Update menu values */
@@ -83,6 +84,8 @@ function setDifficulty() {
   setMenuValue(this, "difficulty", "difficulty", difficulty);
   makeScoringCell.setAIColor();
   document.querySelector("#move-ai").childNodes[1].style.color = vec2rgb(makeScoringCell.player_colors[1]);
+  if (difficulty=="medium") {cacheCells("f");}
+  else if (difficulty=="hard") {cacheCells("r");}
 }
 
 /* Update board size */
@@ -267,7 +270,16 @@ function preloadImages(array) {
     }
 }
 /* load all cells of a given color into cache */
-function cacheCells() {
+function cacheCells(clr) {
+  var a =  [
+    "0000", "1000", "0100", "0010", "0001", "1100", "1010", "1001",
+    "0110", "0101", "0011", "1110", "1101", "1011", "0111", "1111"
+  ];
+    preloadImages(
+      a.map(function(x) { return "images/" + clr + x + ".png"; })
+    );
+}
+function cacheAllCells() {
   var a =  [
     "0000", "1000", "0100", "0010", "0001", "1100", "1010", "1001",
     "0110", "0101", "0011", "1110", "1101", "1011", "0111", "1111"
