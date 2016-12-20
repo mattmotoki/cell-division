@@ -1,0 +1,12 @@
+
+.icon-play:before { content: '\e800'; } /* '' */
+.icon-ccw:before { content: '\e801'; } /* '' */
+.icon-arrows-cw:before { content: '\e802'; } /* '' */
+.icon-book:before { content: '\e803'; } /* '' */
+.icon-chart-bar:before { content: '\e804'; } /* '' */
+.icon-github-circled:before { content: '\f09b'; } /* '' */
+.icon-github:before { content: '\f113'; } /* '' */
+.icon-gamepad:before { content: '\f11b'; } /* '' */
+.icon-codeopen:before { content: '\f1cb'; } /* '' */
+.icon-chart-line:before { content: '\f201'; } /* '' */
+.icon-user-o:before { content: '\f2c0'; } /* '' */
