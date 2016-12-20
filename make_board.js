@@ -51,7 +51,13 @@ var makeBoard = function(w, h) {
     scoring_table[0][i] = { overlap:0, interlap:0, unconnected:0, extensions:0 };
     scoring_table[1][i] = { overlap:0, interlap:0, unconnected:0, extensions:0 };
     // initialize  connection table (default player=2)
-    connection_table[i] = { player:2, openness:8, connections:[0, 0, 0, 0] };
+    connection_table[i] = {
+      player:2, openness:8, connections:[0, 0, 0, 0],
+      centrality: Math.min(
+        h - Math.abs((i % h)+1 - (h+1)/2),
+        w - Math.abs(Math.floor(i / h)+1 - (w+1)/2)
+      )/Math.max(w, h)
+     };
     // update openness (if neighbor is not feasible then decrement openness)
     if (checkFeasibility(i)) {
       for (var j = 0; j < 8; j++) {
@@ -348,29 +354,33 @@ var makeBoard = function(w, h) {
 
   /* Define and extract values of the AI difficulties */
   function extractValue(plyr, ind) {
-    // extract scores of both players
+    // extract varaibles for both players
     var your_score = extractScore(0, ind);
     var ai_score = extractScore(1, ind);
+    var your_overlap = scoring_table[0][ind].overlap;
+    var ai_overlap = scoring_table[1][ind].overlap;
+    var openness = connection_table[ind].openness;
+    var centrality = connection_table[ind].centrality;
 
     // calculate easy and hard values
-    var easy = 10*ai_score + 5*your_score;
-    var hard = 2*ai_score + 2*your_score + 0.01*connection_table[ind].openness;
+    var easy = ai_overlap + your_overlap + openness + centrality;
+    var hard = ai_score + your_score + openness + centrality;
 
     // combine easy and hard to get value
     switch (difficulty) {
       case "easy":   return easy;
       case "medium": return 0.5*easy + 0.5*hard;
       case "hard":   return hard;
-      default:       return 0.25*easy + 0.75*hard;
+      default: throw "difficulty not defined";
     }
   }
 
   /* Find the board position of the best move */
   function findBestMove() {
-    var best_value = 0;
-    var value = 0;
-    var best_ind = 0;
-    var ind = 0;
+    var best_value = -999999;
+    var value = -999999;
+    var best_ind = -1;
+    var ind = -1;
 
     for (var i = 0; i < open_moves.length; i++) {
       ind = open_moves[i];
@@ -413,7 +423,7 @@ var makeBoard = function(w, h) {
     function updateDiff() {
       t += 1/30;
       score[plyr] +=  ds;
-      if (t >= 0.95) {
+      if (t >= 0.975) {
         score[plyr] =  Math.round(score[plyr]);
         cancelAnimationFrame(requestIncDiffId);
       } else { requestAnimationFrame(updateDiff); }

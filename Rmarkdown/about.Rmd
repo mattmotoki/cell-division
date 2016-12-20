@@ -21,7 +21,22 @@ readable
 
 
 # Introduction 
-Cell Addition is a turn-based board game.  This game is intended for those who like strategy/puzzles and dislike luck/probability^[One of the motivations for creating this game was out of frustration with Candy Crush which after awhile becomes a game of luck rather than skill.].  All A.I. opponents implement a deterministic strategy that is greedy with respect to an approximate value function.  Games against a fixed difficulty A.I. opponent are completely reproducible and can be thought of as a type of puzzle; i.e., you can design a strategy that specifically exploits the A.I. opponent's weaknesses.  
+Cell Addition is a strategy-based board game.  All A.I. opponents implement a deterministic strategy that is greedy with respect to an approximate value function.  Games against a fixed difficulty A.I. opponent are reproducible.  
+
+## How to Play
+Player take turns placing their cells. A player's cells divide when they connect with each other; vertical, horizontal and diagonal connections are allowed.  
+```{r, out.width = "100px", echo=FALSE}
+knitr::include_graphics("medium_size_logo.png")
+```
+
+Your score is equal to the total number of cell that you have on the board.  The game ends when the board is full and the winner is the player with the most cells. 
+
+## Features
+In the current implementation of the game, there are three fixed-difficulty ai opponents.  The R implementation also has an adaptive opponent that plays differently depending on how much it is winning/losing by.
+
+The current implementation has three square grid board configuratios. The R implementation has board configurations that are more flexible.  In the break and flask layouts, gravity applies to moves played (cells fall to the lowest open row).
+
+
 
 # Implementation
 
@@ -36,12 +51,11 @@ The current implementation of the game is writen directly in plain HTML, CSS and
 
 # Creating The Cells
 The visuals in this R implementation are quite limited; e.g.,
-<center>![](petri4.png)</center>
+```{r, out.width = "500px", echo=FALSE}
+knitr::include_graphics("petri4.png")
+```
 
-Rather than drawing squares and lines, it is more visually appealing to use cartoon-like cells;e.g, 
-<center>![](medium_size_logo.png)</center>
-
-This section describes the process of creating cell images from scratch using base R graphics.  The images can then be loaded and displayed as buttons in the game. 
+Rather than drawing squares and lines, it is more visually appealing to use cartoon-like.  This section describes the process of creating cell images from scratch using base R graphics.  The images can then be loaded and displayed as buttons in the game. 
 
 
 ## Defining the Outline

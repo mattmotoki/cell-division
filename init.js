@@ -8,7 +8,7 @@
 var game_over = false;     // game over flag
 var first_move = "you";    // if true then user goes first
 var board_size = "small";  // board size
-var difficulty = "medium"; // AI difficulty
+var difficulty = "easy"; // AI difficulty
 var score = [0, 0];        // your score and AI's score
 var n_rounds = 0;          // number of rounds per game
 /* Create a game log (for easier undos and for score visualization)*/
@@ -27,10 +27,6 @@ window.onresize = function() {
 
 /* Get user input */
 document.querySelector("body").onload = function() {
-  // cache all cells images into memory
-  cacheCells();
-
-
   // initialize difficulty
   document.querySelector("#difficulty-" + difficulty)
   .style.textDecoration = "underline";
@@ -59,6 +55,9 @@ document.querySelector("body").onload = function() {
 
   // initialize scoring cell
   requestId = makeScoringCell.animateCell();
+
+  // cache remaining cells images into memory
+  cacheCells();
 };
 
 /* Update menu values */
