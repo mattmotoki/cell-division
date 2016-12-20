@@ -411,18 +411,15 @@ var makeBoard = function(w, h) {
     // update old cell (which should have opacity=0)
     var old_cell = document.querySelector("#old-cell-img-" + ind);
     var new_cell = document.querySelector("#new-cell-img-" + ind);
+    // update old_cell source, then fade it out
     old_cell.src = new_cell.src;
-    old_cell.onload = function() {
-      // fade it out old_cell
-      old_cell.style.opacity = 1;
-      easeElement(old_cell, "out", 0.5, 2)
-
-      // set new cell opacity=0, update it then fade it in
-      new_cell.style.opacity = 0;
-      new_cell.src = "images/" + player_color[connection_table[ind].player] +
-      connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
-      new_cell.onload = function() {easeElement(new_cell, "in", 0.5, 2)};
-    };
+    old_cell.style.opacity = 1;
+    easeElement(old_cell, "out", 0.5, 2)
+    // set new cell opacity=0, update it then fade it in
+    new_cell.style.opacity = 0;
+    new_cell.src = "images/" + player_color[connection_table[ind].player] +
+    connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
+    easeElement(new_cell, "in", 0.5, 2);
   }
 
   // /* Gradually update score difference (for scoring cell color) */
