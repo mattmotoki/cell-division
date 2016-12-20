@@ -31,7 +31,7 @@ footer {flex-grow: 0.5;}
 /* -------- */
 header {
 	flex-direction: column;
-	background-color: rgba(100,100,100,0.25);
+	background-color: rgba(100,100,100,0.35);
 	border-bottom: 1px solid;
 }
 
@@ -154,18 +154,19 @@ main {
 .cell-container * {
 	margin: 1px 0 0 1px; /* this is fudging */
 }
+
 .cell-text {
-	display: inline-block;
-	visibility:hidden;
+	display: none;
+	visibility: hidden;
 	color: black;
 	position: absolute;
 	left: calc(50% - 0.35em);
 	top: calc(50% - 0.75em);
 }
+
 .single-cell {
 	display: inline-block;
 	width: 100%;
-	opacity: 0;
 }
 .old {
 	display: inline-block;
@@ -217,7 +218,7 @@ main {
 /* -------- */
 footer {
 	flex-direction: column;
-	background-color: rgba(100,100,100,0.25);
+	background-color: rgba(100,100,100,0.35);
 	border-top: 1px solid;
 }
 footer > *{
@@ -264,9 +265,9 @@ footer > *{
 		max-height: 75vh;
 		max-width: 75vh;
 	}
-	.cell-text {
+	/*.cell-text {
 		font-size: 0.75em;
-	}
+	}*/
 	#statistics-overlay {
 		font-size: 0.6em;
 	}

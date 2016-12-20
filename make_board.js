@@ -83,11 +83,11 @@ var makeBoard = function(w, h) {
     cell_container.ind0 =  ind0;
     cell_container.onclick = playRound;
 
-    // initialize scoring overlay text
-    var cell_text = document.createElement("div");
-    cell_text.innerHTML = "1";
-    cell_text.id  = "cell-text-" + ind0;
-    cell_text.className = "cell-text on";
+    // // initialize scoring overlay text
+    // var cell_text = document.createElement("div");
+    // cell_text.innerHTML = "1";
+    // cell_text.id  = "cell-text-" + ind0;
+    // cell_text.className = "cell-text on";
 
     // initialize cell image
     var old_cell = document.createElement("img");
@@ -104,7 +104,7 @@ var makeBoard = function(w, h) {
     // add elements to board
     cell_container.appendChild(new_cell);
     cell_container.appendChild(old_cell);
-    cell_container.appendChild(cell_text);
+    // cell_container.appendChild(cell_text);
     container.appendChild(cell_container);
     document.querySelector("#board-container").appendChild(container);
   }
@@ -168,7 +168,7 @@ var makeBoard = function(w, h) {
     // remove hover property from cell image and cell text ("on" class)
     document.querySelector("#new-cell-img-" + ind0).className  = "single-cell new";
     document.querySelector("#old-cell-img-" + ind0).className  = "single-cell old";
-    document.querySelector("#cell-text-" + ind0).className  = "cell-text";
+    // document.querySelector("#cell-text-" + ind0).className  = "cell-text";
 
     // update score parameters
     updateScore(plyr, extractScore(plyr, ind0));
@@ -273,7 +273,7 @@ var makeBoard = function(w, h) {
     // add hover property from cell image and cell text
     document.querySelector("#new-cell-img-" + ind0).className  = "single-cell on new";
     document.querySelector("#old-cell-img-" + ind0).className  = "single-cell on old";
-    document.querySelector("#cell-text-" + ind0).className  = "cell-text on";
+    // document.querySelector("#cell-text-" + ind0).className  = "cell-text on";
 
     // update score parameters
     score[plyr] = plyr_score;
@@ -328,13 +328,13 @@ var makeBoard = function(w, h) {
       }
 
       // update the text displayed in the cell
-      if (checkFeasibility(ind1)) {
-        document.querySelector("#cell-text-" + ind1).innerHTML = extractScore(0, ind1);
-      }
+      // if (checkFeasibility(ind1)) {
+      //   document.querySelector("#cell-text-" + ind1).innerHTML = extractScore(0, ind1);
+      // }
     }
 
-    // update the text displayed in the cell
-    document.querySelector("#cell-text-" + ind0).innerHTML = extractScore(0, ind0);
+    // // update the text displayed in the cell
+    // document.querySelector("#cell-text-" + ind0).innerHTML = extractScore(0, ind0);
 
     // update the display of the current cell
     updateCellDisplay(ind0);
@@ -389,8 +389,8 @@ var makeBoard = function(w, h) {
         best_value = value;
         best_ind = ind;
       }
-      // update the text displayed in the cell (this could be better placed)
-      document.querySelector("#cell-text-" + ind).innerHTML = extractScore(0, ind);
+      // // update the text displayed in the cell (this could be better placed)
+      // document.querySelector("#cell-text-" + ind).innerHTML = extractScore(0, ind);
     }
     return best_ind;
   }
@@ -401,16 +401,23 @@ var makeBoard = function(w, h) {
 
   /* Update cell image */
   function updateCellDisplay(ind) {
+    // update old cell (which should have opacity=0)
     var old_cell = document.querySelector("#old-cell-img-" + ind);
     var new_cell = document.querySelector("#new-cell-img-" + ind);
-
-    // update old cell
     old_cell.src = new_cell.src;
-    old_cell.onload = function() {easeElement(old_cell, "out", 0.5, 2)};
-    // update new cell (map number of connections to {0, 1})
-    new_cell.src = "images/" + player_color[connection_table[ind].player] +
-    connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
-    new_cell.onload = function() {easeElement(new_cell, "in", 0.5, 2)};
+    old_cell.onload = function() {
+      // fade it out old_cell
+      old_cell.style.opacity = 1;
+      old_cell.style.filter = "alpha(opacity=100)";
+      easeElement(old_cell, "out", 0.5, 2)
+
+      // set new cell opacity=0, update it then fade it in
+      new_cell.style.opacity = 0;
+      new_cell.style.filter = "alpha(opacity=0)";
+      new_cell.src = "images/" + player_color[connection_table[ind].player] +
+      connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
+      new_cell.onload = function() {easeElement(new_cell, "in", 0.5, 2)};
+    };
   }
 
   // /* Gradually update score difference (for scoring cell color) */
