@@ -144,13 +144,13 @@ function makeGraphics() {
   var w = document.querySelector("#board").offsetWidth;
   var scores = game_log.map(function(x) {return Math.round(x.score);} );
   // remove first two elements (zeros) and add current scores
-  scores.splice(0,2)
+  scores.splice(0,2);
   if (board_size=="medium") {
-    scores.push(score[1*(first_move=="you")])
-    scores.push(score[1*(first_move!="you")])
+    scores.push(score[1*(first_move=="you")]);
+    scores.push(score[1*(first_move!="you")]);
   } else {
-    scores.push(score[1*(first_move!="you")])
-    scores.push(score[1*(first_move=="you")])
+    scores.push(score[1*(first_move!="you")]);
+    scores.push(score[1*(first_move=="you")]);
   }
   makeDifferenceGraph(scores, first_move=="you", makeScoringCell.player_colors, h, w);
   makeIndividualGraph(scores, first_move=="you", makeScoringCell.player_colors, h, w);
@@ -192,7 +192,7 @@ function resetBoard() {
   }
 
   // update displays
-  document.querySelector("#game-over-message").innerHTML = "";;
+  document.querySelector("#game-over-message").innerHTML = "";
   document.querySelector("#stats-button").className = "off";
   document.querySelector("#statistics-overlay").style.display = "none";
 }
