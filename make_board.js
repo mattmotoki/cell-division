@@ -235,9 +235,11 @@ var makeBoard = function(w, h) {
 
     // check if game is over
     if (game_over) {
-      setTimeout(showGameOverMessage, 600);
-      document.querySelector("#stats-button").className = "";
-     }
+      setTimeout(function() {
+        showGameOverMessage() ;
+        document.querySelector("#stats-button").className = "";
+      }, 750);  
+    }
   }
 
 
