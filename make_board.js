@@ -238,7 +238,7 @@ var makeBoard = function(w, h) {
       setTimeout(function() {
         showGameOverMessage() ;
         document.querySelector("#stats-button").className = "";
-      }, plyr=="you" ? 1200 : 700);
+      }, plyr=="you" ? 1500 : 1000);
     }
   }
 
