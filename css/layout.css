@@ -155,14 +155,14 @@ main {
 	margin: 1px 0 0 1px; /* this is fudging */
 }
 
-.cell-text {
+/*.cell-text {
 	display: none;
 	visibility: hidden;
 	color: black;
 	position: absolute;
 	left: calc(50% - 0.35em);
 	top: calc(50% - 0.75em);
-}
+}*/
 
 .single-cell {
 	display: inline-block;
@@ -176,11 +176,11 @@ main {
 	width: 100%;
 }
 
-.cell-container:hover .cell-text.on {
+/*.cell-container:hover .on {
 	visibility: visible;
 	cursor: pointer;
 	z-index: 1;
-}
+}*/
 .cell-container:hover .single-cell.on {
 	background-color: rgba(255, 255, 255, 0.1);
 	cursor:pointer;
