@@ -57,7 +57,7 @@ var makeBoard = function(w, h) {
         h - Math.abs((i % h)+1 - (h+1)/2),
         w - Math.abs(Math.floor(i / h)+1 - (w+1)/2)
       )/Math.max(w, h)
-     };
+    };
     // update openness (if neighbor is not feasible then decrement openness)
     if (checkFeasibility(i)) {
       for (var j = 0; j < 8; j++) {
@@ -72,12 +72,16 @@ var makeBoard = function(w, h) {
   container.id = "board";
 
   /* Fill in the board */
+  var ind0;
+  var cell_container;
+  var old_cell;
+  var new_cell;
   for (var i=0; i < (w-4)*(h-4);  i++) {
-    var ind0 = convertIndex(i);
+    ind0 = convertIndex(i);
     open_moves.push(ind0);
 
     // get cell container
-    var cell_container = document.createElement("div");
+    cell_container = document.createElement("div");
     cell_container.className = "cell-container";
     cell_container.style.width = 100/(w-4) + "%";
     cell_container.ind0 =  ind0;
@@ -90,12 +94,12 @@ var makeBoard = function(w, h) {
     // cell_text.className = "cell-text on";
 
     // initialize cell image
-    var old_cell = document.createElement("img");
+    old_cell = document.createElement("img");
     old_cell.id  = "old-cell-img-" + ind0;
     old_cell.className  = "single-cell on old";
     old_cell.src = "images/o0000.png";
 
-    var new_cell = document.createElement("img");
+    new_cell = document.createElement("img");
     new_cell.id  = "new-cell-img-" + ind0;
     new_cell.className  = "single-cell on new";
     new_cell.src = "images/o0000.png";
@@ -115,7 +119,7 @@ var makeBoard = function(w, h) {
 
   /* Set AI move if needed */
   if (first_move=="ai") {
-    var ind0 = findBestMove();
+    ind0 = findBestMove();
     var move_ind = open_moves.indexOf(ind0);
     open_moves.splice(move_ind, 1);
     playMove(ind0, 1);
@@ -134,7 +138,7 @@ var makeBoard = function(w, h) {
 
       // cut off user input for 2 seconds (time for two moves)
       is_busy = true;
-      setTimeout( function() {is_busy = false;}, 1000 )
+      setTimeout( function() {is_busy = false;}, 1000 );
 
       // remove from feasible array
       open_moves.splice(move_ind, 1);
@@ -175,10 +179,12 @@ var makeBoard = function(w, h) {
 
 
     // update state values of other cells
+    var ind1;
+    var ind2;
     for (var i = 0; i < 8; i++) {
       // adjacent indices (surrounding cells)
-      var ind1 = ind0 + adj[i];   // one position away
-      var ind2 = ind0 + 2*adj[i]; // two positions away
+      ind1 = ind0 + adj[i];   // one position away
+      ind2 = ind0 + 2*adj[i]; // two positions away
 
       // update openness and overlap
       connection_table[ind1].openness -- ;
