@@ -229,7 +229,7 @@ var makeBoard = function(w, h) {
 
     // check if game is over
     if (game_over) {
-      setTimeout(showGameOverMessage, 500);
+      setTimeout(showGameOverMessage, 600);
       document.querySelector("#stats-button").className = "";
      }
   }
@@ -409,12 +409,10 @@ var makeBoard = function(w, h) {
     old_cell.onload = function() {
       // fade it out old_cell
       old_cell.style.opacity = 1;
-      old_cell.style.filter = "alpha(opacity=100)";
       easeElement(old_cell, "out", 0.5, 2)
 
       // set new cell opacity=0, update it then fade it in
       new_cell.style.opacity = 0;
-      new_cell.style.filter = "alpha(opacity=0)";
       new_cell.src = "images/" + player_color[connection_table[ind].player] +
       connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
       new_cell.onload = function() {easeElement(new_cell, "in", 0.5, 2)};

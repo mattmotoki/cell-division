@@ -209,7 +209,6 @@ function easeElement(el, in_or_out="out", duration=1, power=3) {
   // initialize
   var op = initial_op;
   el.style.opacity = initial_op;
-  el.style.filter = "alpha(opacity=" + initial_op*100 + ")";
   var anim_id = requestAnimationFrame(updateOpacity);
   // update opacity: 1-t^power (out) or t^power (in)
   function updateOpacity() {
@@ -217,11 +216,9 @@ function easeElement(el, in_or_out="out", duration=1, power=3) {
     op = in_or_out=="out" ? 1-Math.pow(t, power) : Math.pow(t, power);
     if (t >= 1){
       el.style.opacity = 1-initial_op;
-      el.style.filter = "alpha(opacity=" + (1-initial_op)*100 + ")";
       cancelAnimationFrame(anim_id);
     } else {
       el.style.opacity = op;
-      el.style.filter = "alpha(opacity=" + op*100 + ")";
       anim_id = requestAnimationFrame(updateOpacity);
     }
   }
