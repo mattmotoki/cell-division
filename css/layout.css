@@ -86,7 +86,7 @@ header {
 	color: rgb(34, 255, 34);
 }
 #move-ai i {
-	color: rgb(230, 54, 230);
+	color: rgb(34, 142, 250);
 }
 
 /* -------------- */
@@ -264,6 +264,9 @@ footer > *{
 		max-height: 75vh;
 		max-width: 75vh;
 	}
+	.cell-text {
+		font-size: 0.75em;
+	}
 	#statistics-overlay {
 		font-size: 0.6em;
 	}
@@ -278,7 +281,6 @@ footer > *{
 		padding: 0;
 		margin-top: 0.5em;
 	}
-
 
 	footer { display: none; }
 }
