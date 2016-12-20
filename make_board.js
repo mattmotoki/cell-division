@@ -229,7 +229,7 @@ var makeBoard = function(w, h) {
 
     // check if game is over
     if (game_over) {
-      setTimeout(showGameOverMessage, 1000);
+      setTimeout(showGameOverMessage, 500);
       document.querySelector("#stats-button").className = "";
      }
   }
@@ -250,6 +250,7 @@ var makeBoard = function(w, h) {
     if (game_over) {
       document.querySelector("#statistics-overlay").style.display = "none";
       document.querySelector("#stats-button").className = "off";
+      document.querySelector("#game-over-message").innerHTML = "";
       game_over = false;
     }
   };
