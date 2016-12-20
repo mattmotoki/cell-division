@@ -177,14 +177,11 @@ main {
 	width: 100%;
 }
 
-/*.cell-container:hover .on {
-	visibility: visible;
-	cursor: pointer;
-	z-index: 1;
-}*/
+
 .cell-container:hover .single-cell.on {
 	background-color: rgba(255, 255, 255, 0.1);
 	cursor:pointer;
+	z-index: 1;
 }
 
 

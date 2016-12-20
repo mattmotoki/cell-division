@@ -412,7 +412,7 @@ var makeBoard = function(w, h) {
     var old_cell = document.querySelector("#old-cell-img-" + ind);
     var new_cell = document.querySelector("#new-cell-img-" + ind);
     old_cell.src = new_cell.src;
-    // old_cell.onload = function() {
+    old_cell.onload = function() {
       // fade it out old_cell
       old_cell.style.opacity = 1;
       easeElement(old_cell, "out", 0.5, 2)
@@ -421,9 +421,8 @@ var makeBoard = function(w, h) {
       new_cell.style.opacity = 0;
       new_cell.src = "images/" + player_color[connection_table[ind].player] +
       connection_table[ind].connections.map(function(v) {return 1*(v>0);}).join("") + ".png";
-      easeElement(new_cell, "in", 0.5, 2);
-      // new_cell.onload = function() {easeElement(new_cell, "in", 0.5, 2)};
-    // };
+      new_cell.onload = function() {easeElement(new_cell, "in", 0.5, 2)};
+    };
   }
 
   // /* Gradually update score difference (for scoring cell color) */
