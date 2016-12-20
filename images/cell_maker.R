@@ -46,12 +46,12 @@ quad_y <- quad_outline[, 2]+0.5
 # build block functins
 graphics.off()
 
-# cell outline
-png("o0000.png")
-blank_plot()
-# abline(h=c(0,1), v=c(0,1), lwd=line_width/2)
-# polygon(sq_x, sq_y, col = rgb(1, 1, 1, 0))  
-dev.off()
+# # cell outline
+# png("o0000.png")
+# blank_plot()
+# # abline(h=c(0,1), v=c(0,1), lwd=line_width/2)
+# # polygon(sq_x, sq_y, col = rgb(1, 1, 1, 0))  
+# dev.off()
 
 
 # wrapper function to plot and save all colors

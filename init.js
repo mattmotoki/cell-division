@@ -27,6 +27,10 @@ window.onresize = function() {
 
 /* Get user input */
 document.querySelector("body").onload = function() {
+  // cache all cells images into memory
+  cacheCells();
+
+
   // initialize difficulty
   document.querySelector("#difficulty-" + difficulty)
   .style.textDecoration = "underline";
@@ -139,7 +143,7 @@ document.querySelector("#stats-button").onclick = function() {
 function makeGraphics() {
   var h = 0.4*document.querySelector("#board").offsetHeight;
   var w = document.querySelector("#board").offsetWidth;
-  var scores = game_log.map(function(x) {return x.score;} );
+  var scores = game_log.map(function(x) {return Math.round(x.score);} );
   // remove first two elements (zeros) and add current scores
   scores.splice(0,2)
   if (board_size=="medium") {
@@ -244,4 +248,37 @@ function vec2rgb(vec) {
 /* Convert entries in a vector into an rgba string */
 function vec2rgba(vec) {
   return "rgba(" + vec[0] + "," + vec[1] + "," + vec[2] + "," + vec[3] + ")";
+}
+
+/* load images into browswer cache */
+function preloadImages(array) {
+    if (!preloadImages.list) {
+        preloadImages.list = [];
+    }
+    var list = preloadImages.list;
+    for (var i = 0; i < array.length; i++) {
+        var img = new Image();
+        img.onload = function() {
+            var index = list.indexOf(this);
+            if (index !== -1) {
+                // remove image from the array once it's loaded
+                // for memory consumption reasons
+                list.splice(index, 1);
+            }
+        }
+        list.push(img);
+        img.src = array[i];
+    }
+}
+/* load all cells of a given color into cache */
+function cacheCells() {
+  var a =  [
+    "0000", "1000", "0100", "0010", "0001", "1100", "1010", "1001",
+    "0110", "0101", "0011", "1110", "1101", "1011", "0111", "1111"
+  ];
+  ["g", "b", "f", "r"].forEach(function(clr) {
+    preloadImages(
+      a.map(function(x) { return "images/" + clr + x + ".png"; })
+    );
+  });
 }
