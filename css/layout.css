@@ -149,7 +149,6 @@ main {
 	display: inline-block;
 	position: relative;
 	outline: 1px solid gray;
-	/*font-size: 1.5em;*/
 }
 .cell-container * {
 	margin: 1px 0 0 1px; /* this is fudging */
@@ -168,6 +167,7 @@ main {
 	display: inline-block;
 	width: 100%;
 	z-index: 1;
+	opacity: 1;
 }
 .old {
 	display: inline-block;
