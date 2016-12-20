@@ -3,10 +3,6 @@ var makeBoard = function(w, h) {
   /* Create a board of cells                                                  */
   /*  -w:  width of the board (without margin)                                */
   /*  -h:  height of the board (without margin)                               */
-  /*                                                                          */
-  /* Global Variables:                                                        */
-  /*  -difficulty: used to define AI's moves                                  */
-  /*  -first_move: determines who get's the first move                        */
   /* ------------------------------------------------------------------------ */
 
   /* ----------------------------- */

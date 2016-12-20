@@ -41,25 +41,25 @@ The current implementation has three square grid board configuratios. The R impl
 # Implementation
 
 ## R 
-Cell Division was originally written using R Shiny which converts R code into HTML, CSS and Javascript. 
-The code for the original game is available [here](https://github.com/mattmotoki/Games.ai/tree/master/Cell%20Division) and can be played at [addlink].  Unfortunately, R Shiny geared more towards interactive data analytics and is less not well-suited for this type of game.  
+Cell Division was originally written using R Shiny which converts R code into HTML, CSS and Javascript. The code for the original game is available [here](https://github.com/mattmotoki/Games.ai/tree/master/Cell%20Division) and can be played [here](https://mmotoki.shinyapps.io/cell_division/).  R Shiny is geared more towards interactive data analytics and is not well-suited for this type of game.  
 
 
 ## HTML, CSS and Javascript
-The current implementation of the game is writen directly in plain HTML, CSS and Javascript and can be played at [addlink].  This implementation lacks a few features of the R implementation, but overall it is faster and cleaner. 
+The current implementation of the game is writen in plain HTML, CSS and Javascript.  The code is available [here](https://github.com/mattmotoki/mattmotoki.github.io) and can be played  [here](https://mattmotoki.github.io/).  This implementation lacks a few features of the R implementation, but overall it is a better implementation. 
 
 
-# Creating The Cells
-The visuals in this R implementation are quite limited; e.g.,
+# Technical Stuff
+## Creating The Cells
+The visuals in this R implementation are limited; e.g.,
 ```{r, out.width = "500px", echo=FALSE}
 knitr::include_graphics("petri4.png")
 ```
 
-Rather than drawing squares and lines, it is more visually appealing to use cartoon-like.  This section describes the process of creating cell images from scratch using base R graphics.  The images can then be loaded and displayed as buttons in the game. 
+Cartoon-like cells look better than overlaid squares and lines.  This section describes the process of creating cell images from scratch using base R graphics.  The images can then be loaded and displayed as buttons in the game. 
 
 
-## Defining the Outline
-Cells are drawn as layered polygons in base R.  Before calling the `polygon` function we must create a new plot.  The `blank_plot` function creates a new empty plot and draws lines to highlight the edges of the cell which we will take to be 0 and 1 in both directions. 
+### Defining the Outline
+Cells are drawn as layered polygons in base R.  Before calling the `polygon` function we must create a new plot.  The `blank_plot` function creates a new empty plot and draws lines to highlight the edges of the cell which we will be at 0 and 1 in both directions. 
 ```{r}
 blank_plot <- function() {
   par(mar=c(0,0,0,0), bg=NA)
@@ -145,10 +145,10 @@ poly_and_points(side_tri_y, side_tri_x)   # top
 ```
 
 
-## Shading About the Center of Mass
-There are two types of shading used to create the cells.  Both types of shading are implemented by plotting a sequence of polygons centered about the center of mass with either decreasing/increasing size and decreasing/increasing transparency. 
+### Shading About the Center of Mass
+There are two types of shading used to create the cells.  Both types of shading are implemented by overlaying a sequence of polygons centered about the center of mass with either decreasing/increasing size and decreasing/increasing transparency. 
 
-The center of mass (COM) can be calculated using the following hack.  First, save the polygon image of the cell as a temporary png, then read it back into R as a 3-dimensional matrix (two dimensions for x and y and the third dimension for the RGBA value).  The center of mass can then be obtained by taking inner products between the rows/cols of the transparency matrix and the corresponding y/x values. The `com_calc` takes in the `x` and `y` values of the cell outline and applies the aforementioned hack.
+The center of mass (COM) can be calculated using a double integral, but it is easier to use the following hack.  First, save the outline of the cell as a temporary png, then read it back into R as a 3-dimensional array (two dimensions for the x and y coordinate and the third dimension for the transparency value).  The center of mass can then be obtained by taking inner products between the rows/cols of the transparency matrix and the corresponding y/x values. The `com_calc` takes in the `x` and `y` values of the cell outline and applies the aforementioned hack.
 ```{r}
 com_calc <- function(x, y) {
   # plot and save shape
@@ -217,54 +217,76 @@ plot_cell(side_tri_y, side_tri_x, color=cellgreen)   # top
 
  
 
-# A.I. Opponent
+## A.I. Opponent
 All oppponent's follow a greedy with respect to some approximation of the value of a move.  The quality of the approximation determines the difficulty of the opponent.  Since the objective is to maximize your score, it makes sense to approximate the long term benefit of a move with its immediate increase in score.  It turn's out that the increase in score can be decomposed in the a function of the following four variables: 
 
-* $\text{overlap}(\text{move})$ is the number of cells adjacent to a move,
-* $\text{interlap}(\text{move})$ is the number of times the move is sandwitched by it's cell and it's opposite
-* $\text{extensions}(\text{move})$ is the number of existing connections that a move extends
-* $\text{unconnected}(\text{move})$ is the number of unconnected cells that a move connects,
+* $\text{overlap}_p(\text{move})$ is the number of cells adjacent to a move,
+* $\text{interlap}_p(\text{move})$ is the number of times the move is sandwitched by its cell and its opposite,
+* $\text{extensions}_p(\text{move})$ is the number of existing connections that a move extends,
+* $\text{unconnected}_p(\text{move})$ is the number of unconnected cells that a move connects,
 
 and the formula is 
 
 $$\begin{split}
 \Delta \text{score}_p(\text{move}) 
-&= \mathbb{I} \{\text{overlap}(\text{move})>1\} - \text{unconnected}(\text{move}) \\
-&\quad + 2\cdot \big[\text{overlap}(\text{move}) - \text{interlap}(\text{move})\big] \\
-&\quad + 2\cdot\big[  \text{overlap}(\text{move})  - \text{extensions}(\text{move}) \big],
+&= \mathbb{I} \{\text{overlap}_p(\text{move})>1\} - \text{unconnected}_p(\text{move}) \\
+&\quad + 2\cdot \big[\text{overlap}_p(\text{move}) - \text{interlap}_p(\text{move})\big] \\
+&\quad + 2\cdot\big[  \text{overlap}_p(\text{move})  - \text{extensions}_p(\text{move}) \big],
 \end{split}$$
 where $p$ denotes the player playing the move.  By convention, we define the first player ($p=1$) to be you and the second player ($p=2$) to be the A.I.  
 
 
-One benefit of this decomposition is that each of the variables can themselves be updated in an online fashion.  Thus, we can keep track of the increase in score for every move efficiently. 
+One benefit of this decomposition is that each of the variables can be updated in an online fashion.   
 
-Additional variables that have intuitive value are:
+Additional player-independent variables that have intuitive value are:
 
 * $\text{openness}(\text{move})$ is move number of open positions adjacent to a move,
 * $\text{centrality}(\text{move})$ measures how close a move is to the center of the board.
 
+
 Every opponent uses some a weighted sum of the above variables.  The weights that are used in the combinations are completely ad hoc and can most likely be improved. 
 
-## Easy, Medium and Hard Opponents
+### Easy, Medium and Hard Opponents
 The easy opponent's feature combination is
 $$
 \begin{split}
 \text{easy}(\text{move}) 
-= 10 \cdot \Delta \text{score}_2(\text{move}) 
-  + 5\cdot \Delta \text{score}_1(\text{move}) 
+&= \text{centrality}(\text{move}) + \text{openness}(\text{move}) \\
+& \quad+ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}).
 \end{split}
 $$
-Thus, the easy opponent cares almost entirely about maximizing it's immediate score.  On the other hand, the hard opponent takes a more balanced approach 
+The intuition is that $\text{openness}(\text{move}) - \text{overlap}(\text{move})$ is related to the increase in the total overlap in a board.  The actual formula is 
+$$
+\text{total_overlap}_p' = \text{total_overlap}_p +  \text{openness}_p(\text{move}) - \text{overlap}_p(\text{move})
+$$
+where $\text{total_overlap}_p$ is player $p$'s total overlap in the board before playing a move $\text{move}$ and $\text{total_overlap}_p'$ is the total overlap after playing $\text{move}$. Thus the easy player's strategy can be rewritten as 
+$$
+\begin{split}
+\text{easy}(\text{move})
+& =\text{centrality}(\text{move})\\
+& \quad + 1.5 \cdot \text{overlap}_1(\text{move}) + 1.5 \cdot  \text{overlap}_2(\text{move}) \\ 
+& \quad + 0.5\cdot \big[ \text{openness}(\text{move}) - \text{overlap}_2(\text{move}) \big] \\
+& \quad + 0.5\cdot \big[ \text{openness}(\text{move}) - \text{overlap}_1(\text{move}) \big] .
+\end{split}
+$$
+The first two terms after  $\text{centrality}$ engourage the maximization of the immediate overlap of a move (exploitation), while the last two terms encourage the ai to maximize the total overlap of the board (exploration).  Thus there is a tradeoff between exploration and exploitation; exploition being 3 times more important than exploration.  In the formula for $\Delta \text{score}_p$, overlap has the largest positive coefficient and so it makes sense that the ai using this value approximation does reasonably well.  
+
+The hard opponent takes the above idea further and aims at obtaining a tradeoff between immediate score increase and total "scoring potential";
 $$
 \begin{split}
 \text{hard}(\text{move}) 
-&= 2\cdot \Delta \text{score}_2(\text{move}) 
-\quad + 2\cdot \Delta \text{score}_1(\text{move}) \\
-&\quad + 1\cdot \text{openness}(\text{move}) 
-\quad + 1 \cdot \text{centrality}(\text{move}).
+& = \text{centrality}(\text{move}) + \text{openness}(\text{move})\\
+& \quad +  \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}).
 \end{split}
 $$
-The medium opponent's weights are just the average of the easy and hard opponent's weights.  
+Although this formula looks similar to $\text{easy}(\text{move})$, it does not have the same interpretation. That said, even with out any theoretical justification, the ai using this metric is generally harder to beat than the easy ai.  
+
+The medium ai's value is the average of the easy and hard opponent's values; i.e., 
+$$
+\text{medium}(\text{move}) =
+0.5\cdot \text{hard}(\text{move})  + 
+0.5\cdot \text{easy}(\text{move}) .
+$$
 
 
 
@@ -294,7 +316,7 @@ The medium opponent's weights are just the average of the easy and hard opponent
 <!-- The previous two opponents looked only at their own values.  The hard opponent takes into account how much a move will hurt your chances of increasing your own score.  In this way, it is a bit more adversarial than the previous two opponents.  The openness of a move is also given some weight and if all else is equal, the hard opponent will choose a move closest to the center of the board. -->
 
 
-## Adaptive (R implementation only)
+### Adaptive (R implementation only)
 The adaptive opponent has a skill level which determines the overall strategy in a game.  
 
 The adaptive opponent adapts to your play in two ways: 
@@ -303,28 +325,26 @@ The adaptive opponent adapts to your play in two ways:
 2. It adapts its entire strategy after a game.
 
 
-Formally, the adaptive player uses a blend (convex combination) of the normalized easy player's score approximation and the normalized hard player's score approximation.  
+The adaptive ai uses a convex combination of the easy and hard ai's value approximation.  
 $$
 \text{adaptive}(\text{move}) 
-= \text{skill}' \cdot \frac{\text{hard}(\text{move})}{\max\limits_{m}\{ \text{hard}(m) \} } 
-+ (1 - \text{skill}') \cdot  \frac{\text{easy} \text{move})}{\max\limits_{m}\{ \text{easy}(m) \} },
+= \text{skill}' \cdot \text{hard}(\text{move})
++ (1 - \text{skill}') \cdot  \text{easy}(\text{move}),
 $$
-
-where $\text{skill}'$ is the modified skill parameter
+where $\text{skill}'$ is modified (within-game) skill parameter
 
 $$
-\text{skill}' = \text{skill} + ( \text{your score} - \text{A.I.'s score} ).
+\text{skill}' = \text{skill} + 0.01\cdot ( \text{your_score} - \text{ai_score} ).
 $$
-
 Notice that if you are winning, then the effective skill of your opponent goes up.  Moreover, if you are winning by a lot then the effective skill will go up by a lot.  
 
 At the end of the game, your opponent's skill level is updated according to the following formula:
 $$
-\text{skill} \leftarrow \text{skill} + \frac{ \text{your score} - \text{A.I.'s score}  }{1 + \mathbb{I} \{ \text{your score} < \text{A.I.'s score} \}  }.
+\text{skill} \leftarrow \text{skill} + 0.01\cdot  \frac{ \text{your_score} - \text{ai_score}  }{1 + \mathbb{I} \{ \text{your_score} < \text{ai_score} \}  }.
 $$
-Hence, if you beat your opponent, then its skill goes up by the score difference; if you lose to your opponent, then its skill goes down by one half the absolute score difference.  If the game is a draw, then the skill level stays the same.
+Hence, if you beat your opponent, then its skill goes up by the score difference; if you lose to your opponent, then its skill goes down in proportion to half the absolute score difference.  If the game is a draw, then the skill level stays the same.
 
-Ignoring within-game adaptivity, when $\text{skill}=0$ you are essentially playing against the easy opponent, when $\text{skill}=100$ you are playing against the hard, and similarly, \text{skill} $skill=50$ you are playing against the medium opponent.
+Ignoring within-game adaptivity, when $\text{skill}=0$ you are essentially playing against the easy ai, when $\text{skill}=1$ you are playing against the hard ai, and similarly, \text{skill} $\text{skill}=0.5$ you are playing against the medium ai.
 
 
 
@@ -339,8 +359,8 @@ There are many variations on this game that can be played.  What follows is an u
 
 
 * **Alternative Objectives**: Instead of placing cells on the board, we can start with a given number of each player's cells in a predefined configuration.  You are allowed to move a cell one step in any direction or swap your cell with an opponent's adjacent cell.  Cells continue to divide based on thier connections.  The end of a game occurs after a fixed number of moves. The winner is the player with the most cells at the end of the game.  
-+ **Cell Swap**: Let player's swap their cell's with their oppoent's (enforce [no backsies](http://www.urbandictionary.com/define.php?term=no%20backsies)); 
-+ **Cell Jumps**: Let players jump their opponent's cells to convert them to one of their own (as in checkers).
++ **Cell Swap**: Let player's swap their cell's with their oppoent's; 
++ **Cell Jumps**: Let players jump their opponent's cells (as in checkers) to convert them to one of their own.
 
 * **Triangular and Hexagonal Grids**: Storing a board defined over these grids can be done by modifying what it means to be adjacent to another cell.  Thus, boards can be stored and analyzed in a similar way to the rectangular grid.  The approximations that the A.I. opponents use will probably also generalize well to these types of grids. 
 
