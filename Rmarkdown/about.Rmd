@@ -269,7 +269,7 @@ $$
 & \quad + 0.5\cdot \big[ \text{openness}(\text{move}) - \text{overlap}_1(\text{move}) \big] .
 \end{split}
 $$
-The first two terms after  $\text{centrality}$ engourage the maximization of the immediate overlap of a move (exploitation), while the last two terms encourage the ai to maximize the total overlap of the board (exploration).  Thus there is a tradeoff between exploration and exploitation; exploition being 3 times more important than exploration.  In the formula for $\Delta \text{score}_p$, overlap has the largest positive coefficient and so it makes sense that the ai using this value approximation does reasonably well.  
+The first two terms after  $\text{centrality}$ engourage the maximization of the immediate overlap of a move (exploitation), while the last two terms encourage the ai to maximize the total overlap of the board (exploration).  Thus there is a tradeoff between exploration and exploitation, with exploition being 3 times more important than exploration.  In the formula for $\Delta \text{score}_p$, overlap has the largest positive coefficient and so it makes sense that the ai using this value approximation does reasonably well.  
 
 The hard opponent takes the above idea further and aims at obtaining a tradeoff between immediate score increase and total "scoring potential";
 $$

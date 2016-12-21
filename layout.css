@@ -1,0 +1,358 @@
+/* ---------------------- */
+/* Generic HTML Elements  */
+/* ---------------------- */
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin: 0;
+	padding: 0;
+	font-size: 2em;
+	font-family:"Segoe UI",Arial,sans-serif;
+	background-color: black;
+	color: rgb(34, 255, 34);
+}
+a {
+	text-decoration: none;
+	color: rgb(34, 255, 34);
+}
+/* Section Sizing (Portrait) */
+header, main>*, footer{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+main { flex-grow: 2;}
+header { flex-grow: 1;}
+footer {flex-grow: 0.5;}
+
+/* -------- */
+/*  Header  */
+/* -------- */
+header {
+	flex-direction: column;
+	background-color: rgba(100,100,100,0.35);
+	border-bottom: 1px solid;
+}
+
+/* Title */
+#scoring-cell {
+	display: inline-block;
+	vertical-align: middle;
+	max-height: 20%;
+}
+#title {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 5px;
+	font-size: 2em;
+}
+
+/* Settings */
+#options-menu {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+}
+.setting >* {
+	display: block;
+	color: white;
+}
+.setting img {
+	height: 0.75em;
+	vertical-align: baseline;
+	padding-right: 0.2em;
+}
+.setting i {
+	font-size: 0.9em;
+	padding-right: 0.2em;
+}
+
+#board-size >*:hover, #move-you:hover {
+	color: rgb(34, 255, 34);
+}
+
+#difficulty-easy:hover {
+	color: rgb(34, 142, 250);
+}
+#difficulty-medium:hover {
+	color: rgb(230, 54, 230);
+}
+#difficulty-hard:hover {
+	color: rgb(255, 60, 0);
+}
+
+#move-you i {
+	color: rgb(34, 255, 34);
+}
+#move-ai i {
+	color: rgb(34, 142, 250);
+}
+
+/* -------------- */
+/*  Main Section */
+/* -------------- */
+main {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+#score0 {
+	color: rgb(34, 255, 34);
+}
+
+/* score bar */
+#score-bar {
+	flex-grow: 2;
+	font-size: 1.25em;
+	justify-content: space-between;
+	margin: 0 1em 0 1em ;
+	border: none;
+}
+
+/* game buttons */
+#game-buttons {
+	flex-grow: 1.5;
+}
+#game-buttons >* {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 0.75em;
+	border-radius: 0.6em;
+	padding: 0.25em;
+	min-width: 15%;
+	background-color: rgb(34, 255, 34);
+	color: black;
+	cursor: pointer;
+}
+#game-buttons a i {
+	font-size: 2em;
+}
+
+#stats-button.off {
+	opacity: 0.25;
+	cursor: default;
+}
+
+#board-container {
+	max-width: 45vh;
+	align-self: center;
+	position: relative;
+}
+#board {
+	border: 2px solid gray;
+}
+
+.cell-container {
+	display: inline-block;
+	position: relative;
+	outline: 1px solid gray;
+}
+.cell-container * {
+	margin: 1px 0 0 1px; /* this is fudging */
+}
+
+/*.cell-text {
+	display: none;
+	visibility: hidden;
+	color: black;
+	position: absolute;
+	left: calc(50% - 0.35em);
+	top: calc(50% - 0.75em);
+}*/
+
+.single-cell {
+	display: inline-block;
+	width: 100%;
+	z-index: 1;
+	opacity: 1;
+}
+.old {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+
+.cell-container:hover .single-cell.on {
+	background-color: rgba(255, 255, 255, 0.1);
+	cursor:pointer;
+	z-index: 1;
+}
+
+
+/* graphics overlay */
+#statistics-overlay {
+	position: absolute;
+	max-height: 75vh;
+	max-width: 75vh;
+	height: 100%;
+	width: 100%;
+	display: none;
+	flex-direction: column;
+	justify-content: space-between;
+	color: gray;
+	background: rgba(0, 0, 0, 1);
+	z-index: 1;
+}
+
+.graphic {
+	display: flex;
+	flex-direction: column;
+}
+#statistics-overlay a {
+	font-size: 0.75em;
+	align-self: center;
+ }
+
+
+/* -------- */
+/*  Footer  */
+/* -------- */
+footer {
+	flex-direction: column;
+	background-color: rgba(100,100,100,0.35);
+	border-top: 1px solid;
+}
+footer > *{
+	width:100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+
+/* ----------------------- */
+/*  Landscape Orientation  */
+/* ----------------------- */
+@media only screen and (orientation: landscape)  {
+	body {
+		flex-direction: row;
+	}
+	header {
+		flex-grow: 2;
+		border-bottom: none;
+		justify-content: space-around;
+		padding: 0;
+	}
+	header a {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin: 0;
+	}
+	#scoring-cell {
+		height: 50%;
+		max-height: 30vh;
+	}
+
+	#options-menu {
+		padding: 0 0.5em 0 0.5em;
+	}
+	#score-bar {
+		font-size: 0.9em;
+	}
+	#board-container {
+		flex-grow: 1;
+		border-bottom: none;
+		max-height: 75vh;
+		max-width: 75vh;
+	}
+	/*.cell-text {
+		font-size: 0.75em;
+	}*/
+	#statistics-overlay {
+		font-size: 0.6em;
+	}
+	#statistics-overlay a {
+		font-size: 0.75em;
+	}
+
+	#game-buttons {
+		flex-grow: 0.5;
+		font-size: 0.75em;
+		background-color: rgb(34, 255, 34);
+		padding: 0;
+		margin-top: 0.5em;
+	}
+
+	footer { display: none; }
+}
+
+
+
+/* ---------------- */
+/*  Fontello Icons  */
+/* ---------------- */
+@font-face {
+  font-family: 'fontello';
+  src: url('../font/fontello.eot?88069834');
+  src: url('../font/fontello.eot?88069834#iefix') format('embedded-opentype'),
+       url('../font/fontello.woff2?88069834') format('woff2'),
+       url('../font/fontello.woff?88069834') format('woff'),
+       url('../font/fontello.ttf?88069834') format('truetype'),
+       url('../font/fontello.svg?88069834#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('../font/fontello.svg?88069834#fontello') format('svg');
+  }
+}
+*/
+
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+.icon-play:before { content: '\e800'; } /* '' */
+.icon-ccw:before { content: '\e801'; } /* '' */
+.icon-arrows-cw:before { content: '\e802'; } /* '' */
+.icon-book:before { content: '\e803'; } /* '' */
+.icon-chart-bar:before { content: '\e804'; } /* '' */
+.icon-github-circled:before { content: '\f09b'; } /* '' */
+.icon-github:before { content: '\f113'; } /* '' */
+.icon-gamepad:before { content: '\f11b'; } /* '' */
+.icon-codeopen:before { content: '\f1cb'; } /* '' */
+.icon-chart-line:before { content: '\f201'; } /* '' */
+.icon-user-o:before { content: '\f2c0'; } /* '' */
