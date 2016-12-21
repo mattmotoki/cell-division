@@ -233,7 +233,7 @@ $$\begin{split}
 &\quad + 2\cdot \big[\text{overlap}_p(\text{move}) - \text{interlap}_p(\text{move})\big] \\
 &\quad + 2\cdot\big[  \text{overlap}_p(\text{move})  - \text{extensions}_p(\text{move}) \big],
 \end{split}$$
-where $p$ denotes the player playing the move.  By convention, we define the first player ($p=1$) to be you and the second player ($p=2$) to be the A.I.  
+where $p$ denotes the player playing the move.  By convention, define the first player ($p=1$) to be you and the second player ($p=2$) to be the A.I.  
 
 
 One benefit of this decomposition is that each of the variables can be updated in an online fashion.   
@@ -255,11 +255,11 @@ $$
 & \quad+ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}).
 \end{split}
 $$
-The intuition is that $\text{openness}(\text{move}) - \text{overlap}(\text{move})$ is related to the increase in the total overlap in a board.  The actual formula is 
+The intuition is that $\text{openness}(\text{move}) - \text{overlap}_p(\text{move})$ is related to the increase in the total overlap in a board.  The actual formula is 
 $$
 \text{total_overlap}_p' = \text{total_overlap}_p +  \text{openness}_p(\text{move}) - \text{overlap}_p(\text{move})
 $$
-where $\text{total_overlap}_p$ is player $p$'s total overlap in the board before playing a move $\text{move}$ and $\text{total_overlap}_p'$ is the total overlap after playing $\text{move}$. Thus the easy player's strategy can be rewritten as 
+where $\text{total_overlap}_p$ is player $p$'s total overlap in the board before playing $\text{move}$ and $\text{total_overlap}_p'$ is the total overlap after playing $\text{move}$. Thus the easy player's strategy can be rewritten as 
 $$
 \begin{split}
 \text{easy}(\text{move})
@@ -288,32 +288,6 @@ $$
 0.5\cdot \text{easy}(\text{move}) .
 $$
 
-
-
-<!-- The easy opponent obtains a move by maximizing -->
-<!-- $$ -->
-<!-- \text{easy}(\text{move}) = \text{overlap}(\text{move}) + 0.01 \cdot \text{centrality}(\text{move}). -->
-<!-- $$ -->
-<!-- The overlap is a relatively good approximation for the increase in score of a move; it is only when we extend existing connections or place a move in between two cells do we over count.  The centrality term is intended to be negligible unless a tie occurs, in which case the opponent will prefer moves towards the center of the board.   -->
-
-<!-- ### Medium -->
-<!-- The medium opponent obtains a move by maximizing -->
-<!-- $$ -->
-<!-- \text{medium}(\text{move}) = \Delta \text{score}_2(\text{move}) + 0.5\cdot \text{openness}(\text{move}) + 0.01 \cdot \text{centrality}(\text{move}). -->
-<!-- $$ -->
-<!-- Here the opponent tries to maximize its increase in score directly.  Again, with the centrality term used to break ties. -->
-
-
-<!-- ### Hard -->
-<!-- The hard opponent obtains a move by maximizing -->
-<!-- $$\begin{split} -->
-<!-- \text{hard}(\text{move})  -->
-<!-- &= \Delta \text{score}_2(\text{move})  -->
-<!-- \quad + 0.75\cdot \Delta \text{score}_1(\text{move}) \\ -->
-<!-- &\quad + 0.1\cdot \text{openness}(\text{move})  -->
-<!-- \quad + 0.01 \cdot \text{centrality}(\text{move}). -->
-<!-- \end{split}$$ -->
-<!-- The previous two opponents looked only at their own values.  The hard opponent takes into account how much a move will hurt your chances of increasing your own score.  In this way, it is a bit more adversarial than the previous two opponents.  The openness of a move is also given some weight and if all else is equal, the hard opponent will choose a move closest to the center of the board. -->
 
 
 ### Adaptive (R implementation only)
