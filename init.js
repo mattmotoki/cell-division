@@ -78,8 +78,13 @@ function setMenuValue(el, var_name, value_name, value) {
 }
 
 /* Update difficulty */
-document.querySelector("#ai-difficulty")
-.childNodes.forEach(function(el) {el.onclick = setDifficulty;});
+// document.querySelector("#ai-difficulty").childNodes.forEach(function(el) {el.onclick = setDifficulty;});
+(function() {
+  var difficulty_list = document.querySelector("#ai-difficulty").childNodes;
+  for (var i=0; i<difficulty_list.length; i++) {
+    difficulty_list[i].onclick = setDifficulty;
+  }
+})();
 function setDifficulty() {
   setMenuValue(this, "difficulty", "difficulty", difficulty);
   makeScoringCell.setAIColor();
@@ -89,13 +94,23 @@ function setDifficulty() {
 }
 
 /* Update board size */
-document.querySelector("#board-size")
-.childNodes.forEach(function(el) {el.onclick = setSize;});
+// document.querySelector("#board-size").childNodes.forEach(function(el) {el.onclick = setSize;});
+(function() {
+  var size_list = document.querySelector("#board-size").childNodes;
+  for (var i=0; i<size_list.length; i++) {
+    size_list[i].onclick = setSize;
+  }
+})();
 function setSize() { setMenuValue(this, "board_size", "size", board_size); }
 
 /* Update first move */
-document.querySelector("#first-move")
-.childNodes.forEach(function(el) {el.onclick = setFirstMove;});
+// document.querySelector("#first-move").childNodes.forEach(function(el) {el.onclick = setFirstMove;});
+(function() {
+  var first_move_list = document.querySelector("#first-move").childNodes;
+  for (var i=0; i<first_move_list.length; i++) {
+    first_move_list[i].onclick = setFirstMove;
+  }
+})();
 function setFirstMove() { setMenuValue(this, "first_move", "move", first_move); }
 
 
