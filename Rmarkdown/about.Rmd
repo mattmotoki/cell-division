@@ -246,40 +246,37 @@ To calculate a value of a move, the ai opponent uses a weighted sum of the above
 ### Easy, Medium and Hard Opponents
 Cell Addition is a zero sum game and so your gain is the same as the ai's loss.  Thus, when designing the ai, it will be beneficial to take this into account. 
 
-The easy ai's value function is 
+The easy ai's value function is simply
 $$
-\begin{split}
-\text{easy}(\text{move}) 
-&= \text{centrality}(\text{move}) + \text{openness}(\text{move}) \\
-& \quad+ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}).
-\end{split}
+\text{easy}(\text{move}) = \text{centrality}(\text{move});
 $$
-The intuition is that $\text{openness}(\text{move}) - \text{overlap}_p(\text{move})$ is related to the increase in the total overlap in a board.  The actual formula for the increaes in the total overlap of a board when playing $\text{move}$ is 
-$$
-\Delta\text{total_overlap}_p(\text{move}) = \text{openness}_p(\text{move}) - \text{overlap}_p(\text{move})
-$$
-The easy ai's strategy can be rewritten as 
-$$
-\begin{split}
-\text{easy}(\text{move})
-& =\text{centrality}(\text{move})\\
-& \quad + 1.5 \cdot\big[ \text{overlap}_2(\text{move}) +   \text{overlap}_1(\text{move})\big] \\ 
-& \quad + 0.5\cdot\big[ \Delta\text{total_overlap}_2(\text{move}) + \Delta\text{total_overlap}_1(\text{move})\big].
-\end{split}
-$$
-The two $\text{overlap}$ terms encourage exploitation of the current move while the two $\Delta\text{total_overlap}$ terms encourage exploration of the board.  Overlap is the largest contributor to $\Delta \text{score}_p$ and so it makes sense that the ai using this value approximation does reasonably well.  
+that is, the easy ai just places it's move in the center most position of the board with ties broken arbitrarily.
 
-The hard ai modifies the above idea by switching $\text{overlap}$ with $\Delta \text{score}$, which after simplification yields
+The hard ai's value function is 
 $$
 \begin{split}
 \text{hard}(\text{move}) 
-& = \text{centrality}(\text{move}) + \text{openness}(\text{move})\\
-& \quad +  1.5\cdot \big[ \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}) \big]\\
-& \quad -  0.5\cdot \big[ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}) \big]
+& = \text{centrality}(\text{move}) + 2\cdot \text{openness}(\text{move})\\
+& \quad + \big[ \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}) \big]\\
+&\quad - \big[ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}) \big]
 .
 \end{split}
 $$
-The hope is that hard ai will choose a move that balances the immediate score increases of the move with the total overlap of the resulting board.  
+The idea is to find a tradeoff between exploration and exploitation.  To see this, consider the following formula for the increase in the total overlap of a board when playing $\text{move}$
+$$
+\Delta\text{total_overlap}_p(\text{move}) = \text{openness}_p(\text{move}) - \text{overlap}_p(\text{move}).
+$$
+The hard ai's value approximation can now be rewritten as
+$$
+\begin{split}
+\text{hard}(\text{move}) 
+& = \text{centrality}(\text{move}) \\
+& \quad + \big[ \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}) \big]\\
+& \quad + \big[ \Delta\text{total_overlap}_2(\text{move}) + \Delta\text{total_overlap}_1(\text{move}) \big]
+.
+\end{split}
+$$
+The two first two terms after $\text{centrality}$ encourage exploitation of the current game state while the last two terms encourage exploration of the board.  
 
 The medium ai's value is the average of the easy and hard opponent's values; i.e., 
 $$

@@ -454,31 +454,28 @@ One benefit of this decomposition is that each of the variables can be updated i
 <div id="easy-medium-and-hard-opponents" class="section level3">
 <h3>Easy, Medium and Hard Opponents</h3>
 <p>Cell Addition is a zero sum game and so your gain is the same as the ai’s loss. Thus, when designing the ai, it will be beneficial to take this into account.</p>
-<p>The easy ai’s value function is <span class="math display">\[
-\begin{split}
-\text{easy}(\text{move}) 
-&amp;= \text{centrality}(\text{move}) + \text{openness}(\text{move}) \\
-&amp; \quad+ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}).
-\end{split}
-\]</span> The intuition is that <span class="math inline">\(\text{openness}(\text{move}) - \text{overlap}_p(\text{move})\)</span> is related to the increase in the total overlap in a board. The actual formula for the increaes in the total overlap of a board when playing <span class="math inline">\(\text{move}\)</span> is <span class="math display">\[
-\Delta\text{total_overlap}_p(\text{move}) = \text{openness}_p(\text{move}) - \text{overlap}_p(\text{move})
-\]</span> The easy ai’s strategy can be rewritten as <span class="math display">\[
-\begin{split}
-\text{easy}(\text{move})
-&amp; =\text{centrality}(\text{move})\\
-&amp; \quad + 1.5 \cdot\big[ \text{overlap}_2(\text{move}) +   \text{overlap}_1(\text{move})\big] \\ 
-&amp; \quad + 0.5\cdot\big[ \Delta\text{total_overlap}_2(\text{move}) + \Delta\text{total_overlap}_1(\text{move})\big].
-\end{split}
-\]</span> The two <span class="math inline">\(\text{overlap}\)</span> terms encourage exploitation of the current move while the two <span class="math inline">\(\Delta\text{total_overlap}\)</span> terms encourage exploration of the board. Overlap is the largest contributor to <span class="math inline">\(\Delta \text{score}_p\)</span> and so it makes sense that the ai using this value approximation does reasonably well.</p>
-<p>The hard ai modifies the above idea by switching <span class="math inline">\(\text{overlap}\)</span> with <span class="math inline">\(\Delta \text{score}\)</span>, which after simplification yields <span class="math display">\[
+<p>The easy ai’s value function is simply <span class="math display">\[
+\text{easy}(\text{move}) = \text{centrality}(\text{move});
+\]</span> that is, the easy ai just places it’s move in the center most position of the board with ties broken arbitrarily.</p>
+<p>The hard ai’s value function is <span class="math display">\[
 \begin{split}
 \text{hard}(\text{move}) 
-&amp; = \text{centrality}(\text{move}) + \text{openness}(\text{move})\\
-&amp; \quad +  1.5\cdot \big[ \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}) \big]\\
-&amp; \quad -  0.5\cdot \big[ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}) \big]
+&amp; = \text{centrality}(\text{move}) + 2\cdot \text{openness}(\text{move})\\
+&amp; \quad + \big[ \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}) \big]\\
+&amp;\quad - \big[ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}) \big]
 .
 \end{split}
-\]</span> The hope is that hard ai will choose a move that balances the immediate score increases of the move with the total overlap of the resulting board.</p>
+\]</span> The idea is to find a tradeoff between exploration and exploitation. To see this, consider the following formula for the increase in the total overlap of a board when playing <span class="math inline">\(\text{move}\)</span> <span class="math display">\[
+\Delta\text{total_overlap}_p(\text{move}) = \text{openness}_p(\text{move}) - \text{overlap}_p(\text{move}).
+\]</span> The hard ai’s value approximation can now be rewritten as <span class="math display">\[
+\begin{split}
+\text{hard}(\text{move}) 
+&amp; = \text{centrality}(\text{move}) \\
+&amp; \quad + \big[ \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}) \big]\\
+&amp; \quad + \big[ \Delta\text{total_overlap}_2(\text{move}) + \Delta\text{total_overlap}_1(\text{move}) \big]
+.
+\end{split}
+\]</span> The two first two terms after <span class="math inline">\(\text{centrality}\)</span> encourage exploitation of the current game state while the last two terms encourage exploration of the board.</p>
 <p>The medium ai’s value is the average of the easy and hard opponent’s values; i.e., <span class="math display">\[
 \text{medium}(\text{move}) =
 0.5\cdot \text{hard}(\text{move})  + 
