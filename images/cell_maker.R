@@ -45,6 +45,14 @@ quad_y <- quad_outline[, 2]+0.5
 #------------------
 # build block functins
 graphics.off()
+png("cell_background.png", width=2400, height=4800)
+par(mar=c(0,0,0,0), bg=NA)
+plot(1, type="n", asp=1, axes=FALSE, 
+     yaxs="i", xaxs="i", xlab = "", ylab = "",
+     xlim = c(-1.002, 2.002), ylim = c(-2.002, 4.002)
+)
+plot_cell(2*sm_sq_x, 2*sm_sq_y, cellgreen)
+dev.off()
 
 # # cell outline
 # png("o0000.png")

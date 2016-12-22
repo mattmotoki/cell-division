@@ -59,7 +59,7 @@ Cartoon-like cells look better than overlaid squares and lines.  This section de
 
 
 ### Defining the Outline
-Cells are drawn as layered polygons in base R.  Before calling the `polygon` function we must create a new plot.  The `blank_plot` function creates a new empty plot and draws lines to highlight the edges of the cell which we will be at 0 and 1 in both directions. 
+Cells are drawn as layered polygons in base R.  Before calling the `polygon` functiona new plot needs to be created.  The `blank_plot` function creates a new empty plot and draws lines to highlight the edges of the cell which we will be at 0 and 1 in both directions. 
 ```{r}
 blank_plot <- function() {
   par(mar=c(0,0,0,0), bg=NA)
@@ -69,7 +69,7 @@ blank_plot <- function() {
   )
 }
 ```
-The natural way to define the outline of a cell is in terms of its $x$ and $y$ coordinates.  Alternatively, we can specify the outline parametrically with an angle $\theta\in[0,\, 2\pi]$ and a radius $r$, then map back to the $xy$-plane using the formulas
+The natural way to define the outline of a cell is in terms of its $x$ and $y$ coordinates.  Alternatively, the outline can be parameterized by an angle $\theta\in[0,\, 2\pi]$ and a radius $r$ and then mapped back to the $xy$-plane using the formulas
 $$
 x = r\cdot \cos(\theta)
 \qquad
@@ -116,7 +116,7 @@ side_triangular_cell <- function(r, r2, n_pnts) {
 }
 ```
 
-To draw multiple cells we apply translations, rotations and reflections to the outlines. For example,
+Multiple cells can be drawn with translations, rotations and reflections of the original outline. For example,
 ```{r, fig.width=4, fig.height=4, fig.align='center' }
 # create outlines
 side_tri_outline <- side_triangular_cell(0.1, 0.3, 10)
@@ -173,7 +173,7 @@ com_calc <- function(x, y) {
 }
 ```
 
-We can now create the shadow for the ouline of the cell using a decreasing sequence of polygon size and transparency.  The next style of shading creates a dimple in the middle of the cell and created using an increasing sequence of polygon size and transparency.
+The shading for the outline of the cell uses a decreasing sequence of polygon size and transparency.  On the other hand, the shading that creates depth in the middle of the cell uses an increasing sequence of polygon size and transparency.
 
 ```{r, fig.width=4, fig.height=4, fig.align='center' }
 library(png)
@@ -234,8 +234,6 @@ $$\begin{split}
 &\quad + 2\cdot\big[  \text{overlap}_p(\text{move})  - \text{extensions}_p(\text{move}) \big],
 \end{split}$$
 where $p$ denotes the player playing the move.  By convention, define the first player ($p=1$) to be you and the second player ($p=2$) to be the A.I.  
-
-
 One benefit of this decomposition is that each of the variables can be updated in an online fashion.   
 
 Additional player-independent variables that have intuitive value are:
@@ -243,11 +241,12 @@ Additional player-independent variables that have intuitive value are:
 * $\text{openness}(\text{move})$ is move number of open positions adjacent to a move,
 * $\text{centrality}(\text{move})$ measures how close a move is to the center of the board.
 
-
-Every opponent uses some a weighted sum of the above variables.  The weights that are used in the combinations are completely ad hoc and can most likely be improved. 
+To calculate a value of a move, the ai opponent uses a weighted sum of the above variables.
 
 ### Easy, Medium and Hard Opponents
-The easy opponent's feature combination is
+Cell Addition is a zero sum game and so your gain is the same as the ai's loss.  Thus, when designing the ai, it will be beneficial to take this into account. 
+
+The easy ai's value function is 
 $$
 \begin{split}
 \text{easy}(\text{move}) 
@@ -255,31 +254,32 @@ $$
 & \quad+ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}).
 \end{split}
 $$
-The intuition is that $\text{openness}(\text{move}) - \text{overlap}_p(\text{move})$ is related to the increase in the total overlap in a board.  The actual formula is 
+The intuition is that $\text{openness}(\text{move}) - \text{overlap}_p(\text{move})$ is related to the increase in the total overlap in a board.  The actual formula for the increaes in the total overlap of a board when playing $\text{move}$ is 
 $$
-\text{total_overlap}_p' = \text{total_overlap}_p +  \text{openness}_p(\text{move}) - \text{overlap}_p(\text{move})
+\Delta\text{total_overlap}_p(\text{move}) = \text{openness}_p(\text{move}) - \text{overlap}_p(\text{move})
 $$
-where $\text{total_overlap}_p$ is player $p$'s total overlap in the board before playing $\text{move}$ and $\text{total_overlap}_p'$ is the total overlap after playing $\text{move}$. Thus the easy player's strategy can be rewritten as 
+The easy ai's strategy can be rewritten as 
 $$
 \begin{split}
 \text{easy}(\text{move})
 & =\text{centrality}(\text{move})\\
-& \quad + 1.5 \cdot \text{overlap}_1(\text{move}) + 1.5 \cdot  \text{overlap}_2(\text{move}) \\ 
-& \quad + 0.5\cdot \big[ \text{openness}(\text{move}) - \text{overlap}_2(\text{move}) \big] \\
-& \quad + 0.5\cdot \big[ \text{openness}(\text{move}) - \text{overlap}_1(\text{move}) \big] .
+& \quad + 1.5 \cdot\big[ \text{overlap}_2(\text{move}) +   \text{overlap}_1(\text{move})\big] \\ 
+& \quad + 0.5\cdot\big[ \Delta\text{total_overlap}_2(\text{move}) + \Delta\text{total_overlap}_1(\text{move})\big].
 \end{split}
 $$
-The first two terms after  $\text{centrality}$ engourage the maximization of the immediate overlap of a move (exploitation), while the last two terms encourage the ai to maximize the total overlap of the board (exploration).  Thus there is a tradeoff between exploration and exploitation, with exploition being 3 times more important than exploration.  In the formula for $\Delta \text{score}_p$, overlap has the largest positive coefficient and so it makes sense that the ai using this value approximation does reasonably well.  
+The two $\text{overlap}$ terms encourage exploitation of the current move while the two $\Delta\text{total_overlap}$ terms encourage exploration of the board.  Overlap is the largest contributor to $\Delta \text{score}_p$ and so it makes sense that the ai using this value approximation does reasonably well.  
 
-The hard opponent takes the above idea further and aims at obtaining a tradeoff between immediate score increase and total "scoring potential";
+The hard ai modifies the above idea by switching $\text{overlap}$ with $\Delta \text{score}$, which after simplification yields
 $$
 \begin{split}
 \text{hard}(\text{move}) 
 & = \text{centrality}(\text{move}) + \text{openness}(\text{move})\\
-& \quad +  \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}).
+& \quad +  1.5\cdot \big[ \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}) \big]\\
+& \quad -  0.5\cdot \big[ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}) \big]
+.
 \end{split}
 $$
-Although this formula looks similar to $\text{easy}(\text{move})$, it does not have the same interpretation. That said, even with out any theoretical justification, the ai using this metric is generally harder to beat than the easy ai.  
+The hope is that hard ai will choose a move that balances the immediate score increases of the move with the total overlap of the resulting board.  
 
 The medium ai's value is the average of the easy and hard opponent's values; i.e., 
 $$
@@ -291,9 +291,9 @@ $$
 
 
 ### Adaptive (R implementation only)
-The adaptive opponent has a skill level which determines the overall strategy in a game.  
+The adaptive ai has a skill level which determines the overall strategy in a game.  
 
-The adaptive opponent adapts to your play in two ways: 
+The adaptive ai adapts to your play in two ways: 
 
 1. It adapts to your play within a game.
 2. It adapts its entire strategy after a game.
@@ -310,22 +310,23 @@ where $\text{skill}'$ is modified (within-game) skill parameter
 $$
 \text{skill}' = \text{skill} + 0.01\cdot ( \text{your_score} - \text{ai_score} ).
 $$
-Notice that if you are winning, then the effective skill of your opponent goes up.  Moreover, if you are winning by a lot then the effective skill will go up by a lot.  
+Notice that if you are winning, then the effective skill of the ai goes up.  Moreover, if you are winning by a lot then the effective skill will go up by a lot.  
 
-At the end of the game, your opponent's skill level is updated according to the following formula:
+At the end of the game, the ai's skill level is updated according to the following formula:
 $$
 \text{skill} \leftarrow \text{skill} + 0.01\cdot  \frac{ \text{your_score} - \text{ai_score}  }{1 + \mathbb{I} \{ \text{your_score} < \text{ai_score} \}  }.
 $$
-Hence, if you beat your opponent, then its skill goes up by the score difference; if you lose to your opponent, then its skill goes down in proportion to half the absolute score difference.  If the game is a draw, then the skill level stays the same.
+Hence, if you beat the ai, then its skill goes up by the score difference; if you lose, then its skill goes down in proportion to half the absolute score difference.  If the game is a draw, then the skill level stays the same.
 
-Ignoring within-game adaptivity, when $\text{skill}=0$ you are essentially playing against the easy ai, when $\text{skill}=1$ you are playing against the hard ai, and similarly, \text{skill} $\text{skill}=0.5$ you are playing against the medium ai.
-
+Ignoring within-game adaptivity, when $\text{skill}=0$ you are essentially playing against the easy ai, when $\text{skill}=1$ you are playing against the hard ai, and when $\text{skill}=0.5$ you are playing against the medium ai.
 
 
 
 
 # Future Add-Ons
 There are many variations on this game that can be played.  What follows is an unordered list of possible improvements/variants of the game.
+
+* **Early Stopping**: Getting the first move can be an advantage, especially on the medium board configuration.  To mitigate this, the game can stop a few rounds early.  For example, in the medium board configuration, if the game stops one round early then both players will get have an equal number o moves.  
 
 * **Attack Moves**: Give players access to the strong acid HCl and the strong base NaOH.  Each acid/base will destroy the other player's cells while leaving their cells intact.  Similarly, isopropyl alcohol can be played to destroy any cell.  
 + **Sythesis Process**: Let NaOH/HCl and isopropyl alcohol regenerate over time. 

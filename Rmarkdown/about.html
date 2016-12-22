@@ -287,7 +287,7 @@ readable
 <p>Cartoon-like cells look better than overlaid squares and lines. This section describes the process of creating cell images from scratch using base R graphics. The images can then be loaded and displayed as buttons in the game.</p>
 <div id="defining-the-outline" class="section level3">
 <h3>Defining the Outline</h3>
-<p>Cells are drawn as layered polygons in base R. Before calling the <code>polygon</code> function we must create a new plot. The <code>blank_plot</code> function creates a new empty plot and draws lines to highlight the edges of the cell which we will be at 0 and 1 in both directions.</p>
+<p>Cells are drawn as layered polygons in base R. Before calling the <code>polygon</code> functiona new plot needs to be created. The <code>blank_plot</code> function creates a new empty plot and draws lines to highlight the edges of the cell which we will be at 0 and 1 in both directions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blank_plot &lt;-<span class="st"> </span>function() {
   <span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">bg=</span><span class="ot">NA</span>)
   <span class="kw">plot</span>(<span class="dv">1</span>, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>, <span class="dt">asp=</span><span class="dv">1</span>, <span class="dt">axes=</span><span class="ot">FALSE</span>, 
@@ -295,7 +295,7 @@ readable
        <span class="dt">xlim =</span> <span class="kw">c</span>(-<span class="fl">0.1</span>, <span class="fl">1.1</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="fl">0.1</span>, <span class="fl">1.1</span>)
   )
 }</code></pre></div>
-<p>The natural way to define the outline of a cell is in terms of its <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> coordinates. Alternatively, we can specify the outline parametrically with an angle <span class="math inline">\(\theta\in[0,\, 2\pi]\)</span> and a radius <span class="math inline">\(r\)</span>, then map back to the <span class="math inline">\(xy\)</span>-plane using the formulas <span class="math display">\[
+<p>The natural way to define the outline of a cell is in terms of its <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> coordinates. Alternatively, the outline can be parameterized by an angle <span class="math inline">\(\theta\in[0,\, 2\pi]\)</span> and a radius <span class="math inline">\(r\)</span> and then mapped back to the <span class="math inline">\(xy\)</span>-plane using the formulas <span class="math display">\[
 x = r\cdot \cos(\theta)
 \qquad
 \qquad
@@ -336,7 +336,7 @@ side_triangular_cell &lt;-<span class="st"> </span>function(r, r2, n_pnts) {
     <span class="kw">c</span>(R, R2, R)*<span class="kw">sin</span>(theta) +<span class="st"> </span>y_pivots
   )
 }</code></pre></div>
-<p>To draw multiple cells we apply translations, rotations and reflections to the outlines. For example,</p>
+<p>Multiple cells can be drawn with translations, rotations and reflections of the original outline. For example,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create outlines</span>
 side_tri_outline &lt;-<span class="st"> </span><span class="kw">side_triangular_cell</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="dv">10</span>)
 side_tri_x &lt;-<span class="st"> </span>side_tri_outline[, <span class="dv">1</span>]+<span class="fl">0.5</span>
@@ -388,7 +388,7 @@ poly_and_points &lt;-<span class="st"> </span>function(x, y) {
   
   <span class="kw">c</span>(com_x, com_y)
 }</code></pre></div>
-<p>We can now create the shadow for the ouline of the cell using a decreasing sequence of polygon size and transparency. The next style of shading creates a dimple in the middle of the cell and created using an increasing sequence of polygon size and transparency.</p>
+<p>The shading for the outline of the cell uses a decreasing sequence of polygon size and transparency. On the other hand, the shading that creates depth in the middle of the cell uses an increasing sequence of polygon size and transparency.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(png)
 <span class="co"># plot a single cell with shadow and dimple</span>
 plot_cell &lt;-<span class="st"> </span>function(x, y, color) {
@@ -443,71 +443,52 @@ plot_cell &lt;-<span class="st"> </span>function(x, y, color) {
 &amp;= \mathbb{I} \{\text{overlap}_p(\text{move})&gt;1\} - \text{unconnected}_p(\text{move}) \\
 &amp;\quad + 2\cdot \big[\text{overlap}_p(\text{move}) - \text{interlap}_p(\text{move})\big] \\
 &amp;\quad + 2\cdot\big[  \text{overlap}_p(\text{move})  - \text{extensions}_p(\text{move}) \big],
-\end{split}\]</span> where <span class="math inline">\(p\)</span> denotes the player playing the move. By convention, we define the first player (<span class="math inline">\(p=1\)</span>) to be you and the second player (<span class="math inline">\(p=2\)</span>) to be the A.I.</p>
-<p>One benefit of this decomposition is that each of the variables can be updated in an online fashion.</p>
+\end{split}\]</span> where <span class="math inline">\(p\)</span> denotes the player playing the move. By convention, define the first player (<span class="math inline">\(p=1\)</span>) to be you and the second player (<span class="math inline">\(p=2\)</span>) to be the A.I.<br />
+One benefit of this decomposition is that each of the variables can be updated in an online fashion.</p>
 <p>Additional player-independent variables that have intuitive value are:</p>
 <ul>
 <li><span class="math inline">\(\text{openness}(\text{move})\)</span> is move number of open positions adjacent to a move,</li>
 <li><span class="math inline">\(\text{centrality}(\text{move})\)</span> measures how close a move is to the center of the board.</li>
 </ul>
-<p>Every opponent uses some a weighted sum of the above variables. The weights that are used in the combinations are completely ad hoc and can most likely be improved.</p>
+<p>To calculate a value of a move, the ai opponent uses a weighted sum of the above variables.</p>
 <div id="easy-medium-and-hard-opponents" class="section level3">
 <h3>Easy, Medium and Hard Opponents</h3>
-<p>The easy opponent’s feature combination is <span class="math display">\[
+<p>Cell Addition is a zero sum game and so your gain is the same as the ai’s loss. Thus, when designing the ai, it will be beneficial to take this into account.</p>
+<p>The easy ai’s value function is <span class="math display">\[
 \begin{split}
 \text{easy}(\text{move}) 
 &amp;= \text{centrality}(\text{move}) + \text{openness}(\text{move}) \\
 &amp; \quad+ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}).
 \end{split}
-\]</span> The intuition is that <span class="math inline">\(\text{openness}(\text{move}) - \text{overlap}(\text{move})\)</span> is related to the increase in the total overlap in a board. The actual formula is <span class="math display">\[
-\text{total_overlap}_p' = \text{total_overlap}_p +  \text{openness}_p(\text{move}) - \text{overlap}_p(\text{move})
-\]</span> where <span class="math inline">\(\text{total_overlap}_p\)</span> is player <span class="math inline">\(p\)</span>’s total overlap in the board before playing a move <span class="math inline">\(\text{move}\)</span> and <span class="math inline">\(\text{total_overlap}_p'\)</span> is the total overlap after playing <span class="math inline">\(\text{move}\)</span>. Thus the easy player’s strategy can be rewritten as <span class="math display">\[
+\]</span> The intuition is that <span class="math inline">\(\text{openness}(\text{move}) - \text{overlap}_p(\text{move})\)</span> is related to the increase in the total overlap in a board. The actual formula for the increaes in the total overlap of a board when playing <span class="math inline">\(\text{move}\)</span> is <span class="math display">\[
+\Delta\text{total_overlap}_p(\text{move}) = \text{openness}_p(\text{move}) - \text{overlap}_p(\text{move})
+\]</span> The easy ai’s strategy can be rewritten as <span class="math display">\[
 \begin{split}
 \text{easy}(\text{move})
 &amp; =\text{centrality}(\text{move})\\
-&amp; \quad + 1.5 \cdot \text{overlap}_1(\text{move}) + 1.5 \cdot  \text{overlap}_2(\text{move}) \\ 
-&amp; \quad + 0.5\cdot \big[ \text{openness}(\text{move}) - \text{overlap}_2(\text{move}) \big] \\
-&amp; \quad + 0.5\cdot \big[ \text{openness}(\text{move}) - \text{overlap}_1(\text{move}) \big] .
+&amp; \quad + 1.5 \cdot\big[ \text{overlap}_2(\text{move}) +   \text{overlap}_1(\text{move})\big] \\ 
+&amp; \quad + 0.5\cdot\big[ \Delta\text{total_overlap}_2(\text{move}) + \Delta\text{total_overlap}_1(\text{move})\big].
 \end{split}
-\]</span> The first two terms after <span class="math inline">\(\text{centrality}\)</span> engourage the maximization of the immediate overlap of a move (exploitation), while the last two terms encourage the ai to maximize the total overlap of the board (exploration). Thus there is a tradeoff between exploration and exploitation; exploition being 3 times more important than exploration. In the formula for <span class="math inline">\(\Delta \text{score}_p\)</span>, overlap has the largest positive coefficient and so it makes sense that the ai using this value approximation does reasonably well.</p>
-<p>The hard opponent takes the above idea further and aims at obtaining a tradeoff between immediate score increase and total “scoring potential”; <span class="math display">\[
+\]</span> The two <span class="math inline">\(\text{overlap}\)</span> terms encourage exploitation of the current move while the two <span class="math inline">\(\Delta\text{total_overlap}\)</span> terms encourage exploration of the board. Overlap is the largest contributor to <span class="math inline">\(\Delta \text{score}_p\)</span> and so it makes sense that the ai using this value approximation does reasonably well.</p>
+<p>The hard ai modifies the above idea by switching <span class="math inline">\(\text{overlap}\)</span> with <span class="math inline">\(\Delta \text{score}\)</span>, which after simplification yields <span class="math display">\[
 \begin{split}
 \text{hard}(\text{move}) 
 &amp; = \text{centrality}(\text{move}) + \text{openness}(\text{move})\\
-&amp; \quad +  \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}).
+&amp; \quad +  1.5\cdot \big[ \Delta \text{score}_2(\text{move}) + \Delta \text{score}_1(\text{move}) \big]\\
+&amp; \quad -  0.5\cdot \big[ \text{overlap}_2(\text{move}) + \text{overlap}_1(\text{move}) \big]
+.
 \end{split}
-\]</span> Although this formula looks similar to <span class="math inline">\(\text{easy}(\text{move})\)</span>, it does not have the same interpretation. That said, even with out any theoretical justification, the ai using this metric is generally harder to beat than the easy ai.</p>
+\]</span> The hope is that hard ai will choose a move that balances the immediate score increases of the move with the total overlap of the resulting board.</p>
 <p>The medium ai’s value is the average of the easy and hard opponent’s values; i.e., <span class="math display">\[
 \text{medium}(\text{move}) =
 0.5\cdot \text{hard}(\text{move})  + 
 0.5\cdot \text{easy}(\text{move}) .
 \]</span></p>
-<!-- The easy opponent obtains a move by maximizing -->
-<!-- $$ -->
-<!-- \text{easy}(\text{move}) = \text{overlap}(\text{move}) + 0.01 \cdot \text{centrality}(\text{move}). -->
-<!-- $$ -->
-<!-- The overlap is a relatively good approximation for the increase in score of a move; it is only when we extend existing connections or place a move in between two cells do we over count.  The centrality term is intended to be negligible unless a tie occurs, in which case the opponent will prefer moves towards the center of the board.   -->
-<!-- ### Medium -->
-<!-- The medium opponent obtains a move by maximizing -->
-<!-- $$ -->
-<!-- \text{medium}(\text{move}) = \Delta \text{score}_2(\text{move}) + 0.5\cdot \text{openness}(\text{move}) + 0.01 \cdot \text{centrality}(\text{move}). -->
-<!-- $$ -->
-<!-- Here the opponent tries to maximize its increase in score directly.  Again, with the centrality term used to break ties. -->
-<!-- ### Hard -->
-<!-- The hard opponent obtains a move by maximizing -->
-<!-- $$\begin{split} -->
-<!-- \text{hard}(\text{move})  -->
-<!-- &= \Delta \text{score}_2(\text{move})  -->
-<!-- \quad + 0.75\cdot \Delta \text{score}_1(\text{move}) \\ -->
-<!-- &\quad + 0.1\cdot \text{openness}(\text{move})  -->
-<!-- \quad + 0.01 \cdot \text{centrality}(\text{move}). -->
-<!-- \end{split}$$ -->
-<!-- The previous two opponents looked only at their own values.  The hard opponent takes into account how much a move will hurt your chances of increasing your own score.  In this way, it is a bit more adversarial than the previous two opponents.  The openness of a move is also given some weight and if all else is equal, the hard opponent will choose a move closest to the center of the board. -->
 </div>
 <div id="adaptive-r-implementation-only" class="section level3">
 <h3>Adaptive (R implementation only)</h3>
-<p>The adaptive opponent has a skill level which determines the overall strategy in a game.</p>
-<p>The adaptive opponent adapts to your play in two ways:</p>
+<p>The adaptive ai has a skill level which determines the overall strategy in a game.</p>
+<p>The adaptive ai adapts to your play in two ways:</p>
 <ol style="list-style-type: decimal">
 <li>It adapts to your play within a game.</li>
 <li>It adapts its entire strategy after a game.</li>
@@ -520,11 +501,11 @@ plot_cell &lt;-<span class="st"> </span>function(x, y, color) {
 \]</span> where <span class="math inline">\(\text{skill}'\)</span> is modified (within-game) skill parameter</p>
 <p><span class="math display">\[
 \text{skill}' = \text{skill} + 0.01\cdot ( \text{your_score} - \text{ai_score} ).
-\]</span> Notice that if you are winning, then the effective skill of your opponent goes up. Moreover, if you are winning by a lot then the effective skill will go up by a lot.</p>
-<p>At the end of the game, your opponent’s skill level is updated according to the following formula: <span class="math display">\[
+\]</span> Notice that if you are winning, then the effective skill of the ai goes up. Moreover, if you are winning by a lot then the effective skill will go up by a lot.</p>
+<p>At the end of the game, the ai’s skill level is updated according to the following formula: <span class="math display">\[
 \text{skill} \leftarrow \text{skill} + 0.01\cdot  \frac{ \text{your_score} - \text{ai_score}  }{1 + \mathbb{I} \{ \text{your_score} &lt; \text{ai_score} \}  }.
-\]</span> Hence, if you beat your opponent, then its skill goes up by the score difference; if you lose to your opponent, then its skill goes down in proportion to half the absolute score difference. If the game is a draw, then the skill level stays the same.</p>
-<p>Ignoring within-game adaptivity, when <span class="math inline">\(\text{skill}=0\)</span> you are essentially playing against the easy ai, when <span class="math inline">\(\text{skill}=1\)</span> you are playing against the hard ai, and similarly,  <span class="math inline">\(\text{skill}=0.5\)</span> you are playing against the medium ai.</p>
+\]</span> Hence, if you beat the ai, then its skill goes up by the score difference; if you lose, then its skill goes down in proportion to half the absolute score difference. If the game is a draw, then the skill level stays the same.</p>
+<p>Ignoring within-game adaptivity, when <span class="math inline">\(\text{skill}=0\)</span> you are essentially playing against the easy ai, when <span class="math inline">\(\text{skill}=1\)</span> you are playing against the hard ai, and when <span class="math inline">\(\text{skill}=0.5\)</span> you are playing against the medium ai.</p>
 </div>
 </div>
 </div>
@@ -532,6 +513,7 @@ plot_cell &lt;-<span class="st"> </span>function(x, y, color) {
 <h1>Future Add-Ons</h1>
 <p>There are many variations on this game that can be played. What follows is an unordered list of possible improvements/variants of the game.</p>
 <ul>
+<li><p><strong>Early Stopping</strong>: Getting the first move can be an advantage, especially on the medium board configuration. To mitigate this, the game can stop a few rounds early. For example, in the medium board configuration, if the game stops one round early then both players will get have an equal number o moves.</p></li>
 <li><strong>Attack Moves</strong>: Give players access to the strong acid HCl and the strong base NaOH. Each acid/base will destroy the other player’s cells while leaving their cells intact. Similarly, isopropyl alcohol can be played to destroy any cell.<br />
 </li>
 <li><strong>Sythesis Process</strong>: Let NaOH/HCl and isopropyl alcohol regenerate over time.</li>
