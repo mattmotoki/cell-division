@@ -7,7 +7,7 @@
 /* ------------------------------------- */
 var game_over = false;     // game over flag
 var first_move = "you";    // if true then user goes first
-var board_size = "small";  // board size
+var board_size = "medium";  // board size
 var difficulty = "easy"; // AI difficulty
 var score = [0, 0];        // your score and AI's score
 var n_rounds = 0;          // number of rounds per game
@@ -178,8 +178,8 @@ function makeGraphics() {
 /*            Helper Functions           */
 /* ------------------------------------- */
 function resetBoard() {
-  // switch first moves at the end of a game
-  if (game_over) {
+  // switch first moves if you win
+  if (game_over && score[0]>score[1]) {
     // turn off underline of old first move
     document.querySelector("#move-" + first_move)
     .style.textDecoration = "none";
