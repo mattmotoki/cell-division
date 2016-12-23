@@ -54,6 +54,11 @@ plot(1, type="n", asp=1, axes=FALSE,
 plot_cell(2*sm_sq_x, 2*sm_sq_y, cellgreen)
 dev.off()
 
+png("cell_icon.png", width=480, height=480)
+blank_plot()
+plot_cell(2*sm_sq_x, 2*sm_sq_y, cellgreen)
+dev.off()
+
 # # cell outline
 # png("o0000.png")
 # blank_plot()
