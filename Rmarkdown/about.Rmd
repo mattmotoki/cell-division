@@ -145,31 +145,32 @@ poly_and_points(side_tri_y, side_tri_x)   # top
 ```
 
 
-### Shading About the Center of Mass
+### Shading About the Centroid
 There are two types of shading used to create the cells.  Both types of shading are implemented by overlaying a sequence of polygons centered about the center of mass with either decreasing/increasing size and decreasing/increasing transparency. 
 
-The center of mass (COM) can be calculated using a double integral, but it is easier to use the following hack.  First, save the outline of the cell as a temporary png, then read it back into R as a 3-dimensional array (two dimensions for the x and y coordinate and the third dimension for the transparency value).  The center of mass can then be obtained by taking inner products between the rows/cols of the transparency matrix and the corresponding y/x values. The `com_calc` takes in the `x` and `y` values of the cell outline and applies the aforementioned hack.
+The centroid of a polygon is 
+$$
+\begin{split}
+C_x &= \frac{1}{6A} \sum_{i=0}^{n-1} (x_i + x_{i+1}) (x_i \cdot  y_{i+1} - x_{i+1} \cdot y_i)\\
+C_y &= \frac{1}{6A} \sum_{i=0}^{n-1} (y_i + y_{i+1}) (x_i \cdot  y_{i+1} - x_{i+1} \cdot y_i)\\
+\end{split}
+$$
+where 
+$$
+A = \frac{1}{2} \sum_{i=0}^{n-1} (x_i \cdot  y_{i+1} - x_{i+1} \cdot y_i).
+$$
 ```{r}
-com_calc <- function(x, y) {
-  # plot and save shape
-  png('temp_com.png', width = 800, height = 800)
-  par(mar=c(0,0,0,0), bg="NA")
-  plot(1, type="n", asp=1, axes = FALSE,
-       yaxs="i", xaxs="i", xlab = "", ylab = "",
-       xlim = c(0, 1), ylim = c(0, 1)
-  )
-  polygon(x, y, col=rgb(0,0,0), border=NA)
-  dev.off()
-  
-  # load in shape
-  img <- 1*(readPNG("temp_com.png")[, , 4]>0.5)
-  img <- img/sum(img)
-  
-  # calculate center of mass
-  com_x <- sum(img %*% seq(0, 1, length=dim(img)[1]))
-  com_y <- 1-sum(t(img) %*% seq(0, 1, length=dim(img)[1]))
-  
-  c(com_x, com_y)
+circularShift <- function(x,shift=0) {
+  N <- length(x)
+  K <- shift %% N
+  if(K == 0) x else c(x[(N-K+1):N],x[1:(N-K)])
+}
+
+centroidCalc <- function(x, y) {
+  shift_x <- circularShift(x, 1)
+  shift_y <- circularShift(y, 1)
+  d <- x*shift_y - shift_x*y
+  c(sum( (x+shift_x)*d ), sum( (y+shift_y)*d ) ) / (3*sum(d))
 }
 ```
 
@@ -179,7 +180,7 @@ The shading for the outline of the cell uses a decreasing sequence of polygon si
 library(png)
 # plot a single cell with shadow and dimple
 plot_cell <- function(x, y, color) {
-  com <- com_calc(x, y)
+  centroid <- centroidCalc(x, y)
   
   # add shadow
   n_layers <- 100
@@ -187,8 +188,10 @@ plot_cell <- function(x, y, color) {
   alpha <- seq(0.1, 1, length=n_layers)
   polygon(x, y, col="black", border=NA)
   for (k in 1:n_layers) {
-    polygon(shrink[k]*(x-com[1])+com[1], shrink[k]*(y-com[2])+com[2],
-            col=rgb(color[1], color[2], color[3], alpha[k]), border=NA) 
+    polygon(shrink[k]*(x-centroid[1])+centroid[1],
+            shrink[k]*(y-centroid[2])+centroid[2],
+            col=rgb(color[1], color[2], color[3], alpha[k]),
+            border=NA) 
   }
   
   # add dimple
@@ -197,8 +200,10 @@ plot_cell <- function(x, y, color) {
   alpha <- seq(0.01, 0.05, length=n_layers)
   color <- 0.5*color
   for (k in 1:n_layers) {
-    polygon(shrink[k]*(x-com[1])+com[1], shrink[k]*(y-com[2])+com[2],
-            col=rgb(color[1], color[2], color[3], alpha[k]), border=NA)
+    polygon(shrink[k]*(x-centroid[1])+centroid[1],
+            shrink[k]*(y-centroid[2])+centroid[2],
+            col=rgb(color[1], color[2], color[3], alpha[k]),
+            border=NA)
   }
 }
 

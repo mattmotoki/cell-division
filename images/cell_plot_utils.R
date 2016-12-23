@@ -72,28 +72,20 @@ quad_cell <- function(r, r2, n_pnts) {
 #------------------
 # post single cell plotting functions
 
-# center of mass calculation
-com_calc <- function(x, y) {
-  # plot shape
-  png('temp.png', width = 1000, height = 1000)
-  par(mar=c(0,0,0,0), bg="NA")
-  plot(1, type="n", asp=1, axes = FALSE,
-       yaxs="i", xaxs="i", xlab = "", ylab = "",
-       xlim = c(0, 1), ylim = c(0, 1)
-  )
-  polygon(x, y, col=rgb(0,0,0), border=NA)
-  dev.off()
-  
-  img <- 1*(readPNG("temp.png")[, , 4]>0.5)
-  img <- img/sum(img)
-  
-  com_x <- sum(img %*% seq(0, 1, length=dim(img)[1]))
-  com_y <- 1-sum(t(img) %*% seq(0, 1, length=dim(img)[1]))
-  
-  print(c(com_x, com_y))
-  c(com_x, com_y)
-  
+# centroid calculation
+circularShift <- function(x,shift=0) {
+  N <- length(x)
+  K <- shift %% N
+  if(K == 0) x else c(x[(N-K+1):N],x[1:(N-K)])
 }
+
+centroidCalc <- function(x, y) {
+  shift_x <- circularShift(x, 1)
+  shift_y <- circularShift(y, 1)
+  d <- x*shift_y - shift_x*y
+  c(sum( (x+shift_x)*d ), sum( (y+shift_y)*d ) ) / (3*sum(d))
+}
+
 
 # plot a single cell with shadow and dimple
 plot_cell <- function(x, y, color) {
@@ -102,25 +94,27 @@ plot_cell <- function(x, y, color) {
   polygon(x, y, col="black", border=NA)
   
   # get center of mass
-  com <- com_calc(x, y)
+  centroid <- centroidCalc(x, y)
   
   # add shadow
   n_layers <- 100
-  shink <- seq(1, 0,length=n_layers)
+  shrink <- seq(1, 0,length=n_layers)
   alpha <- seq(0.1, 1, length=n_layers)
   for (k in 1:n_layers) {
-    polygon(shink[k]*(x-com[1])+com[1], shink[k]*(y-com[2])+com[2],
+    polygon(shrink[k]*(x-centroid[1])+centroid[1],
+            shrink[k]*(y-centroid[2])+centroid[2],
             col=rgb(color[1], color[2], color[3], alpha[k]),
             border=NA)
   }
   
   # add dimple
   n_layers <- 25
-  shink <- seq(0.25, 0.85, length=n_layers)^2
+  shrink <- seq(0.25, 0.85, length=n_layers)^2
   alpha <- seq(0.01, 0.05, length=n_layers)
   color <- 0.5*color
   for (k in 1:n_layers) {
-    polygon(shink[k]*(x-com[1])+com[1], shink[k]*(y-com[2])+com[2],
+    polygon(shrink[k]*(x-centroid[1])+centroid[1],
+            shrink[k]*(y-centroid[2])+centroid[2],
             col=rgb(color[1], color[2], color[3], alpha[k]),
             border=NA)
   }
