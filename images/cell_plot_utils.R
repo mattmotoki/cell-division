@@ -12,7 +12,7 @@ cellyellow <- c(255/255,255/255,0/255)
 # single cell plotting functions
 
 # square
-square_cell <- function(r, n_pnts) {
+squareCell <- function(r, n_pnts) {
   R <- rep(r, n_pnts)
   theta <- seq(0, 2*pi, length.out = 4*n_pnts)
   
@@ -23,7 +23,7 @@ square_cell <- function(r, n_pnts) {
 
 
 # triangular
-triangular_cell <- function(r, r2, n_pnts) {
+triangularCell <- function(r, r2, n_pnts) {
   R <- rep(r, n_pnts)
   R2 <- rep(r2, n_pnts)
   
@@ -39,7 +39,7 @@ triangular_cell <- function(r, r2, n_pnts) {
 
 
 # side triangular
-side_triangular_cell <- function(r, r2, n_pnts) {
+sideTriangularCell <- function(r, r2, n_pnts) {
   R <- rep(r, n_pnts)
   R2 <- rep(r2, n_pnts)
   theta <- c(seq(0, 3*pi/4, length.out = n_pnts),
@@ -52,7 +52,7 @@ side_triangular_cell <- function(r, r2, n_pnts) {
 
 
 # quadrilateral
-quad_cell <- function(r, r2, n_pnts) {
+quadCell <- function(r, r2, n_pnts) {
   R <- rep(r, n_pnts)
   R2 <- rep(r2, n_pnts)
   
@@ -88,7 +88,7 @@ centroidCalc <- function(x, y) {
 
 
 # plot a single cell with shadow and dimple
-plot_cell <- function(x, y, color) {
+plotCell <- function(x, y, color, shrinkage=2) {
   
   # start with all black cell
   polygon(x, y, col="black", border=NA)
@@ -97,9 +97,9 @@ plot_cell <- function(x, y, color) {
   centroid <- centroidCalc(x, y)
   
   # add shadow
-  n_layers <- 100
-  shrink <- seq(1, 0,length=n_layers)
-  alpha <- seq(0.1, 1, length=n_layers)
+  n_layers <- 250
+  shrink <- seq(1, 0, length=n_layers)^shrinkage
+  alpha <- seq(0.09, 1, length=n_layers)
   for (k in 1:n_layers) {
     polygon(shrink[k]*(x-centroid[1])+centroid[1],
             shrink[k]*(y-centroid[2])+centroid[2],
@@ -121,7 +121,7 @@ plot_cell <- function(x, y, color) {
 }
 
 # create a blank plot
-blank_plot <- function() {
+blankPlot <- function() {
   par(mar=c(0,0,0,0), bg=NA)
   plot(1, type="n", asp=1, axes=FALSE, 
        yaxs="i", xaxs="i", xlab = "", ylab = "",
