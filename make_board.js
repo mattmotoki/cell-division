@@ -368,7 +368,8 @@ var makeBoard = function(w, h) {
     var centrality = connection_table[ind].centrality;
 
     // calculate easy and hard values
-    var easy = centrality;
+    var easy = centrality + 8*(ai_overlap + your_overlap) - (ai_score + your_score);
+    // console.log(easy);
     var hard = centrality + 2*openness + ai_score+your_score - (ai_overlap+your_overlap) ;
 
     // combine easy and hard to get value
