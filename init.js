@@ -13,6 +13,25 @@ var score = [0, 0];        // your score and AI's score
 var n_rounds = 0;          // number of rounds per game
 /* Create a game log (for easier undos and for score visualization)*/
 var game_log = [];
+/* Sound effects */
+var init_sound = new Howl({
+  urls: ["sounds/jump-c-04.wav"],
+  sprite: { blop: [0, 250]}
+});
+var low_sound = new Howl({
+  urls: ["sounds/blop.wav"],
+  volume: 0.5,
+  sprite: { blop: [0, 1000]}
+});
+var mid_sound = new Howl({
+  urls: ["sounds/correct.wav"],
+  volume: 0.5,
+  sprite: { blop: [0, 1000]}
+});
+var high_sound = new Howl({
+  urls: ["sounds/bong-chime-3.mp3"],
+  sprite: { blop: [0, 2000]}
+});
 
 
 /* ------------------------------------- */

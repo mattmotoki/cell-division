@@ -427,6 +427,7 @@ var makeBoard = function(w, h) {
     var ds = added_score/30;
     var player_score = document.querySelector("#score" + plyr);
     var requestIncDiffId = requestAnimationFrame(updateDiff);
+    mapScoreToSound(added_score);
 
     function updateDiff() {
       t += 1/30;
@@ -449,4 +450,11 @@ var makeBoard = function(w, h) {
     var col = (ind % (h-4)) + 2;
     return col*h + row;
   }
+}
+
+function mapScoreToSound(added_score) {
+  if (added_score<=1)       { init_sound.play("blop"); }
+  else if (added_score<=4)  { low_sound.play("blop"); }
+  else if (added_score<=10) { mid_sound.play("blop"); }
+  else                      { high_sound.play("blop"); }
 }
