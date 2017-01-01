@@ -327,6 +327,7 @@ Ignoring within-game adaptivity, when $\text{skill}=0$ you are essentially playi
 
 # Future Add-Ons
 There are many variations on this game that can be played.  What follows is an unordered list of possible improvements/variants of the game.
+* **Stem Cells**: Undifferentiated cell that can become partially colored once fully surrounded.  If fully surrounded, the center of the stem cells can also be colored, resulting in a cell with a total of nine divisions.  
 
 * **Early Stopping**: Getting the first move can be an advantage, especially on the medium board configuration.  To mitigate this, the game can stop a few rounds early.  For example, in the medium board configuration, if the game stops one round early then both players will get have an equal number o moves.  
 
