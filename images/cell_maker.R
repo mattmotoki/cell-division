@@ -1,8 +1,8 @@
 source("cell_plot_utils.R")
 line_width <- 3
 
-w = 120
-h = 120
+w = 360
+h = 360
 
 #------------------
 # cell definitions

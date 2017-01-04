@@ -223,7 +223,7 @@ plot_cell(side_tri_y, side_tri_x, color=cellgreen)   # top
  
 
 ## A.I. Opponent
-All oppponent's follow a greedy with respect to some approximation of the value of a move.  The quality of the approximation determines the difficulty of the opponent.  Since the objective is to maximize your score, it makes sense to approximate the long term benefit of a move with its immediate increase in score.  It turn's out that the increase in score can be decomposed in the a function of the following four variables: 
+All oppponents are greedy with respect to some approximation of the value of a move.  The quality of the approximation determines the difficulty of the opponent.  Since the objective is to maximize your score, it makes sense to approximate the long term benefit of a move with its immediate increase in score.  It turn's out that the increase in score can be decomposed in the a function of the following four variables: 
 
 * $\text{overlap}_p(\text{move})$ is the number of cells adjacent to a move,
 * $\text{interlap}_p(\text{move})$ is the number of times the move is sandwitched by its cell and its opposite,
@@ -327,6 +327,7 @@ Ignoring within-game adaptivity, when $\text{skill}=0$ you are essentially playi
 
 # Future Add-Ons
 There are many variations on this game that can be played.  What follows is an unordered list of possible improvements/variants of the game.
+
 * **Stem Cells**: Undifferentiated cell that can become partially colored once fully surrounded.  If fully surrounded, the center of the stem cells can also be colored, resulting in a cell with a total of nine divisions.  
 
 * **Early Stopping**: Getting the first move can be an advantage, especially on the medium board configuration.  To mitigate this, the game can stop a few rounds early.  For example, in the medium board configuration, if the game stops one round early then both players will get have an equal number o moves.  
