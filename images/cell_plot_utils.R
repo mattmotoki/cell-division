@@ -1,7 +1,6 @@
 library(png)
 
 # plotting parameters
-n_pnts <- 100
 cellgreen <- c(34/255,250/255,34/255)
 cellred <- c(255/255,60/255,0/255)
 cellfuscia <- c(230/255,54/255,230/255)
@@ -108,9 +107,9 @@ plotCell <- function(x, y, color, shrinkage=2) {
   }
   
   # add dimple
-  n_layers <- 25
-  shrink <- seq(0.25, 0.85, length=n_layers)^2
-  alpha <- seq(0.01, 0.05, length=n_layers)
+  n_layers <- 100
+  shrink <- seq(0., 0.85, length=n_layers)^2
+  alpha <- seq(0.01, 0.2, length=n_layers)^2/5
   color <- 0.5*color
   for (k in 1:n_layers) {
     polygon(shrink[k]*(x-centroid[1])+centroid[1],
@@ -125,6 +124,6 @@ blankPlot <- function() {
   par(mar=c(0,0,0,0), bg=NA)
   plot(1, type="n", asp=1, axes=FALSE, 
        yaxs="i", xaxs="i", xlab = "", ylab = "",
-       xlim = c(-0.002, 1.002), ylim = c(-0.002, 1.002)
+       xlim = c(0L, 1L), ylim = c(0L, 1L)
   )
 }
