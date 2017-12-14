@@ -1,4 +1,5 @@
 source("cell_plot_utils.R")
+library(fields)
 line_width <- 3
 
 w = 1000
@@ -97,6 +98,7 @@ repeatImage <- function(save_name) {
 # wrapper function to plot and save all colors
 saveCells <- function(cell_func) {
   cell_colors <- c("cellgreen", "cellred", "cellfuscia", "cellblue", "cellyellow")
+  # cell_colors <- "cellred"
   for (colorname in cell_colors) cell_func(colorname) 
 }
 

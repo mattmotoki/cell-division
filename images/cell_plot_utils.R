@@ -108,15 +108,17 @@ plotCell <- function(x, y, color, shrinkage=2) {
   
   # add dimple
   n_layers <- 100
-  shrink <- seq(0., 0.85, length=n_layers)^2
-  alpha <- seq(0.01, 0.2, length=n_layers)^2/5
+  shrink <- seq(0., 0.9, length=n_layers)^2
+  alpha <- seq(0.01, 0.2, length=n_layers)^2
+  alpha <- alpha/ifelse(all(color == cellred), 2.5, 5)
   color <- 0.5*color
   for (k in 1:n_layers) {
     polygon(shrink[k]*(x-centroid[1])+centroid[1],
             shrink[k]*(y-centroid[2])+centroid[2],
             col=rgb(color[1], color[2], color[3], alpha[k]),
             border=NA)
-  }
+  }  
+  
 }
 
 # create a blank plot
