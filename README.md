@@ -3,7 +3,7 @@
 Play the game at https://mattmotoki.github.io/
 
 ## How to Play
-Player take turns placing their cells. A player’s cells divide when they connect with each other; vertical, horizontal and diagonal connections are allowed. Your score is equal to the total number of cell that you have on the board. The game ends when the board is full and the winner is the player with the most cells.
+Player take turns placing their cells. A player’s cells divide when they connect with each other; vertical, horizontal and diagonal connections are allowed. Your score is equal to the total number of cells that you have on the board. The game ends when the board is full. The winner is the player with the most cells.
 
 ## Implementation
 
