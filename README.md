@@ -1,5 +1,7 @@
 # A Biology-Inspired Board Game with an AI Opponent
 
+Play the game at https://mattmotoki.github.io/
+
 The game is written primarily in plain JavaScript, HTML5, and CSS3.  
 
 The only external library used is [howler.js](https://howlerjs.com/),
