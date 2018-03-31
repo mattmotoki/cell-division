@@ -132,9 +132,9 @@ var makeBoard = function(w, h) {
     var move_ind = open_moves.indexOf(ind0);
     if (move_ind>=0 && !is_busy) {
 
-      // cut off user input for 2 seconds (time for two moves)
+      // cut off user input for 1.5 seconds (time for two moves)
       is_busy = true;
-      setTimeout( function() {is_busy = false;}, 1000 );
+      setTimeout( function() {is_busy = false;}, 1500 );
 
       // remove from feasible array
       open_moves.splice(move_ind, 1);
