@@ -21,6 +21,8 @@ The AI opponent is greedy with respect to some scoring metric.
 ## Known Bugs
 ~~Scoring is gets messed up if moves are placed too quickly or if connection is bad.  A quick fix would be to make the score update instant rather than have the score incrementally update over a 0.5s period.~~
 
+## More Information
+[About Page](http://htmlpreview.github.io/?https://github.com/mattmotoki/mattmotoki.github.io/blob/master/Rmarkdown/about.html)
 
 ## TODO
 Create a Deep Reinforcement Learning Agent
