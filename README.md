@@ -1,6 +1,8 @@
 # A Biology-Inspired Board Game with an AI Opponent
 
-<h1 style="text-align: center"> <a href="https://mattmotoki.github.io/cell-division/"> Play the Game Here</a> </h1>
+* <a href="https://mattmotoki.github.io/cell-division/"> Play the Game Here</a> 
+
+* <a href="https://mattmotoki.github.io/cell-division.html"> My blog post on Cell Division</a> 
 
 
 ## How to Play
