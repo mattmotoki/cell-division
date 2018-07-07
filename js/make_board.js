@@ -359,7 +359,7 @@ var makeBoard = function(w, h) {
 
   /* Define and extract values of the AI difficulties */
   function extractValue(plyr, ind) {
-    // extract varaibles for both players
+    // extract variables for both players
     var your_score = extractScore(0, ind);
     var ai_score = extractScore(1, ind);
     var your_overlap = scoring_table[0][ind].overlap;
@@ -421,7 +421,7 @@ var makeBoard = function(w, h) {
     easeElement(new_cell, "in", 0.5, 2);
   }
 
-  // /* Gradually update score difference (for scoring cell color) */
+  /* Gradually update score difference (for scoring cell color) */
   function updateScore(plyr, added_score) {
     var t = 0;
     var ds = added_score/30;
@@ -433,7 +433,7 @@ var makeBoard = function(w, h) {
       t += 1/30;
       score[plyr] +=  ds;
       if (t >= 0.975) {
-        score[plyr] =  Math.round(score[plyr]);
+        score[plyr] =  Math.cell(score[plyr]);
         cancelAnimationFrame(requestIncDiffId);
       } else { requestAnimationFrame(updateDiff); }
       player_score.innerHTML = (plyr==0 ? "You" : "AI") + ": " + Math.ceil(score[plyr]);
