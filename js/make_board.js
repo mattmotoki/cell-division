@@ -433,7 +433,7 @@ var makeBoard = function(w, h) {
       t += 1/30;
       score[plyr] +=  ds;
       if (t >= 0.975) {
-        score[plyr] =  Math.cell(score[plyr]);
+        score[plyr] =  Math.ceil(score[plyr]);
         cancelAnimationFrame(requestIncDiffId);
       } else { requestAnimationFrame(updateDiff); }
       player_score.innerHTML = (plyr==0 ? "You" : "AI") + ": " + Math.ceil(score[plyr]);
