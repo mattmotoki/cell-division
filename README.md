@@ -1,8 +1,7 @@
 # A Biology-Inspired Board Game with an AI Opponent
 
-Play the game at https://mattmotoki.github.io/cell-division/
+<h1 style="text-align: center"> <a href="https://mattmotoki.github.io/cell-division/"> Play the Game Here</a> </h1>
 
-[About Page](http://htmlpreview.github.io/?https://github.com/mattmotoki/cell-division/blob/master/Rmarkdown/about.html)
 
 ## How to Play
 Player take turns placing their cells. A player’s cells divide when they connect with each other; vertical, horizontal and diagonal connections are allowed. Your score is equal to the total number of cells that you have on the board. The game ends when the board is full. The winner is the player with the most cells.
