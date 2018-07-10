@@ -201,7 +201,7 @@ var makeBoard = function(w, h) {
         if (scoring_table[plyr][ind1].unconnected==-1) {
           scoring_table[plyr][ind1].unconnected = 0;
           for (var j = 0; j < 8; j++) {
-            scoring_table[plyr][ind1+adj[j]].unconnected = 0;
+            scoring_table[plyr][ind1+adj[j]].unconnected --;
           }
         }
 
@@ -353,7 +353,7 @@ var makeBoard = function(w, h) {
   /* Calculate score from state variables */
   function extractScore(plyr, ind) {
     var s = scoring_table[plyr][ind];
-    return (s.overlap ==0) - s.unconnected + 4*s.overlap - 2*(s.interlap + s.extensions);
+    return (s.overlap==0) - s.unconnected + 4*s.overlap - 2*(s.interlap + s.extensions);
   }
 
 
@@ -421,7 +421,7 @@ var makeBoard = function(w, h) {
     easeElement(new_cell, "in", 0.5, 2);
   }
 
-  /* Gradually update score difference (for scoring cell color) */
+  /* Gradually fade in score difference (for scoring cell color) */
   function updateScore(plyr, added_score) {
     var t = 0;
     var ds = added_score/30;
@@ -432,11 +432,11 @@ var makeBoard = function(w, h) {
     function updateDiff() {
       t += 1/30;
       score[plyr] +=  ds;
-      if (t >= 0.975) {
-        score[plyr] =  Math.cell(score[plyr]);
+      if (t >= 1) {
+        score[plyr] =  Math.round(score[plyr]);
         cancelAnimationFrame(requestIncDiffId);
       } else { requestAnimationFrame(updateDiff); }
-      player_score.innerHTML = (plyr==0 ? "You" : "AI") + ": " + Math.ceil(score[plyr]);
+      player_score.innerHTML = (plyr==0 ? "You" : "AI") + ": " + Math.round(score[plyr]);
     }
   }
 

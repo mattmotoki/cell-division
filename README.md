@@ -21,9 +21,6 @@ The cell design was done using base R graphics.
 
 The AI opponent is greedy with respect to some scoring metric. 
 
-## Known Bugs
-~~Scoring gets messed up if moves are placed too quickly or if connection is bad.  A quick fix would be to make the score update instant rather than have the score incrementally update over a 0.5s period.~~
-
 ## TODO
 Create a Deep Reinforcement Learning Agent
 
