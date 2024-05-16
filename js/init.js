@@ -15,21 +15,23 @@ var n_rounds = 0;          // number of rounds per game
 var game_log = [];
 /* Sound effects */
 var init_sound = new Howl({
-  urls: ["sounds/jump-c-04.wav"],
+  urls: ["sounds/mouth-40.wav"],
+  volume: 0.5,
   sprite: { blop: [0, 250]}
 });
 var low_sound = new Howl({
-  urls: ["sounds/blop.wav"],
-  volume: 0.5,
-  sprite: { blop: [0, 1000]}
+  urls: ["sounds/jump-c-04.wav"],
+  volume: 1.0,
+  sprite: { blop: [0, 250]}
 });
 var mid_sound = new Howl({
-  urls: ["sounds/correct.wav"],
+  urls: ["sounds/blop.wav"],
   volume: 0.5,
   sprite: { blop: [0, 1000]}
 });
 var high_sound = new Howl({
   urls: ["sounds/bong-chime-3.mp3"],
+  volume: 0.4,
   sprite: { blop: [0, 2000]}
 });
 
