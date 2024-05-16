@@ -7,8 +7,8 @@
 /* ------------------------------------- */
 var game_over = false;     // game over flag
 var first_move = "you";    // if true then user goes first
-var board_size = "medium";  // board size
-var difficulty = "easy"; // AI difficulty
+var board_size = "large";  // board size
+var difficulty = "hard"; // AI difficulty
 var score = [0, 0];        // your score and AI's score
 var n_rounds = 0;          // number of rounds per game
 /* Create a game log (for easier undos and for score visualization)*/
